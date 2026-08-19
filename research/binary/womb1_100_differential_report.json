@@ -41,7 +41,6 @@
     "comparisons": 100,
     "attempts": 100,
     "retrying_seeds": 0,
-    "max_attempts": 1,
     "rng_transitions": 3600,
     "room_config_selections": 800,
     "boss_selections": 100,
@@ -50,10 +49,13 @@
     "ultra_placements": 100,
     "mismatches": 0
   },
+  "stats_extra": {
+    "max_attempts": 1
+  },
   "matches": true,
   "mismatch": null,
   "targeted_xl_fixture": {
-    "purpose": "random corpus (seeds 1-50) contains no XL Womb I floor (XL ~1/480); targeted seeds with Labyrinth curse",
+    "purpose": "XL Womb I seeds (Labyrinth curse); second boss now FIXED Mom's Heart (8) via the select_boss_id level-8 switch, not pool 10",
     "seeds": [
       106,
       244,
@@ -65,7 +67,6 @@
       "required_dead_ends": 7,
       "curse_mask": 2
     },
-    "xl_boss_verification": "seed 106 accepted 37 rooms with additional boss (7, pool 10) at room 37; all 3 seeds clean-vs-reference matched",
     "mismatches": 0
   }
 }

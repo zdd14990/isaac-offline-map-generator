@@ -851,3 +851,40 @@ the canonical ORIGINAL route:
   `/map B911 99AC 1 8` -> Womb II HARD PNG; both PARTIAL_BINARY.
 - Discipline: Womb I/II are `PARTIAL_BINARY` on the 100-sample corpus, never
   `CONFIRMED_BINARY`. ALT route and Sheol+ remain FAIL CLOSED.
+
+## Round 5 (2026-08-18): ALT route reconstruction + fixed-boss correction
+
+- **`Level::select_boss_id` fixed-boss switch (0x422830)** — CONFIRMED. The
+  function switches on level_stage 6..12 before any pool selection:
+  ORIGINAL (stage_type not 4/5): level 6 -> Mom (6), level 8 -> Mom's Heart
+  (8) or It Lives! (25) under a flag condition, level 10 -> Satan (24)/
+  Isaac (39), level 11 -> The Lamb (54)/???, level 12 -> Delirium (70);
+  ALT (stage_type 4/5): level 6 -> Mom-Mausoleum (89), level 8 -> Mother
+  (88), level 10/11 -> ??? (40), level 12 -> Delirium (70). Boss-room ids
+  verified against the bossportraits table and the room sets (89 in
+  `31.mausoleum.stb`, 88 in `33.corpse.stb`, all ids in
+  `00.special rooms.stb`). Implemented as `select_floor_boss` in both
+  leaves; Depths II / Womb II / XL-second-boss pool picks corrected.
+- **ALT StageType sequence 4,5,4,5,4,5** — CONFIRMED (forced by
+  `get_room_config_stage` + `stages.xml`); slot = stage+1 gated on stage_type
+  (Level::Init 0x744940); stage/type setter 0x7466d0; pre-Init alt fixup
+  0x7467c0 with per-stage chapter table `Game+0x6746c + stage*0x320`.
+- **ALT BossPool index == rcs (27..32)** — CONFIRMED hardcoded name->index
+  table in the bosspools.xml parser (0x421bf0): downpour 27, mines 29,
+  mausoleum 31, corpse 33, dross 28, ashpit 30, gehenna 32. The earlier
+  "XML position + 1" guess for alt pools (19..24) was wrong.
+- **ALT floor-init** — CONFIRMED from `generate_dungeon` (0x740e10):
+  target = min(stage*10/3+5+bit, 20); -3 via first/second-half predicates
+  (stages 1-4, odd stages XL-gated); XL = min(target*1.8, 45); dead_ends =
+  (stage!=1)+5 (+1 alt 1-4); difficulty windows by stage parity; Labyrinth
+  only on odd stages < 8 (`can_apply_labyrinth` 0x7385c0).
+- **ALT M5 (through-Treasure) stage_type-independent**; M6 specials use
+  adjusted-stage (stage+1) gates at sites 0x73b3ea/0x73b497/0x73ba3b/
+  0x73bcff/0x73bd31/0x73bfe7; alternate-path blocks 0x0033C416..0x0033C69E
+  (first-half mandatory end room for Dross / Downpour-XL; second-half needs
+  collectible 626; third branch ORIGINAL-only flag) — CONFIRMED;
+  Secret/Ultra shared; late branches 0x73e422 (ORIGINAL-only
+  achievement-187 gate) and 0x73ea83 (Mines/Ashpit chapter) — OPEN.
+- ALT floors stay FAIL CLOSED until the special-room gate shapes
+  (0x0033BCF5..0x0033C0B6 and late) are reconstructed — see
+  `research/notes/alt_special_room_condition_matrix.md`.

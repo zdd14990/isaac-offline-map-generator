@@ -13,6 +13,8 @@ from dataclasses import dataclass
 import struct
 from typing import Iterable
 
+from .boss_pool import fixed_boss_for_level
+
 
 PROFILE_SHA256 = "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b"
 UINT32_MASK = 0xFFFFFFFF
@@ -25,6 +27,12 @@ BASEMENT_POOL_INDEX = 1
 CAVES_POOL_INDEX = 4
 DEPTHS_POOL_INDEX = 7
 WOMB_POOL_INDEX = 10
+DOWNPOUR_POOL_INDEX = 27
+DROSS_POOL_INDEX = 28
+MINES_POOL_INDEX = 29
+ASHPIT_POOL_INDEX = 30
+MAUSOLEUM_POOL_INDEX = 31
+GEHENNA_POOL_INDEX = 32
 
 
 def _f32(value: float) -> float:
@@ -276,6 +284,31 @@ class BossPoolRuntimeReference:
 
     def select_canonical_stage(self, room_config_stage: int) -> BossPoolRuntimeSelectionReference:
         return self._select_canonical_pool(room_config_stage)
+
+    def select_floor_boss(
+        self,
+        level_stage: int,
+        stage_type: int,
+        room_config_stage: int,
+    ) -> BossPoolRuntimeSelectionReference:
+        """Mirror ``Level::select_boss_id``: fixed switch first, pool otherwise."""
+
+        fixed = fixed_boss_for_level(level_stage, stage_type)
+        if fixed is None:
+            return self._select_canonical_pool(room_config_stage)
+        state = self.pool_states[room_config_stage]
+        return BossPoolRuntimeSelectionReference(
+            boss_id=fixed,
+            selected_entry_id=fixed,
+            pool_index=room_config_stage,
+            persistent_pre_state=state,
+            persistent_post_state=state,
+            local_selector_final_state=state,
+            ledger=(),
+            repick_count=0,
+            fallback_used=False,
+            pool_reset_count=0,
+        )
 
     def _select_canonical_pool(
         self, pool_index: int

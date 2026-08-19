@@ -18,7 +18,7 @@ contains the full post-topology generation: Boss -> Type8 -> Shop -> Treasure
 | operation | stage7 | stage8 | predicate / RVA | RNG effect |
 |---|---|---|---|---|
 | Boss | executes | executes | `Level__select_boss_id(level_stage, stage_type, pool)`; pool derived from rcs(10) = pool 10; geometry via `post_topology_dispatch` + `assign_room_config` | 1 config seed draw + geometry draws (shared leaf) |
-| XL second boss (stage 7) | executes when Labyrinth | n/a (even stage) | `select_boss_id(level_stage + 1, stage_type)` — same pool 10 since rcs(8,0)=10; RNG state saved before and **restored** after (`local_d8[0x60b5] = local_fc` + re-init shifts from `DAT_00b1f66c`) | 0 net persistent draws (rewound) |
+| XL second boss (stage 7) | executes when Labyrinth | n/a (even stage) | `select_boss_id(level_stage + 1, stage_type)` — level 8 returns the **FIXED boss Mom's Heart (8)** (level-6..12 switch, RVA 0x422909), NOT pool 10; RNG state saved before and **restored** after (`local_d8[0x60b5] = local_fc` + re-init shifts from `DAT_00b1f66c`) | 0 net persistent draws (rewound); pool 10 untouched |
 | "additional multi-boss Stage 12 block" | skip | skip | `*local_d8 == 0xc` gate (Void only) | none |
 | Labyrinth/XL gate | bit 2 of curse | n/a | `(~remove & (add|curse|used) & 2) == 0` — bit 0x02 = Labyrinth | branches to XL path |
 

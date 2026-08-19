@@ -125,4 +125,6 @@ def test_depths1_xl_clean_matches_reference(seed: int, difficulty: str) -> None:
         depths_definitions=DEPTHS,
         blue_womb_definitions=BLUE_WOMB,
     )
-    assert len(d1.layout.permanent_removed_bosses) == 6  # 4 floors + XL dual Boss
+    # 4 floors + XL second boss = fixed Mom (level 6 switch), which the binary
+    # returns before the pool selection, so Mom never joins the removed set.
+    assert len(d1.layout.permanent_removed_bosses) == 5

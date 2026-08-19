@@ -13,6 +13,7 @@ import re
 import struct
 
 from .rng import IsaacRNG
+from .stage_seed import STAGETYPE_REPENTANCE, STAGETYPE_REPENTANCE_B
 
 
 POOL_COUNT = 37
@@ -22,12 +23,51 @@ BASEMENT_POOL_INDEX = 1
 CAVES_POOL_INDEX = 4
 DEPTHS_POOL_INDEX = 7
 WOMB_POOL_INDEX = 10
+# ALT pools == room-config stage (hardcoded name->index table in the
+# bosspools.xml parser; see alt_route_stage_type_lifecycle.md).
+DOWNPOUR_POOL_INDEX = 27
+DROSS_POOL_INDEX = 28
+MINES_POOL_INDEX = 29
+ASHPIT_POOL_INDEX = 30
+MAUSOLEUM_POOL_INDEX = 31
+GEHENNA_POOL_INDEX = 32
 
 
 def _f32(value: float) -> float:
     return struct.unpack("<f", struct.pack("<f", value))[0]
 
 
+
+# select_boss_id switch (RVA 0x422830): levels 6/8/10/11/12 return a FIXED
+# boss id before any pool selection.  Level 6 = Mom / Mom-Mausoleum,
+# level 8 = Mom's Heart (or It Lives!) / Mother; 10/11/12 are outside the
+# generated scope (Sheol/Dark-Room/Void) and recorded for completeness.
+# The tuple form is (canonical, alternate); canonical = NORMAL/HARD fresh run.
+FIXED_BOSS_BY_LEVEL: dict[int, tuple[tuple[int, ...], tuple[int, ...]]] = {
+    # level_stage: (stage_type not in (4,5)) -> ids, (stage_type in (4,5)) -> ids
+    6: ((6,), (89,)),
+    8: ((8, 25), (88,)),
+    10: ((24, 39), (40,)),
+    11: ((54, 40), (40,)),
+    12: ((70,), (70,)),
+}
+
+
+def fixed_boss_for_level(level_stage: int, stage_type: int) -> int | None:
+    """Return the fixed boss id for a level, or ``None`` for a pool pick.
+
+    Mirror of the ``select_boss_id`` switch: ORIGINAL level 6 -> Mom (6),
+    level 8 -> Mom's Heart (8) (It Lives! 25 under the non-canonical flag
+    condition); ALT level 6 -> Mom (Mausoleum) 89, level 8 -> Mother (88).
+    Returns the canonical id (NORMAL/HARD fresh run) and treats every other
+    level as a weighted pool pick.
+    """
+
+    row = FIXED_BOSS_BY_LEVEL.get(level_stage)
+    if row is None:
+        return None
+    alt = stage_type in (STAGETYPE_REPENTANCE, STAGETYPE_REPENTANCE_B)
+    return row[1][0] if alt else row[0][0]
 @dataclass(frozen=True)
 class BossPoolEntry:
     boss_id: int
@@ -222,6 +262,36 @@ class BossPoolRuntimeState:
         """
 
         return self._select_canonical_pool(room_config_stage)
+
+    def select_floor_boss(
+        self,
+        level_stage: int,
+        stage_type: int,
+        room_config_stage: int,
+    ) -> BossPoolRuntimeSelection:
+        """Mirror ``Level::select_boss_id``: fixed switch first, pool otherwise.
+
+        Levels 6/8 (and 10/11/12, out of scope) return the fixed boss without
+        touching the pool RNG; every other level performs the weighted pool
+        pick from ``pool[room_config_stage]``.
+        """
+
+        fixed = fixed_boss_for_level(level_stage, stage_type)
+        if fixed is None:
+            return self._select_canonical_pool(room_config_stage)
+        state = self.pool_rngs[room_config_stage].seed
+        return BossPoolRuntimeSelection(
+            boss_id=fixed,
+            selected_entry_id=fixed,
+            pool_index=room_config_stage,
+            persistent_pre_state=state,
+            persistent_post_state=state,
+            local_selector_final_state=state,
+            transitions=(),
+            repick_count=0,
+            fallback_used=False,
+            pool_reset_count=0,
+        )
 
     def _select_canonical_pool(self, pool_index: int) -> BossPoolRuntimeSelection:
         entries = self.shuffled_entries[pool_index]

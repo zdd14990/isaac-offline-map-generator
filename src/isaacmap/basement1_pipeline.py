@@ -425,7 +425,9 @@ def run_post_topology_through_treasure(
     ledger: list[PipelineRNGDraw] = []
     config_traces: list[ConfigTrace] = []
     conditions: list[ConditionTrace] = []
-    boss = run_state.boss_pools.select_canonical_stage(profile.room_config_stage)
+    boss = run_state.boss_pools.select_floor_boss(
+        profile.level_stage, profile.stage_type, profile.room_config_stage
+    )
     boss_entry = _select_boss_config(
         state,
         selection=boss,
@@ -459,7 +461,9 @@ def run_post_topology_through_treasure(
             boss_entry.door_mask,
         )
         level_snapshot = state.level_rng.seed
-        second_boss = run_state.boss_pools.select_canonical_stage(profile.room_config_stage)
+        second_boss = run_state.boss_pools.select_floor_boss(
+            profile.level_stage + 1, profile.stage_type, profile.room_config_stage
+        )
         additional_bosses.append(second_boss)
         second_entry = _select_boss_config(
             state,

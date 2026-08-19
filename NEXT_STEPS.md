@@ -241,3 +241,45 @@ wiring commits [checkpoints C/D].
 Evidence-grade discipline: Womb I/II are `PARTIAL_BINARY` on the 100-sample
 corpus — never labeled CONFIRMED_BINARY (that grade is reserved for the
 20k-class floors 1-6).
+
+## Round 5 (2026-08-18): ALT route evidence + fixed-boss correction (ALT stays FAIL CLOSED)
+
+**MAIN 6/8 fixed-boss correction (binary, affects MAIN):**
+
+`Level__select_boss_id` (0x422830) switches on level_stage 6..12 BEFORE any
+pool selection: ORIGINAL level 6 -> Mom (6), level 8 -> Mom's Heart (8) (or
+It Lives! 25 under a flag condition); ALT level 6 -> Mom-Mausoleum (89),
+level 8 -> Mother (88). The repo's pool picks for Depths II / Womb II (and
+the XL second bosses at level 6/8) were clean-vs-reference-validated but
+binary-wrong; now fixed in both leaves (`select_floor_boss`). Womb II no
+longer advances pool 10; Depths II no longer advances pool 7. Womb I/II
+reports regenerated (100/100 each, 0 mismatches).
+
+**ALT route evidence (all CONFIRMED, recorded in notes):**
+
+- StageType sequence 4,5,4,5,4,5 for 1+..6+ forced by `get_room_config_stage`
+  + `stages.xml` (Dross=(2,5)->28, Ashpit=(4,5)->30, Gehenna=(6,5)->32).
+- Transition machinery: Level::Init slot = stage+1 iff stage_type 4/5
+  (0x744940); stage/type setter 0x7466d0; pre-Init alt fixup 0x7467c0.
+- ALT BossPool index == rcs (27..32) via the hardcoded name->index table in
+  the bosspools.xml parser (0x421bf0) — the earlier "XML position + 1" guess
+  (19..24) was wrong.
+- Floor-init matrix: target = min(stage*10/3+5+bit, 20); -3 for alt stages
+  1-4 (odd stages XL-gated); XL = min(target*1.8, 45); dead_ends
+  = (stage!=1)+5 (+1 alt 1-4); windows by stage parity; XL only odd < 8.
+- M5 (through-Treasure) stage_type-independent; M6 specials use
+  `adjusted_stage = stage+1` gates (sites 0x73b3ea/0x73b497/0x73ba3b/
+  0x73bcff/0x73bd31/0x73bfe7); alternate-path first-half mandatory end room
+  (Dross always, Downpour-XL); Secret/Ultra shared; late has two stage_type
+  branches (0x73e422 ORIGINAL-only achievement-187 gate; 0x73ea83
+  Mines/Ashpit chapter branch).
+
+**Blocker (precise) — ALT floors stay FAIL CLOSED:** the exact Challenge /
+Chest/Arcade / super-secret gate shapes (0x0033BCF5..0x0033C0B6), the late
+branches (0x73e422, 0x73ea83), and (for 2+) the mandatory end-room draw
+accounting (0x0033C416..0x0033C4D1) still need reconstruction. See
+`research/notes/alt_special_room_condition_matrix.md`.
+
+Notes: `alt_route_stage_type_lifecycle.md`, `alt_floor_init_matrix.md`,
+`alt_special_room_condition_matrix.md`; `womb_bosspool10.md` corrected.
+Tests: generator 494 passed. Commits: `17ccc4d` (evidence [checkpoint A]).

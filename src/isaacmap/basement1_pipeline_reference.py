@@ -276,7 +276,9 @@ def run_post_reference(generator, level_state, boss_state, weights, entries, pro
         profile.is_xl and profile.level_stage not in (3, 5, 7)
     ) or 589 in profile.collectible_ids:
         raise ValueError("through-Treasure reference supports canonical Basement I/II/Caves I/II/Depths I/II/Womb I/II")
-    boss=boss_state.select_canonical_stage(profile.room_config_stage)
+    boss=boss_state.select_floor_boss(
+        profile.level_stage, profile.stage_type, profile.room_config_stage
+    )
     boss_entry=_select_boss_config_reference(state,draws,configs,weights,entries,boss,"Boss",0x003394A4)
     if boss_entry is None: return _result(state,False,"Boss RoomConfig",boss,-1,None,[],-1,None,-1,None,0,draws,configs,conditions)
     boss_room=_consume(state,boss_entry,"DetermineBossRoom",1)
@@ -289,7 +291,9 @@ def run_post_reference(generator, level_state, boss_state, weights, entries, pro
     if profile.is_xl:
         pending=_prepare_xl_extra_boss_room_reference(state,generator,boss_room,boss_entry.door_mask)
         level_snapshot=state.level_rng_state
-        second=boss_state.select_canonical_stage(profile.room_config_stage); additional_bosses.append(second)
+        second=boss_state.select_floor_boss(
+            profile.level_stage + 1, profile.stage_type, profile.room_config_stage
+        ); additional_bosses.append(second)
         second_entry=_select_boss_config_reference(state,draws,configs,weights,entries,second,"Boss[1]",0x00339951)
         if second_entry is None:
             return _result(state,False,"Boss[1] RoomConfig",boss,boss_room,boss_entry,[],-1,None,-1,None,0,draws,configs,conditions,additional_bosses=additional_bosses)

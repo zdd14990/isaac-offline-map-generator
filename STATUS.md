@@ -185,20 +185,28 @@ External gameplay status for all of the above remains independently
 
 Womb I (LevelStage 7) and Womb II (LevelStage 8) are implemented with
 `PARTIAL_BINARY` evidence (100 ordered clean-vs-reference comparisons each).
-All later floors (Sheol, Cathedral, ...) and every alternate-route floor
-(Downpour/Mines/Mausoleum I/II) remain unsupported and fail closed until
-independently reconstructed. Stage-7/8 constants and RoomConfig/BossPool
-profiles were reconstructed from the binary; nothing was copied from earlier
-floors.
+All alternate-route floors (Downpour/Dross/Mines/Ashpit/Mausoleum/Gehenna)
+remain unsupported and fail closed: their StageType lifecycle, floor-init
+matrix and BossPool mapping are binary-confirmed, but the special-room gate
+shapes (Challenge/Chest/Arcade/super-secret adjusted-stage gates and the
+alternate-path mandatory end room) are still being reconstructed — see
+`research/notes/alt_special_room_condition_matrix.md`. Stage-7/8 constants
+and RoomConfig/BossPool profiles were reconstructed from the binary; nothing
+was copied from earlier floors.
 
-### Womb I/II and alternate-route floors: status (2026-08-18, round 4)
+### Womb I/II and alternate-route floors: status (2026-08-18, round 5)
 
-**Womb I/II generation is OPEN on the MAIN route** (bot tokens `7`/`8`;
-`/map B911 99AC 0 7`, `/map B911 99AC 1 8`). Evidence grade `PARTIAL_BINARY`
-per floor: 50 NORMAL + 50 HARD ordered clean-vs-reference comparisons with
-0 mismatches (`research/binary/womb1_100_differential_report.json`,
+**Womb I/II generation is OPEN on the MAIN route** (bot tokens `7`/`8`).
+Evidence grade `PARTIAL_BINARY` per floor: 50 NORMAL + 50 HARD ordered
+clean-vs-reference comparisons with 0 mismatches
+(`research/binary/womb1_100_differential_report.json`,
 `womb2_100_differential_report.json`), plus a targeted Womb I XL fixture
-(seeds 106/244/1381). ALT remains FAIL CLOSED.
+(seeds 106/244/1381). **Round 5 correction:** `select_boss_id` returns FIXED
+bosses for levels 6/8/10/11/12 — Depths II = Mom (6), Womb II = Mom's Heart
+(8), ALT Gehenna = Mom-Mausoleum (89), ALT Corpse II = Mother (88) — so the
+earlier pool picks for Depths II / Womb II (and XL second bosses at level
+6/8) were corrected in both leaves. ALT 1+..6+ remain FAIL CLOSED until the
+special-room gate shapes are reconstructed.
 
 New binary findings this round (post-layout lifecycle tail
 `0x0033D1D6..0x0033D925`, disassembled with `scripts/disassemble_range.py`):
