@@ -394,7 +394,7 @@ def run_treasure_to_secret(
         place = (decision & 3) == 0
         if not place:
             decision2 = _draw(state.level_rng, ledger, rva=0x0033BA27, identity="Level._generationRNG", shift_index=35, reason="MiniBoss stage-one fallback", usage="state % 3")
-            place = profile.level_stage == 1 and decision2 % 3 == 0
+            place = profile.adjusted_level_stage == 1 and decision2 % 3 == 0
     written_bit = dict(subtype_bits)[subtype]
     if rid >= 0:
         if place:
@@ -411,9 +411,8 @@ def run_treasure_to_secret(
     place = False
     if rid >= 0 and 11 not in profile.visited_room_types:
         challenge = _draw(state.level_rng, ledger, rva=0x0033BCF5, identity="Level._generationRNG", shift_index=35, reason="Challenge gate", usage="even draw or Stage >= 3, player condition, Stage >= 2")
-        stage_gate = (challenge & 1) == 0 or profile.level_stage >= 3
-        place = stage_gate and profile.player0_full_health and profile.level_stage >= 2
-    if rid >= 0:
+        stage_gate = (challenge & 1) == 0 or profile.adjusted_level_stage >= 3
+        place = stage_gate and profile.player0_full_health and profile.adjusted_level_stage >= 2
         if place: _assign(state, rid, entry); descriptor_configs[rid] = entry
         else: state.dead_ends.append(rid)
     blocks.append(InterveningBlockTrace("Challenge", "0x0033BBAE..0x0033BD87", 11, 0, before, rid, rid >= 0 and place, tuple(state.dead_ends), entry.key, "even draw or Stage >= 3; eligible player; Stage >= 2"))
@@ -429,12 +428,23 @@ def run_treasure_to_secret(
     seed = _draw(state.level_rng, ledger, rva=0x0033BF11 if room_type == 20 else 0x0033BFB6, identity="Level._generationRNG", shift_index=35, reason="Chest/Arcade RoomConfig", usage=f"type {room_type} selector seed")
     entry = _select("Chest" if room_type == 20 else "Arcade", seed, entries, run_state, ledger, configs, room_type=room_type, subtype=-1 if room_type == 20 else 0)
     before = tuple(state.dead_ends); rid = _consume_end_room(state, entry, f"GetNewEndRoom({'Chest' if room_type == 20 else 'Arcade'})")
-    place = (
-        rid >= 0
-        and profile.level_stage == 2
-        and room_type == 20
-        and profile.player0_max_hearts >= 2
-    )
+    if profile.stage_type in (4, 5):
+        # Binary (0x73c035..0x73c09a): the chosen Chest room is assigned when
+        # the ADJUSTED stage is in {2,4,6,8} and player max hearts > 1; the
+        # Arcade needs coins >= 5, which the canonical profile never meets.
+        place = (
+            rid >= 0
+            and profile.adjusted_level_stage in (2, 4, 6, 8)
+            and room_type == 20
+            and profile.player0_max_hearts > 1
+        )
+    else:
+        place = (
+            rid >= 0
+            and profile.level_stage == 2
+            and room_type == 20
+            and profile.player0_max_hearts >= 2
+        )
     if rid >= 0:
         if place: _assign(state, rid, entry); descriptor_configs[rid] = entry
         else: state.dead_ends.append(rid)

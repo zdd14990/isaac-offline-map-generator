@@ -142,6 +142,27 @@ class BossPoolRuntimeReference:
         return result
 
     @classmethod
+    def fresh_alt(
+        cls,
+        game_start_seed: int,
+        pool_index: int,
+        entries: tuple[BossPoolEntryReference, ...],
+    ) -> "BossPoolRuntimeReference":
+        """Fresh BossPools with one ALT pool (index == rcs 27..32) enabled."""
+
+        seeds = derive_pool_seeds_reference(game_start_seed)
+        return cls(
+            game_start_seed,
+            seeds,
+            list(seeds),
+            {
+                pool_index: shuffle_entries_reference(entries, seeds[pool_index]),
+            },
+            set(),
+            set(),
+        )
+
+    @classmethod
     def resume_canonical_caves(
         cls,
         game_start_seed: int,

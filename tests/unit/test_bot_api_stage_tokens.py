@@ -45,9 +45,8 @@ def test_floor_name_for() -> None:
 
 
 def test_generation_fail_closed_for_alt_floors(tmp_path: Path) -> None:
-    """Alt floors still fail closed with the floor name carried back."""
+    """Alt floors 2+..6+ still fail closed with the floor name carried back."""
     cases = [
-        (ALT_ROUTE, 1, "Downpour I"),
         (ALT_ROUTE, 2, "Downpour II"),
         (ALT_ROUTE, 3, "Mines I"),
         (ALT_ROUTE, 4, "Mines II"),
@@ -62,6 +61,18 @@ def test_generation_fail_closed_for_alt_floors(tmp_path: Path) -> None:
         assert result.error == "UNSUPPORTED_FLOOR", (route, stage)
         assert result.floor_name == floor, (route, stage)
         assert result.route == route, (route, stage)
+
+
+def test_downpour1_generates_for_bot(tmp_path: Path) -> None:
+    """ALT 1+ (Downpour I) is now supported."""
+    result = generate_map_image_for_bot(
+        "B911 99AC", "NORMAL", 1, str(tmp_path), route=ALT_ROUTE
+    )
+    assert result.ok
+    assert result.floor_name == "Downpour I"
+    assert result.route == ALT_ROUTE
+    assert result.algorithm_evidence == "PARTIAL_BINARY"
+    assert result.image_path is not None
 
 
 def test_womb_floors_generate_for_bot(tmp_path: Path) -> None:

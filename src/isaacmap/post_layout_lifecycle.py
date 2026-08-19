@@ -212,10 +212,18 @@ def run_post_layout_lifecycle(
 ) -> PostLayoutLifecycleResult:
     """Replay RVA ``0x0033D1D6..0x0033D925`` for the canonical profile."""
 
-    expected_rcs = 1 + (level_stage - 1) // 2 * 3
+    if stage_type in (4, 5) and level_stage in (1, 2, 3, 4, 5, 6):
+        alt_rcs = (
+            ((level_stage - 1) & ~1) + 27
+            if stage_type == 4
+            else ((level_stage - 1) >> 1) * 2 + 28
+        )
+        expected_rcs = alt_rcs
+    else:
+        expected_rcs = 1 + (level_stage - 1) // 2 * 3
     if (
         level_stage not in (1, 2, 3, 4, 5, 6, 7, 8)
-        or stage_type != 0
+        or stage_type not in (0, 4, 5)
         or room_config_stage != expected_rcs
         or collectible_ids
         or player_collectible_count != 0

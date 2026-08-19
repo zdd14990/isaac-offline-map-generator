@@ -162,8 +162,15 @@ def run_post_layout_lifecycle_reference(
     stage_type: int = 0,
     room_config_stage: int = 1,
 ) -> ReferencePostLayoutLifecycle:
-    expected_rcs = 1 + (level_stage - 1) // 2 * 3
-    if level_stage not in (1, 2, 3, 4, 5, 6, 7, 8) or stage_type != 0 or room_config_stage != expected_rcs:
+    if stage_type in (4, 5) and level_stage in (1, 2, 3, 4, 5, 6):
+        expected_rcs = (
+            ((level_stage - 1) & ~1) + 27
+            if stage_type == 4
+            else ((level_stage - 1) >> 1) * 2 + 28
+        )
+    else:
+        expected_rcs = 1 + (level_stage - 1) // 2 * 3
+    if level_stage not in (1, 2, 3, 4, 5, 6, 7, 8) or stage_type not in (0, 4, 5) or room_config_stage != expected_rcs:
         raise ValueError("reference state is outside the canonical ORIGINAL lifecycle profile")
     level = _ReferenceRNG(level_rng_state, LEVEL_SHIFTS)
     weights = RoomConfigMutableStateReference(dict(room_config_weights))

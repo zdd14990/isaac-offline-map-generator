@@ -273,7 +273,7 @@ def run_treasure_to_secret_reference(
         place = (decision & 3) == 0
         if not place:
             decision = _draw_level(state, draws, 0x0033BA27, "MiniBoss stage-one fallback")
-            place = profile.level_stage == 1 and decision % 3 == 0
+            place = profile.adjusted_level_stage == 1 and decision % 3 == 0
     bit = dict(subtype_bits)[subtype]
     if rid >= 0 and place: used_bits.add(bit)
     _finish_candidate(state, entry, "MiniBoss", rid, place, descriptors, blocks, before, "0x0033B3A8..0x0033BBAE", "ordered unused-subtype vector; 1/4 or Basement-I 1/3 fallback", bit)
@@ -284,7 +284,7 @@ def run_treasure_to_secret_reference(
     place = False
     if rid >= 0 and 11 not in profile.visited_room_types:
         decision = _draw_level(state, draws, 0x0033BCF5, "Challenge gate")
-        place = ((decision & 1) == 0 or profile.level_stage >= 3) and profile.player0_full_health and profile.level_stage >= 2
+        place = ((decision & 1) == 0 or profile.adjusted_level_stage >= 3) and profile.player0_full_health and profile.adjusted_level_stage >= 2
     _finish_candidate(state, entry, "Challenge", rid, place, descriptors, blocks, before, "0x0033BBAE..0x0033BD87", "even draw or Stage >= 3; eligible player; Stage >= 2")
 
     first = _draw_level(state, draws, 0x0033BDD2, "Chest/Arcade first choice")
@@ -296,7 +296,10 @@ def run_treasure_to_secret_reference(
     name = "Chest" if room_type == 20 else "Arcade"
     entry = _select(name, seed, entries, weights, draws, configs, room_type=room_type, subtype=-1 if room_type == 20 else 0)
     before = tuple(state.dead_ends); rid = _consume(state, entry, f"GetNewEndRoom({name})")
-    place = rid >= 0 and profile.level_stage == 2 and room_type == 20 and profile.player0_max_hearts >= 2
+    if profile.stage_type in (4, 5):
+        place = rid >= 0 and profile.adjusted_level_stage in (2, 4, 6, 8) and room_type == 20 and profile.player0_max_hearts > 1
+    else:
+        place = rid >= 0 and profile.level_stage == 2 and room_type == 20 and profile.player0_max_hearts >= 2
     _finish_candidate(state, entry, name, rid, place, descriptors, blocks, before, "0x0033BD87..0x0033C0B6", "canonical Stage 2 assigns Chest; zero-coin Arcade remains unassigned")
 
     _draw_level(state, draws, 0x0033C1C5, "Isaac/Barren type choice")

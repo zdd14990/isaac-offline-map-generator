@@ -154,6 +154,27 @@ class BossPoolRuntimeState:
         return result
 
     @classmethod
+    def fresh_alt(
+        cls,
+        game_start_seed: int,
+        pool_index: int,
+        entries: tuple[BossPoolEntry, ...],
+    ) -> "BossPoolRuntimeState":
+        """Fresh BossPools with one ALT pool (index == rcs 27..32) enabled."""
+
+        seeds = derive_pool_seeds(game_start_seed)
+        return cls(
+            game_start_seed=game_start_seed,
+            pool_seeds=seeds,
+            pool_rngs=[IsaacRNG.game_constructor(seed, POOL_SHIFT_INDEX) for seed in seeds],
+            shuffled_entries={
+                pool_index: shuffle_entries(entries, seeds[pool_index]),
+            },
+            removed=set(),
+            level_blacklist=set(),
+        )
+
+    @classmethod
     def resume_canonical_caves(
         cls,
         game_start_seed: int,

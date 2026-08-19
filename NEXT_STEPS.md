@@ -283,3 +283,24 @@ accounting (0x0033C416..0x0033C4D1) still need reconstruction. See
 Notes: `alt_route_stage_type_lifecycle.md`, `alt_floor_init_matrix.md`,
 `alt_special_room_condition_matrix.md`; `womb_bosspool10.md` corrected.
 Tests: generator 494 passed. Commits: `17ccc4d` (evidence [checkpoint A]).
+
+## Round 5 cont.: Downpour I (1+) IMPLEMENTED — registry open [checkpoint B]
+
+- `derive_alt_topology_inputs(_reference)` (6 floors, tested 120k
+  comparisons); `CanonicalDownpour1Profile` (level 1, stage_type 4, rcs 27,
+  slot 2); `adjusted_level_stage` profile property used by the M6 gates
+  (MiniBoss `adj==1`, Challenge `adj` shape, Chest `adj in {2,4,6,8}`) —
+  behavior-neutral for ORIGINAL (adjusted == level_stage).
+- `downpour1_full_pipeline(_reference).py`, `downpour1_lifecycle.py`,
+  `scripts/differential_downpour1_full.py`.
+- **100 ordered differentials (50 NORMAL + 50 HARD), 0 mismatches**:
+  `research/binary/alt1_100_differential_report.json`.
+- Registry: `SUPPORTED_FLOORS` gains "Downpour I"; bot token `1+` opens.
+  `/map B911 99AC 0 1+` -> Downpour I PNG (1400x900, PARTIAL_BINARY);
+  boss = pool-27 pick (Min Min 91 on B911 99AC). ALT 2+..6+ still
+  FAIL CLOSED.
+- M5/XL guards relaxed to allow XL at level 1 (odd stages < 8);
+  post-layout tail guards accept stage_type 4/5 + alt rcs 27..32; the tail
+  `-8` descriptor queries stage 13 (Blue Womb) on ALT too.
+- Generator tests 527 passed (494 + 14 alt floor-init + 18 downpour1
+  differential + 1 bot-api); fraq bot 94 passed, typecheck green.

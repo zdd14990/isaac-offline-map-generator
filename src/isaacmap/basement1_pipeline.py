@@ -414,7 +414,7 @@ def run_post_topology_through_treasure(
 ) -> PostTopologyAttemptResult:
     profile.validate()
     if profile.level_stage not in (1, 2, 3, 4, 5, 6, 7, 8) or (
-        profile.is_xl and profile.level_stage not in (3, 5, 7)
+        profile.is_xl and profile.level_stage not in (1, 3, 5, 7)
     ) or 589 in profile.collectible_ids:
         raise ValueError(
             "through-Treasure leaf supports canonical Basement I/II/Caves I/II/"

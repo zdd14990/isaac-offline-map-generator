@@ -60,6 +60,18 @@ class CanonicalBasement1Profile:
     library_subtype_max: int = 4
     special_room_used_bits: frozenset[int] = frozenset()
 
+    @property
+    def adjusted_level_stage(self) -> int:
+        """Level-stage as the binary uses it in the M6 special-room gates.
+
+        ``select_boss_id`` / the post-Treasure blocks read ``stage + 1`` for
+        stage_type 4/5 (the same +1 the stage-seed slot rule uses).  For the
+        ORIGINAL route this equals ``level_stage``, so the gates are
+        behavior-neutral there.
+        """
+
+        return self.level_stage + (1 if self.stage_type in (4, 5) else 0)
+
     def validate(self) -> None:
         if self.difficulty not in ("NORMAL", "HARD"):
             raise ValueError("difficulty must be NORMAL or HARD")
@@ -81,6 +93,51 @@ class CanonicalBasement1Profile:
         if not expected:
             raise ValueError(
                 "state is outside the binary-confirmed canonical fresh Basement I profile"
+            )
+
+
+@dataclass(frozen=True)
+class CanonicalDownpour1Profile(CanonicalBasement1Profile):
+    """Stage-1 ALT entry (Downpour I, StageType 4, rcs 27, slot 2).
+
+    Odd Stage 1 satisfies the Labyrinth predicate, so ``is_xl`` is possible.
+    The M6 special-room gates read ``adjusted_level_stage`` (stage + 1).
+    """
+
+    level_stage: int = 1
+    stage_type: int = 4
+    room_config_stage: int = 27
+    planetarium_chance: float = 0.01  # gate false on ALT; documentation only
+
+    def validate(self) -> None:
+        if self.difficulty not in ("NORMAL", "HARD"):
+            raise ValueError("difficulty must be NORMAL or HARD")
+        expected = (
+            self.level_stage == 1
+            and self.stage_type == 4
+            and self.room_config_stage == 27
+            and self.fallback_room_config_stage == 0
+            and self.challenge_id == 0
+            and self.game_mode == 0
+            and self.character_id == 0
+            and self.effective_curse_mask in (0, 1, 2, 4, 8, 32, 64)
+            and self.is_xl == bool(self.effective_curse_mask & 0x02)
+            and not self.is_ascent
+            and not self.is_daily
+            and not self.collectible_ids
+            and not self.visited_room_types
+            and self.shop_state_flags == (False, False, False, False)
+            and self.shop_generation_count == 0
+            and self.player0_max_hearts == 6
+            and self.player0_coins == 0
+            and self.player0_full_health
+            and self.planetarium_unlocked
+            and self.library_subtype_max == 4
+            and self.special_room_used_bits <= frozenset(range(9, 15))
+        )
+        if not expected:
+            raise ValueError(
+                "state is outside the binary-confirmed canonical Downpour I entry profile"
             )
 
 
