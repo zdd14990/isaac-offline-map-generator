@@ -810,10 +810,44 @@ the canonical ORIGINAL route:
   womb 10). Womb pool: Scolex(7), Mama Gurdy(49), Lokii(31), Mr. Fred(53),
   Blastocyst(16) w=1, The Matriarch(72) w=0.25; Womb I/II share pool 10 with
   RNG/removal inheritance via the existing 37-state snapshot.
-- Type8/Shop/Treasure stage-independence is grounded in the round-1
-  CONFIRMED_BINARY STATUS analysis ("NORMAL/HARD has no direct Shop branch",
-  "Canonical Stage 1 executes every named ordinary block") and the clean
-  pipeline's stage-gate shapes (`stage==1/2/3/12` false, `stage>=2/3` true
-  for 7/8, same as Depths 5/6); the 0x00339A87..0x0033A3FF section has not
-  been re-read line-by-line for 7/8, so those rows stay PREVIEW-grade until
-  then.
+- Type8/Shop/Treasure (`0x00339A87..0x0033A3FF`) and the post-Treasure
+  region (`0x0033A410..0x0033A940`) re-read line-by-line for stage 7/8: the
+  only stage gate in the section is `cmp [esi], 0xa` (level_stage==10); no
+  stage-7/8-specific gate exists, so the ordinary Boss/Type8/Shop/Treasure
+  blocks execute unconditionally on canonical Womb (CONFIRMED_BINARY).
+- Planetarium (`0x0033A8F7..0x0033AB45`): gate
+  `stage<7 || (stage<9 && collectible 0x6e) || stage==10`; canonical Womb
+  (no collectible) skips select/geometry/chance but consumes the
+  unconditional 0x0033A961 selector-seed Level draw (CONFIRMED_BINARY).
+- **Reference bug fixed**: the Womb reference originally resumed pool 10
+  with the Depths pool-7 state (`d2.final_boss`); per-pool BossPool RNGs are
+  independent, so pool 10 starts from its own game-start seed at Womb. Both
+  floors now pass 100/100 clean-vs-reference differentials (0 mismatches).
+
+## Womb I/II implementation complete (2026-08-18, round 4 cont.)
+
+- Womb I: `derive_womb1_topology_inputs` (stage 7, XL-capable, target 20 /
+  XL 36, dead ends 7/6), `CanonicalWomb1Profile` (rcs 10, stage_type 0),
+  `womb1_full_pipeline(_reference).py`, `womb1_lifecycle.py`
+  (next_level_stage=8). 100 ordered differentials (50 N + 50 H), 0
+  mismatches: `research/binary/womb1_100_differential_report.json`.
+  Targeted XL fixture seeds 106/244/1381 (NORMAL, curse mask 2, target 36,
+  dead ends 7; seed 106 accepted 37 rooms + additional boss (7, pool 10) at
+  room 37).
+- Womb II: `derive_womb2_topology_inputs` (stage 8, never XL, target 20,
+  dead ends 6, window (5,10)/(10,15)), `CanonicalWomb2Profile`,
+  `womb2_full_pipeline(_reference).py`, `womb2_lifecycle.py`
+  (next_level_stage=9 = Sheol, not implemented). 100 ordered differentials
+  (50 N + 50 H), 0 mismatches:
+  `research/binary/womb2_100_differential_report.json`.
+- Registry: `SUPPORTED_FLOORS` gains Womb I/Womb II; preview resources load
+  `10.womb.stb` + `pools["womb"]`; `bot_api` stage 7/8 open with
+  `algorithm_evidence` (CONFIRMED_BINARY vs PARTIAL_BINARY derived from
+  `generation_status`, persisted for cache hits); fraq bot caption prints
+  the real evidence grade.
+- Full generator suite: `494 passed` (462 baseline + 32 Womb tests). fraq
+  bot: 94 passed, typecheck/build green.
+- Bot smoke (real CLI path): `/map B911 99AC 0 7` -> Womb I NORMAL PNG,
+  `/map B911 99AC 1 8` -> Womb II HARD PNG; both PARTIAL_BINARY.
+- Discipline: Womb I/II are `PARTIAL_BINARY` on the 100-sample corpus, never
+  `CONFIRMED_BINARY`. ALT route and Sheol+ remain FAIL CLOSED.
