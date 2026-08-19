@@ -42,6 +42,65 @@ SUPPORT_VERSION = "first_release_scope_v1"
 
 SUPPORTED_DIFFICULTIES = ("NORMAL", "HARD")
 
+MAIN_ROUTE = "MAIN"
+ALT_ROUTE = "ALT"
+ROUTES = (MAIN_ROUTE, ALT_ROUTE)
+
+# Factual floor names for every user-facing stage token.  Support status comes
+# from ``SUPPORTED_FLOORS`` (the generation truth), never from this table.
+MAIN_FLOOR_NAMES: dict[int, str] = {
+    1: "Basement I",
+    2: "Basement II",
+    3: "Caves I",
+    4: "Caves II",
+    5: "Depths I",
+    6: "Depths II",
+    7: "Womb I",
+    8: "Womb II",
+}
+ALT_FLOOR_NAMES: dict[int, str] = {
+    1: "Downpour I",
+    2: "Downpour II",
+    3: "Mines I",
+    4: "Mines II",
+    5: "Mausoleum I",
+    6: "Mausoleum II",
+}
+FLOOR_NAMES: dict[str, dict[int, str]] = {
+    MAIN_ROUTE: MAIN_FLOOR_NAMES,
+    ALT_ROUTE: ALT_FLOOR_NAMES,
+}
+
+
+def parse_stage_token(token: str) -> tuple[str, int] | None:
+    """Parse a user stage token into ``(route, stage)`` or ``None``.
+
+    Accepts main-route ``"1".."8"`` and alternate-route ``"1+".."6+"``.
+    Validation is syntactic only; support is decided by ``SUPPORTED_FLOORS``.
+    """
+
+    text = str(token).strip()
+    if not text:
+        return None
+    if text.endswith("+"):
+        if len(text) != 2 or not text[0].isdigit():
+            return None
+        stage = int(text[0])
+        if stage not in ALT_FLOOR_NAMES:
+            return None
+        return (ALT_ROUTE, stage)
+    if text.isdigit():
+        stage = int(text)
+        if stage not in MAIN_FLOOR_NAMES:
+            return None
+        return (MAIN_ROUTE, stage)
+    return None
+
+
+def floor_name_for(route: str, stage_number: int) -> str | None:
+    """Return the factual floor name for a route/stage, or ``None``."""
+    return FLOOR_NAMES.get(route, {}).get(stage_number)
+
 # Canonical stage-number -> floor-name mapping, derived from the insertion
 # order of the single ``SUPPORTED_FLOORS`` registry (== LevelStage order
 # 1..6).  Adding a later floor to the registry automatically extends this.
@@ -78,6 +137,7 @@ class BotMapResult:
     error_message: str | None = None
     floor_name: str | None = None
     stage_number: int | None = None
+    route: str | None = None
     difficulty: str | None = None
     seed_text: str | None = None
     image_path: str | None = None
@@ -120,22 +180,24 @@ def _load_icons() -> dict:
     _ICONS = dict(ensure_official_icon_cache(cache_dir).images)
     return _ICONS
 
-
 def generate_map_image_for_bot(
     seed_text: str,
     difficulty: str,
     stage_number: int,
     output_dir: str,
     *,
+    route: str = MAIN_ROUTE,
     canvas_width: int = 1400,
     canvas_height: int = 900,
 ) -> BotMapResult:
     """Generate (or reuse a cached) PNG for one supported floor, fail closed.
 
-    ``difficulty`` is ``"NORMAL"`` or ``"HARD"``; ``stage_number`` is 1..6
-    today.  The produced PNG and a JSON snapshot land in ``output_dir`` with a
-    file name that also encodes the executable hash and support version, which
-    makes the file name itself the cache key.
+    ``difficulty`` is ``"NORMAL"`` or ``"HARD"``; ``route`` is ``"MAIN"`` or
+    ``"ALT"``; ``stage_number`` is the numeric stage inside that route.  The
+    produced PNG and a JSON snapshot land in ``output_dir`` with a file name
+    that also encodes the route, executable hash and support version, which
+    makes the file name itself the cache key (so main ``1`` and alt ``1+``
+    never collide).
     """
 
     normalized_difficulty = str(difficulty).strip().upper()
@@ -146,23 +208,45 @@ def generate_map_image_for_bot(
             error_message=f"difficulty must be NORMAL or HARD, got {difficulty!r}",
         )
 
+    normalized_route = str(route).strip().upper()
+    if normalized_route not in ROUTES:
+        return BotMapResult(
+            ok=False,
+            error="INVALID_ROUTE",
+            error_message=f"route must be MAIN or ALT, got {route!r}",
+        )
+
     if isinstance(stage_number, bool) or not isinstance(stage_number, int):
         return BotMapResult(
             ok=False,
             error="INVALID_STAGE",
             error_message=f"stage must be an integer, got {stage_number!r}",
         )
-    floor_name = stage_number_to_floor_name(stage_number)
+    floor_name = floor_name_for(normalized_route, stage_number)
     if floor_name is None:
         return BotMapResult(
             ok=False,
-            error="UNSUPPORTED_STAGE",
+            error="INVALID_STAGE",
             error_message=(
-                f"stage {stage_number} is not supported; "
-                f"supported: {', '.join(map(str, supported_stage_numbers()))}"
+                f"stage {stage_number} is outside route {normalized_route}; "
+                f"valid stages: {', '.join(map(str, FLOOR_NAMES[normalized_route]))}"
             ),
+            route=normalized_route,
             stage_number=stage_number,
         )
+    if floor_name not in SUPPORTED_FLOORS:
+        return BotMapResult(
+            ok=False,
+            error="UNSUPPORTED_FLOOR",
+            error_message=(
+                f"{floor_name} is not in the SUPPORTED_FLOORS registry; "
+                "generation is FAIL CLOSED until it is reconstructed"
+            ),
+            floor_name=floor_name,
+            route=normalized_route,
+            stage_number=stage_number,
+        )
+
 
     normalized_seed = normalize_seed_text(seed_text)
     if normalized_seed is None:
@@ -178,13 +262,12 @@ def generate_map_image_for_bot(
         return BotMapResult(
             ok=False,
             error="INVALID_SEED",
-            error_message=str(exc),
             seed_text=normalized_seed,
         )
 
     version_token = _version_token()
     compact_seed = normalized_seed.replace(" ", "")
-    base_name = f"{compact_seed}_{normalized_difficulty}_stage{stage_number}_{version_token}"
+    base_name = f"{compact_seed}_{normalized_route}_{normalized_difficulty}_stage{stage_number}_{version_token}"
     out_dir = Path(output_dir)
     image_path = out_dir / f"{base_name}.png"
     json_path = out_dir / f"{base_name}.json"
@@ -201,6 +284,7 @@ def generate_map_image_for_bot(
             ok=True,
             floor_name=floor_name,
             stage_number=stage_number,
+            route=normalized_route,
             difficulty=normalized_difficulty,
             seed_text=normalized_seed,
             image_path=str(image_path),
@@ -218,6 +302,7 @@ def generate_map_image_for_bot(
             error_message=str(exc),
             floor_name=floor_name,
             stage_number=stage_number,
+            route=normalized_route,
             seed_text=normalized_seed,
         )
     except (PreviewGenerationFailed, PreviewError, OSError, ValueError) as exc:
@@ -227,6 +312,7 @@ def generate_map_image_for_bot(
             error_message=str(exc),
             floor_name=floor_name,
             stage_number=stage_number,
+            route=normalized_route,
             difficulty=normalized_difficulty,
             seed_text=normalized_seed,
         )
@@ -247,6 +333,7 @@ def generate_map_image_for_bot(
         payload.setdefault("difficulty", normalized_difficulty)
         payload.setdefault("floor_name", floor_name)
         payload.setdefault("stage_number", stage_number)
+        payload.setdefault("route", normalized_route)
     except Exception as exc:  # render must never crash the caller
         return BotMapResult(
             ok=False,
@@ -254,6 +341,7 @@ def generate_map_image_for_bot(
             error_message=f"render/export failed: {exc}",
             floor_name=floor_name,
             stage_number=stage_number,
+            route=normalized_route,
             difficulty=normalized_difficulty,
             seed_text=normalized_seed,
         )
@@ -276,6 +364,7 @@ def generate_map_image_for_bot(
             error_message=f"writing output failed: {exc}",
             floor_name=floor_name,
             stage_number=stage_number,
+            route=normalized_route,
             difficulty=normalized_difficulty,
             seed_text=normalized_seed,
         )
@@ -284,6 +373,7 @@ def generate_map_image_for_bot(
         ok=True,
         floor_name=floor_name,
         stage_number=stage_number,
+        route=normalized_route,
         difficulty=normalized_difficulty,
         seed_text=normalized_seed,
         image_path=str(image_path),
@@ -302,6 +392,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--seed")
     parser.add_argument("--difficulty", choices=("NORMAL", "HARD"))
     parser.add_argument("--stage", type=int)
+    parser.add_argument("--route", choices=ROUTES, default=MAIN_ROUTE)
     parser.add_argument("--output-dir")
     parser.add_argument("--canvas-width", type=int, default=1400)
     parser.add_argument("--canvas-height", type=int, default=900)
@@ -318,6 +409,21 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "stages": list(supported_stage_numbers()),
                     "summary": supported_stage_summary(),
+                    "routes": {
+                        route: {
+                            str(stage): name
+                            for stage, name in FLOOR_NAMES[route].items()
+                        }
+                        for route in ROUTES
+                    },
+                    "supported": {
+                        route: [
+                            stage
+                            for stage, name in FLOOR_NAMES[route].items()
+                            if name in SUPPORTED_FLOORS
+                        ]
+                        for route in ROUTES
+                    },
                 },
                 ensure_ascii=False,
             )
@@ -332,6 +438,7 @@ def main(argv: list[str] | None = None) -> int:
         args.difficulty,
         args.stage,
         args.output_dir,
+        route=args.route,
         canvas_width=args.canvas_width,
         canvas_height=args.canvas_height,
     )

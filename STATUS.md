@@ -188,6 +188,31 @@ Stage-7 or later constants or RoomConfig/BossPool profile are copied from
 earlier floors; the next floor remains fail closed until independently
 reconstructed.
 
+### Stage-7/8 and alternate-route floors: current blocker (2026-08-18)
+
+The user-facing token surface for Womb I/II (`7`/`8`, main route) and the
+alternate chapters (`1+..6+`: Downpour I/II, Mines I/II, Mausoleum I/II,
+stage type 4/5) is wired end to end in `isaacmap.bot_api` (token parsing,
+route-aware cache keys, `--supported` registry output) and the fraq bot
+(`/map`), but **generation is FAIL CLOSED for all eight floors**. They are
+NOT graded `CONFIRMED_BINARY` and are not claimed as supported.
+
+The concrete blocker is the shared post-layout lifecycle tail
+(`post_layout_lifecycle.run_post_layout_lifecycle`):
+
+- its guard rejects `level_stage` outside 1..6 and any `stage_type` other
+  than 0, which excludes Womb I/II and every alternate floor;
+- the optional `-9` (room-config-stage 13) and `-10` (stage-type 4/5 plus
+  level-stage 7/8) fixed descriptors are deliberately unimplemented and
+  returned as skipped;
+- the 28-persistent-Level-draw invariant assumes the canonical ORIGINAL
+  tail, which the `-10` branch would change.
+
+No binary evidence currently exists for these floors (`research/notes/` has
+no Womb/Downpour/Mines/Mausoleum analysis, and no RVA/selection data for the
+`-10` descriptor). Implementing them requires that reverse engineering first;
+pattern-extension without it is refused (the project never approximates).
+
 
 Noncanonical character, collectible, challenge/game-mode, unlock and continue
 profiles are rejected rather than silently taking the canonical branch.

@@ -75,18 +75,46 @@ mismatches           0
 
 `448 passed`.
 
-## NEXT: (optional, out of first-release scope) Womb I / Stage 7
+## Womb I/II and alternate floors: status (2026-08-18)
 
-Do not start Stage 7 unless explicitly requested. Womb I is odd (XL possible),
-with `get_room_config_stage(7, ORIGINAL)` = 10 (Womb BossPool index 10), a
-fresh pool starting from its run-start state, and its own Stage-7
-`Level::Init`/`generate_dungeon` branch. It is outside the frozen first-release
-scope.
+User-facing token surface is DONE and verified:
 
-Previous verification command:
+- `isaacmap.bot_api`: `parse_stage_token` (main `1..8`, alt `1+..6+`),
+  `floor_name_for`, route-aware cache keys (`MAIN`/`ALT` in the file name),
+  `--route` CLI flag, `--supported` now returns the full route table plus
+  per-route supported lists.
+- fraq bot `/map`: parses the new tokens, passes `route` through to the
+  generator, cache key includes route, and new floors reply FAIL CLOSED with
+  the floor name (e.g. "该层当前未支持（Womb I）..."). Tests: 94 fraq + 14
+  generator bot_api tests; fraq typecheck/build green.
+
+Generation for the eight floors (Womb I/II, Downpour I/II, Mines I/II,
+Mausoleum I/II) is **FAIL CLOSED, not implemented**. Blocker:
+
+1. `post_layout_lifecycle.run_post_layout_lifecycle` guard rejects
+   `level_stage` 7/8 and `stage_type` 4/5; the `-10` fixed descriptor
+   (stage-type 4/5 plus level-stage 7/8) and the `-9` (room-config-stage 13)
+   descriptor are unimplemented; the 28-draw invariant would change.
+2. No binary evidence exists: no RVAs/selection seeds for the `-10` branch,
+   no Womb/Downpour/Mines/Mausoleum floor-init analysis, no notes.
+
+Next concrete steps (each needs static analysis of the frozen binary):
+
+- Disassemble the shared tail `0x0033D1D6..0x0033D94B` for level-stage 7/8
+  and stage-type 4/5; extract the `-10` descriptor selection (RVAs, room
+  type, subtype, seeds) and its extra RNG consumption.
+- Derive floor-init topology inputs for Womb I/II (slot 7/8; Womb I is odd
+  and XL-capable; `get_room_config_stage(7, ORIGINAL)` = 10, Womb BossPool
+  index 10) and for the alt floors (slot `level_stage + 1`, stage type 4).
+- Implement clean + reference pipelines, ~100 differentials per floor
+  (50 NORMAL + 50 HARD), and grade honestly (PARTIAL_BINARY / PREVIEW
+  at most until the corpus grows) — never `CONFIRMED_BINARY` on 100 samples.
+- Register in `SUPPORTED_FLOORS`/bot_api and update the UI floor selector.
+
+Verification command:
 
 ```powershell
 .venv\Scripts\python.exe -m pytest -q
 ```
 
-Result: 448 passed.
+Result: 462 passed (448 + 14 bot_api stage-token tests).

@@ -75,6 +75,13 @@ gameplay state) is **UNSUPPORTED — FAIL CLOSED**: the generator rejects it
 instead of approximating. The registry in `src/isaacmap/preview.py` is the
 single source of truth.
 
+The headless API (`isaacmap.bot_api`) already understands the full user-facing
+token set — main route `1..8` and alternate route `1+..6+` — with
+route-aware cache keys, but generation for Womb I/II (`7`/`8`) and the
+alternate floors (`1+..6+`) remains fail closed until their post-layout
+lifecycle tail (including the `-10` descriptor and stage 7/8 / stage-type 4/5
+branches) is reconstructed with binary evidence. See `STATUS.md`.
+
 ## Evidence model
 
 Two independent evidence dimensions are tracked separately:
