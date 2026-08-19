@@ -138,3 +138,42 @@ Verification command:
 
 Result: 462 passed (448 + 14 bot_api stage-token tests), confirmed at the
 start of round 2.
+
+## Round 3 (2026-08-18): get_room_config_stage + Womb floor-init confirmed
+
+**P2 done — `Level__get_room_config_stage` fully reconstructed**
+(`research/decomp/ghidra/Level__get_room_config_stage.c`, note
+`get_room_config_stage_stage7_8_alt.md`):
+
+- ORIGINAL: `rcs = 1 + ((stage-1)>>1)*3` -> (7,0)=10, (8,0)=**10** (Utero 11
+  is NOT the canonical Womb II rcs — resolved).
+- alt I floors (1..6, stage_type 4): `((stage-1)&~1)+27` -> 27/29/31.
+- alt II floors (1..6, stage_type 5): `((stage-1)>>1)*2+28` -> 28/30/32 —
+  **Dross/Ashpit/Gehenna use stage_type 5 (REPENTANCE_B), not 4**.
+- (7/8, 4/5) -> 33 Corpse (the -10 domain; consistent with round 2).
+- Greed-mode (game mode 2/3) special mapping documented.
+
+**P3 partial — Womb floor-init confirmed** (`Level__generate_dungeon.c`):
+
+- target = `min(stage*10/3+5+bit, 20)` -> Womb I/II = 20; HARD +2+bit
+  (22/23); XL target = `max(4, target*3/5)` -> 12 N / 13 H (Womb I).
+- required dead ends = `(stage != 1) + 5` = 6.
+- **alternate floors subtract 3 from target** (confirmed difference — the
+  alt floor-init must NOT be extrapolated from ORIGINAL).
+
+**Still required before generation can be implemented:**
+
+1. Through-Treasure / Secret / Ultra / late RoomConfig stage gates for
+   level_stage 7/8 (verify each stage-dependent branch against the binary).
+2. Womb BossPool 10 entries (parse bosspools.xml pool 10).
+3. Womb I XL machinery (existing XL gated to stages 3/5; extend + verify).
+4. Difficulty window + planetarium for stage 7/8 (traced in RoomConfig
+   selection).
+5. Alt floors: floor-init remaining params (target-3 confirmed, everything
+   else open), BossPools, special-room matrix, RunGenerationState.
+6. Then: profiles + clean/reference pipelines + ~100 differentials per floor
+   (800 total), grade at most PARTIAL_BINARY / PREVIEW_SUPPORTED, register,
+   update UI selector.
+
+Womb I/II generation remains FAIL CLOSED. Commits this round: `652b6c2`
+(P2) and `150980c` (P3 floor-init).
