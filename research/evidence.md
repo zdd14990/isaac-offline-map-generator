@@ -770,3 +770,16 @@ Findings (see `research/notes/post_layout_descriptor_minus9.md` and
 The generation pipelines for the eight floors remain unimplemented and
 `FAIL CLOSED`; the open items are listed in `STATUS.md` (round 2 section) and
 `research/notes/floors/womb1.md` / `womb2.md`.
+
+## Level::get_room_config_stage reconstruction (2026-08-18, round 3)
+
+`research/decomp/ghidra/Level__get_room_config_stage.c` (Ghidra export of the
+hash-locked PE) resolves the canonical chapter mapping:
+
+- ORIGINAL: `rcs = 1 + ((stage-1)>>1)*3` -> (7,0)=10, (8,0)=10 (Womb II is
+  NOT Utero 11).
+- stage_type 4 (alt I floors): `rcs = ((stage-1)&~1) + 27` -> 27/29/31.
+- stage_type 5 (alt II floors): `rcs = ((stage-1)>>1)*2 + 28` -> 28/30/32.
+- (7/8, 4/5) -> 33 (Corpse) cross-checks the -10 descriptor domain.
+
+Full table in `research/notes/get_room_config_stage_stage7_8_alt.md`.

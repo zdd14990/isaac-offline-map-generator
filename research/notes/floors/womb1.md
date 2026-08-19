@@ -9,8 +9,8 @@ Status: **parameters partially established; generation NOT implemented.**
 | LevelStage | 7 | level-stages enum (repo) |
 | StageType | 0 (ORIGINAL) | main route |
 | Stage-seed slot | 7 | `stage_seed.py` (CONFIRMED_BINARY slot selection) |
-| RoomConfig stage | 10 (**predicted**) | `1+(7-1)//2*3`; NEXT_STEPS note; needs binary verify |
-| BossPool index | 10 (**predicted**) | `boss_pool.py`: pool index == ORIGINAL rcs; needs verify |
+| RoomConfig stage | **10 (CONFIRMED_BINARY)** | `get_room_config_stage(7, 0)` = 1+((7-1)>>1)*3 = 10; see `get_room_config_stage_stage7_8_alt.md` |
+| BossPool index | **10 (CONFIRMED_BINARY)** | pool == ORIGINAL rcs (`boss_pool.py`); rcs = 10 confirmed |
 | XL eligibility | **yes (odd stage, Labyrinth valid)** | curse logic: choice 0 valid on odd stages < 8 |
 | Target room count | `min(floor(70/3)+5+bit, 20) = 20` (**predicted**) | floor_init pattern for stage >= 6 |
 | Dead ends | 6 (**predicted**) | floor_init pattern |

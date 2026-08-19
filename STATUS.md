@@ -217,19 +217,29 @@ New binary findings this round (post-layout lifecycle tail
   `boss_pool.py` confirms pool index == ORIGINAL room-config stage.
   `stage_seed.py` already confirms the alt route seed-slot rule
   (`level_stage + 1`, capped at Home).
+- **`get_room_config_stage` fully reconstructed**
+  (`research/decomp/ghidra/Level__get_room_config_stage.c`, note
+  `get_room_config_stage_stage7_8_alt.md`): ORIGINAL `(7,0)->10` and
+  `(8,0)->10` (Utero 11 is NOT the canonical Womb II rcs); alt I floors
+  `(1..6, stage_type 4) -> 27/29/31`; alt II floors `(1..6, stage_type 5)
+  -> 28/30/32` (Dross/Ashpit/Gehenna are stage_type 5, the "second chapter"
+  variant); `(7/8, 4/5) -> 33` Corpse (the `-10` domain); Greed-mode special
+  mapping documented.
 
 Still open before generation can be implemented (see
 `research/notes/floors/womb1.md`, `womb2.md`,
 `research/notes/stage_type_4_5_binary_proof.md`):
 
-1. `get_room_config_stage(7..8, 0)` and `(1..6, 4/5)` binary mapping
-   (Womb II may be rcs 11/Utero, not 10);
-2. floor-init parameters for stage_type 4/5 (must not be extrapolated from
-   ORIGINAL);
-3. through-Treasure / Secret / Ultra / late RoomConfig stage gates for
+1. floor-init parameters for stage 7/8 (target count cap, dead ends,
+   difficulty window, XL) and for stage_type 4/5 (must not be extrapolated
+   from ORIGINAL);
+2. through-Treasure / Secret / Ultra / late RoomConfig stage gates for
    level_stage 7/8 and stage_type 4/5;
-4. Womb I XL (stage 7 Labyrinth) — existing XL machinery is gated to 3/5;
-5. alternate-route RunGenerationState fields and BossPool indices/lists.
+3. Womb I XL (stage 7 Labyrinth) — existing XL machinery is gated to 3/5;
+4. route-progression stage_type assignment (I floors = 4, II floors = 5)
+   in the level-transition code;
+5. alternate-route RunGenerationState fields and BossPool entries for
+   pools 10 (Womb) and the alt chapters.
 
 Validation target when implemented: 50 NORMAL + 50 HARD per floor (~100
 comparisons, 800 total), graded at most `PARTIAL_BINARY` /
