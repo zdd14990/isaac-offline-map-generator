@@ -1,0 +1,53 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE read as bytes only; no image loading or execution.",
+  "scope": "canonical Basement II Treasure-to-Secret stage predicates",
+  "function_hashes": {
+    "post_topology": "7ae850e43abce93f33e12ef5881bf9d09043ea866ad7773d643965659ad16996",
+    "planetarium_chance": "ab284be888cb4e4848aa6537dda6921c4e7c4b85b0323f5a006daf2f8e67700f",
+    "challenge_player_condition": "b3083f83cd1b7109c8c35e15a2a59f8fcb772f6e47574c1b31ff7d1508a66630"
+  },
+  "control_transfers": {
+    "planetarium_chance": "0x0034DBD0",
+    "challenge_player_condition": "0x005BEB30"
+  },
+  "control_transfer_checks": {
+    "planetarium_chance": true,
+    "challenge_player_condition": true
+  },
+  "instruction_checks": {
+    "miniboss_secondary_draw_and_stage_one_gate": true,
+    "challenge_parity_player_and_stage_gates": true,
+    "chest_max_hearts_and_even_stage_assignment": true,
+    "planetarium_base_load": true,
+    "planetarium_last_treasure_stage_load": true,
+    "planetarium_skipped_treasure_increment": true,
+    "planetarium_add_base": true,
+    "planetarium_clamp_floor": true,
+    "planetarium_clamp_ceiling": true,
+    "player_condition_health_fields": true
+  },
+  "constants": {
+    "base_0_01": 0.009999999776482582,
+    "skipped_treasure_0_20": 0.20000000298023224,
+    "cap_1_0": 1.0
+  },
+  "canonical_stage_two_planetarium_chance": 0.21000000834465027,
+  "canonical_stage_two_planetarium_chance_f32_bits": "3e0a573e",
+  "constant_checks": {
+    "base_0_01": true,
+    "skipped_treasure_0_20": true,
+    "cap_1_0": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "post_topology_hash": true,
+    "planetarium_function_hash": true,
+    "player_condition_function_hash": true,
+    "control_transfers": true,
+    "stage_two_branch_bytes": true,
+    "planetarium_constants": true,
+    "canonical_stage_two_planetarium_chance_bits": true
+  },
+  "matches": true
+}

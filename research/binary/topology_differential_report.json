@@ -1,0 +1,132 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "start_seed_range": [
+    1,
+    10000
+  ],
+  "total_comparisons": 20000,
+  "total_generator_rng_draws_compared": 7285534,
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 10000,
+      "rng_draws": 3428553,
+      "max_rng_draws": 1190,
+      "boundary_skips": 277032,
+      "large_draws": 2978209,
+      "large_random_failures": 2884026,
+      "large_random_successes": 94183,
+      "large_candidates_appended": 514734,
+      "large_rooms_placed": 17239,
+      "forced_dead_end_attempts": 9911,
+      "forced_dead_end_successes": 9911,
+      "outer_retries": 0,
+      "target_room_counts": [
+        8,
+        9
+      ],
+      "shapes_placed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "example_seeds": {
+        "boundary": 1,
+        "large_gate_failure": 1,
+        "large_room_placed": 1,
+        "forced_dead_end": 4,
+        "shape_10": 7,
+        "shape_11": 7,
+        "shape_12": 8,
+        "shape_9": 13
+      }
+    },
+    "HARD": {
+      "comparisons": 10000,
+      "rng_draws": 3856981,
+      "max_rng_draws": 1247,
+      "boundary_skips": 274276,
+      "large_draws": 3257787,
+      "large_random_failures": 3154919,
+      "large_random_successes": 102868,
+      "large_candidates_appended": 224868,
+      "large_rooms_placed": 21889,
+      "forced_dead_end_attempts": 3248,
+      "forced_dead_end_successes": 3248,
+      "outer_retries": 0,
+      "target_room_counts": [
+        10,
+        12
+      ],
+      "shapes_placed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "example_seeds": {
+        "boundary": 1,
+        "large_gate_failure": 1,
+        "large_room_placed": 1,
+        "shape_10": 1,
+        "forced_dead_end": 4,
+        "shape_11": 7,
+        "shape_12": 8,
+        "shape_9": 13
+      }
+    }
+  },
+  "all_shapes_placed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "coverage_requirements": {
+    "normal_covered": true,
+    "hard_covered": true,
+    "large_success_covered": true,
+    "large_failure_covered": true,
+    "forced_dead_end_covered": true,
+    "all_l_shapes_covered": true,
+    "boundary_covered": true,
+    "natural_outer_retry_observed": false
+  },
+  "differential_dimensions": [
+    "target room count",
+    "room anchors",
+    "RoomShape",
+    "occupied cells / complete room_map",
+    "door masks and connection sets",
+    "expansion order",
+    "dead-end and non-dead-end order",
+    "per-attempt retry/forced-dead-end counts",
+    "every generator RNG pre-state and post-state",
+    "final generator RNG state"
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical fresh Basement I through Treasure; Secret and Ultra excluded",
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 10000,
+      "total_attempts": 10785,
+      "retrying_seeds": 740,
+      "abort_operations": {
+        "Treasure geometry": 783,
+        "Boss geometry": 2
+      },
+      "max_attempts": 4,
+      "topology_shapes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "selected_config_shapes": {
+        "Boss": [
+          1,
+          4,
+          6
+        ],
+        "RoomType8": [
+          1
+        ],
+        "Shop": [
+          1
+        ],
+        "Treasure": [
+          1,
+          2,
+          3
+        ]
+      },
+      "geometry_candidate_shapes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "post_topology_rng_transitions": 200668,
+      "room_config_selector_calls": 57245,
+      "candidate_tests": 45155,
+      "condition_traces": 53915
+    },
+    "HARD": {
+      "comparisons": 10000,
+      "total_attempts": 10741,
+      "retrying_seeds": 693,
+      "abort_operations": {
+        "Treasure geometry": 740,
+        "Boss geometry": 1
+      },
+      "max_attempts": 4,
+      "topology_shapes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "selected_config_shapes": {
+        "Boss": [
+          1,
+          4,
+          6
+        ],
+        "RoomType8": [
+          1
+        ],
+        "Shop": [
+          1
+        ],
+        "Treasure": [
+          1,
+          2,
+          3
+        ]
+      },
+      "geometry_candidate_shapes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "post_topology_rng_transitions": 199831,
+      "room_config_selector_calls": 56999,
+      "candidate_tests": 45338,
+      "condition_traces": 53700
+    }
+  },
+  "total_comparisons": 20000,
+  "differential_dimensions": [
+    "attempt count and target-room count",
+    "full M4 topology state and final generator RNG state",
+    "BossPool persistent/local state, blacklist, permanent removal",
+    "RoomConfig ordered candidates, exact-door subset, binary32 weights and draws",
+    "ordered end-room candidate scans, geometry decisions, stable erase",
+    "room anchors, RoomShape, occupied map, connections and RoomType mutation",
+    "all post-topology RNG object transitions and final states",
+    "binary condition traces through Treasure"
+  ]
+}

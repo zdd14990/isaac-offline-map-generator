@@ -1,0 +1,65 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE read as bytes only; no image loading or execution.",
+  "tail_rva": "0x0033D1D6",
+  "tail_size": 1914,
+  "tail_sha256": "a21990350bea6c0557db4208de080246c67be678171774d8749362a5311c6d37",
+  "descriptor_seed_helper_rva": "0x00028940",
+  "descriptor_seed_helper_size": 235,
+  "descriptor_seed_helper_sha256": "8256b881b5c4e4b9d1ac855891ff84e3c54e900762fd01f260cc3681be0b4a7c",
+  "control_transfers": {
+    "descriptor_seed_helpers": [
+      "0x00028940",
+      "0x00028940",
+      "0x00028940",
+      "0x00028940",
+      "0x00028940",
+      "0x00028940",
+      "0x00028940",
+      "0x00028940"
+    ],
+    "room_config_selectors": [
+      "0x0042C7D0",
+      "0x0042C7D0",
+      "0x0042C7D0",
+      "0x0042C7D0",
+      "0x0042C7D0",
+      "0x0042C7D0",
+      "0x0042C7D0",
+      "0x0042C7D0"
+    ],
+    "level_next_calls": [
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0"
+    ]
+  },
+  "instruction_checks": {
+    "fixed_grid_indices_order": true,
+    "error_room_type": true,
+    "black_market_room_type": true,
+    "dungeon_room_type": true,
+    "bossrush_collectible_550": true,
+    "boss_subtype_55": true,
+    "blue_womb_stage_13": true,
+    "canonical_negative_eight": true,
+    "shop_negative_thirteen": true,
+    "angel_negative_eighteen": true,
+    "optional_stage_types_four_five": true,
+    "optional_negative_ten": true,
+    "success_true": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "control_transfers": true,
+    "instruction_constants": true
+  },
+  "matches": true
+}

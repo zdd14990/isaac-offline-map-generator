@@ -1,0 +1,28 @@
+{
+  "path": "C:\\MyGames\\isaac-offline-map-generator\\research\\input\\isaac-ng.exe",
+  "sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "size": 9362440,
+  "machine": "0x014c",
+  "architecture": "x86",
+  "optional_header_magic": "0x010b",
+  "image_base": "0x00400000",
+  "section_count": 6,
+  "characteristics": "0x0122",
+  "pe_timestamp_raw": "0x69e6e3a7",
+  "pe_timestamp_utc": "2026-04-21T02:40:39+00:00",
+  "windows_file_version": null,
+  "windows_product_version": null,
+  "ascii_version_markers": {
+    "v1.9.7.17": [
+      "0x71a3dc",
+      "0x7798f3",
+      "0x77c7d2"
+    ],
+    "Binding of Isaac: Repentance+ v1.9.7.17.J460": [
+      "0x77c7b4"
+    ],
+    "1.9.7.16": [
+      "0x71b52c"
+    ]
+  }
+}

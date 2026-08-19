@@ -1,0 +1,18 @@
+{
+  "pe": "C:\\MyGames\\isaac-offline-map-generator\\research\\input\\isaac-ng.exe",
+  "set_start_seed_rva": "0x005eb880",
+  "sequence_shifts_rva": "0x0071f60c",
+  "sequence_shifts": [
+    3,
+    23,
+    25
+  ],
+  "expected": [
+    3,
+    23,
+    25
+  ],
+  "matches": true,
+  "stage_seed_count_from_loop_immediate": 14,
+  "player_init_draws_after_stage_loop": 1
+}

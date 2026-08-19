@@ -1,0 +1,76 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "scope": "fresh vanilla Basement I Boss then RoomType 8 recovered slice",
+  "start_seed_range": [
+    1,
+    10000
+  ],
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 10000,
+      "boss_ids": [
+        1,
+        2,
+        13,
+        17,
+        20,
+        44,
+        56,
+        60,
+        64,
+        65,
+        84
+      ],
+      "type8_counts": [
+        0,
+        1
+      ],
+      "completed": 9998,
+      "boss_aborts": 2,
+      "type8_aborts": 0,
+      "candidate_tests": 20220,
+      "rng_transitions": 146182,
+      "distinct_final_level_rng_states": 10000
+    },
+    "HARD": {
+      "comparisons": 10000,
+      "boss_ids": [
+        1,
+        2,
+        13,
+        17,
+        20,
+        44,
+        56,
+        60,
+        64,
+        65,
+        84
+      ],
+      "type8_counts": [
+        0,
+        1
+      ],
+      "completed": 9999,
+      "boss_aborts": 1,
+      "type8_aborts": 0,
+      "candidate_tests": 20237,
+      "rng_transitions": 146185,
+      "distinct_final_level_rng_states": 10000
+    }
+  },
+  "differential_dimensions": [
+    "BossPool chained seeds and init-time shuffle",
+    "BossPool persistent and local selector RNG states",
+    "boss identity and room-config weight mutation",
+    "ordered candidate scans and stable erases",
+    "room anchors/shapes/type/variant/subtype mutations",
+    "complete occupied room map and connections",
+    "RoomType 8 selection and candidate-pool side effects",
+    "every recovered RNG object transition and final Level RNG state"
+  ],
+  "total_comparisons": 20000,
+  "total_rng_transitions_compared": 292367
+}

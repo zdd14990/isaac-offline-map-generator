@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "exe_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "fixtures": [],
+  "status": "NO_VERSION_QUALIFIED_FIXTURE_FOUND",
+  "requirements": [
+    "exact game version",
+    "display seed",
+    "floor and StageType",
+    "difficulty",
+    "complete room map"
+  ]
+}

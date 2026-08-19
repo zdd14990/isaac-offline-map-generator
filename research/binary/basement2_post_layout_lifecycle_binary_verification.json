@@ -1,0 +1,24 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE read as bytes only; no image loading or execution.",
+  "scope": "canonical Basement II successful post-layout lifecycle tail",
+  "tail_rva": "0x0033D1D6",
+  "tail_size": 1914,
+  "tail_sha256": "a21990350bea6c0557db4208de080246c67be678171774d8749362a5311c6d37",
+  "instruction_checks": {
+    "first_door_flag_requires_stage_above_four": true,
+    "second_door_flag_requires_stage_above_three": true,
+    "first_flag_bit_write": true,
+    "second_flag_bit_write": true,
+    "blue_womb_current_stage_compare": true,
+    "canonical_negative_eight": true,
+    "optional_stage_types_four_five": true,
+    "success_true": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "tail_hash": true,
+    "stage_two_branch_bytes": true
+  },
+  "matches": true
+}

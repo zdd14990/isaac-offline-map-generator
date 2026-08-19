@@ -1,0 +1,21 @@
+{
+  "status": "INVARIANTS_ONLY_NOT_AN_ORACLE",
+  "seed_range": [
+    1,
+    1000
+  ],
+  "difficulties": [
+    "NORMAL",
+    "HARD"
+  ],
+  "runs": 2000,
+  "max_rooms": 17,
+  "max_retries": 0,
+  "large_rooms": 3495,
+  "checks": [
+    "start_grid_index_84",
+    "at_least_five_dead_ends",
+    "occupied_cells_in_13x13",
+    "no_occupied_cell_overlap"
+  ]
+}

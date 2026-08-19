@@ -1,0 +1,51 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE read as bytes only; no image loading or execution.",
+  "scope": "inherited canonical Basement BossPool repick/fallback/reset path",
+  "pick_boss": {
+    "rva": "0x00022620",
+    "size": 362,
+    "sha256": "9822d3ce7aab6b3a01a10bd9440213ed0e08de5f774527e8b98b2a6bcd21df52"
+  },
+  "select_boss_id": {
+    "rva": "0x00022830",
+    "size": 1498,
+    "sha256": "b4133528375302b58d0ace97c43d1109ee3dbeb626d685bf09851eaec0b78c33"
+  },
+  "control_transfers": {
+    "seven_persistent_prerolls": [
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0",
+      "0x003E90F0"
+    ],
+    "weighted_picker": "0x00022620"
+  },
+  "control_transfer_checks": {
+    "seven_persistent_prerolls": true,
+    "weighted_picker": true
+  },
+  "instruction_checks": {
+    "repick_countdown_nine": true,
+    "binary32_cumulative_add": true,
+    "binary32_target_remap": true,
+    "circular_fallback_next_entry": true,
+    "circular_fallback_wrap": true,
+    "local_binary32_pool_threshold": true,
+    "clear_permanent_removed_bit": true,
+    "clear_attempt_blacklist_bit": true,
+    "clear_each_entry_stride": true,
+    "outer_null_retry_limit_ten": true,
+    "exhaustion_monstro_id_one": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "function_hashes": true,
+    "control_transfers": true,
+    "instruction_semantics": true
+  },
+  "matches": true
+}

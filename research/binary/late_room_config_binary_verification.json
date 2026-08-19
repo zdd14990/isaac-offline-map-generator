@@ -1,0 +1,36 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE read as bytes only; no image loading or execution.",
+  "late_slice_rva": "0x0033CB5D",
+  "late_slice_size": 966,
+  "late_slice_sha256": "edccc3e8e941a1c5b9759ad1f145b55e5305db7653a5e0cb9b132f9e342cb8ed",
+  "collect_rooms_rva": "0x005AF0E0",
+  "collect_rooms_size": 254,
+  "collect_rooms_sha256": "34bf078b58f329e1aea931d7b5cf65712fce754b78729e0c91c4ae2fc4137b77",
+  "control_transfers": {
+    "collect_rooms": "0x005AF0E0",
+    "start_get_room": "0x0042C720",
+    "level_rng_selector_seed": "0x003E90F0",
+    "direct_select_room": "0x0042C7D0",
+    "assign_room_config": "0x00338AB0",
+    "excluded_room_rng_advance": "0x003E90F0"
+  },
+  "instruction_checks": {
+    "collect_non_dead_first": true,
+    "collect_dead_second": true,
+    "hard_minimum_pre_draw_gate": true,
+    "shape_from_generated_room": true,
+    "required_doors_address": true,
+    "room_type_default": true,
+    "reduce_weight_true": true,
+    "null_selector_branch": true,
+    "false_return": true,
+    "start_variant_two": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "control_transfers": true,
+    "instruction_constants": true
+  },
+  "matches": true
+}

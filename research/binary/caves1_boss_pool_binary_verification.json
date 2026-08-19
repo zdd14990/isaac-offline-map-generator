@@ -1,0 +1,68 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE and bosspools.xml read as data only; no image loading or execution.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical ORIGINAL Caves-I pool 4 primary and XL second-boss selection",
+  "pick_boss": {
+    "rva": "0x00022620",
+    "size": 362,
+    "sha256": "9822d3ce7aab6b3a01a10bd9440213ed0e08de5f774527e8b98b2a6bcd21df52"
+  },
+  "select_boss_id": {
+    "rva": "0x00022830",
+    "size": 1498,
+    "sha256": "b4133528375302b58d0ace97c43d1109ee3dbeb626d685bf09851eaec0b78c33"
+  },
+  "room_config_stage": {
+    "rva": "0x0042D030",
+    "size": 206,
+    "sha256": "a1c66c6a62a0dabeb4aec5d35116dca13b3ad587e52abb6d543d405ec42e84ae",
+    "canonical_stage3_result": 4
+  },
+  "boss_calls": {
+    "primary_boss": "0x00022830",
+    "xl_second_boss": "0x00022830"
+  },
+  "caves_pool": {
+    "runtime_index": 4,
+    "xml_order_prefix": [
+      "basement",
+      "cellar",
+      "burning basement",
+      "caves"
+    ],
+    "entry_ids": [
+      3,
+      4,
+      18,
+      45,
+      47,
+      21,
+      14,
+      28,
+      57,
+      67,
+      69,
+      94
+    ]
+  },
+  "instruction_checks": {
+    "primary_passes_stage_and_stage_type": true,
+    "xl_curse_gate": true,
+    "xl_second_passes_stage_plus_one": true,
+    "xl_second_level_rng_snapshot": true,
+    "xl_second_level_rng_restore": true,
+    "pool_selector_seven_prerolls": true,
+    "pool_selector_weighted_picker": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "function_hashes": true,
+    "boss_calls": true,
+    "instruction_semantics": true,
+    "caves_pool_index": true,
+    "caves_pool_entries": true,
+    "stage3_room_config_stage": true
+  },
+  "matches": true
+}

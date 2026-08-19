@@ -1,0 +1,222 @@
+{
+  "pe": "C:\\MyGames\\isaac-offline-map-generator\\research\\input\\isaac-ng.exe",
+  "image_base": 4194304,
+  "matches": [
+    {
+      "name": "Level::Init (generic signature candidate)",
+      "file_offset": 895648,
+      "rva": 898720,
+      "virtual_address": 5093024
+    },
+    {
+      "name": "Level::Init (generic signature candidate)",
+      "file_offset": 1871152,
+      "rva": 1874224,
+      "virtual_address": 6068528
+    },
+    {
+      "name": "Level::Init (generic signature candidate)",
+      "file_offset": 3423552,
+      "rva": 3426624,
+      "virtual_address": 7620928
+    },
+    {
+      "name": "Level::Init (generic signature candidate)",
+      "file_offset": 3849184,
+      "rva": 3852256,
+      "virtual_address": 8046560
+    },
+    {
+      "name": "Level::Init (generic signature candidate)",
+      "file_offset": 3970768,
+      "rva": 3973840,
+      "virtual_address": 8168144
+    },
+    {
+      "name": "Level::Init (generic signature candidate)",
+      "file_offset": 4384192,
+      "rva": 4387264,
+      "virtual_address": 8581568
+    },
+    {
+      "name": "Level::Init (generic signature candidate)",
+      "file_offset": 5579248,
+      "rva": 5582320,
+      "virtual_address": 9776624
+    },
+    {
+      "name": "Level::generate_dungeon",
+      "file_offset": 3408400,
+      "rva": 3411472,
+      "virtual_address": 7605776
+    },
+    {
+      "name": "LevelGenerator::CreateRoom",
+      "file_offset": 5951792,
+      "rva": 5954864,
+      "virtual_address": 10149168
+    },
+    {
+      "name": "LevelGenerator::DetermineBossRoom",
+      "file_offset": 5955920,
+      "rva": 5958992,
+      "virtual_address": 10153296
+    },
+    {
+      "name": "LevelGenerator::Generate",
+      "file_offset": 5951408,
+      "rva": 5954480,
+      "virtual_address": 10148784
+    },
+    {
+      "name": "LevelGenerator::GetNewEndRoom",
+      "file_offset": 5952736,
+      "rva": 5955808,
+      "virtual_address": 10150112
+    },
+    {
+      "name": "LevelGenerator::get_door_source_position",
+      "file_offset": 5957616,
+      "rva": 5960688,
+      "virtual_address": 10154992
+    },
+    {
+      "name": "LevelGenerator::get_door_target_position",
+      "file_offset": 5958176,
+      "rva": 5961248,
+      "virtual_address": 10155552
+    },
+    {
+      "name": "LevelGenerator::get_neighbor_candidates",
+      "file_offset": 5963520,
+      "rva": 5966592,
+      "virtual_address": 10160896
+    },
+    {
+      "name": "LevelGenerator::get_room_placement_offsets",
+      "file_offset": 5960112,
+      "rva": 5963184,
+      "virtual_address": 10157488
+    },
+    {
+      "name": "LevelGenerator::has_shape_slot",
+      "file_offset": 5957488,
+      "rva": 5960560,
+      "virtual_address": 10154864
+    },
+    {
+      "name": "LevelGenerator::is_placement_valid",
+      "file_offset": 5961280,
+      "rva": 5964352,
+      "virtual_address": 10158656
+    },
+    {
+      "name": "LevelGenerator::is_pos_free (generic signature candidate)",
+      "file_offset": 3963952,
+      "rva": 3967024,
+      "virtual_address": 8161328
+    },
+    {
+      "name": "LevelGenerator::is_pos_free (generic signature candidate)",
+      "file_offset": 5961088,
+      "rva": 5964160,
+      "virtual_address": 10158464
+    },
+    {
+      "name": "LevelGenerator::mark_dead_ends",
+      "file_offset": 5959440,
+      "rva": 5962512,
+      "virtual_address": 10156816
+    },
+    {
+      "name": "LevelGenerator::place_room",
+      "file_offset": 5961520,
+      "rva": 5964592,
+      "virtual_address": 10158896
+    },
+    {
+      "name": "LevelGenerator_Room::constructor",
+      "file_offset": 3372464,
+      "rva": 3375536,
+      "virtual_address": 7569840
+    },
+    {
+      "name": "RNG::Next",
+      "file_offset": 4097264,
+      "rva": 4100336,
+      "virtual_address": 8294640
+    },
+    {
+      "name": "RNG::RandomFloat",
+      "file_offset": 4097152,
+      "rva": 4100224,
+      "virtual_address": 8294528
+    },
+    {
+      "name": "RNG::RandomInt",
+      "file_offset": 4097056,
+      "rva": 4100128,
+      "virtual_address": 8294432
+    },
+    {
+      "name": "RNG::SetSeed",
+      "file_offset": 4096992,
+      "rva": 4100064,
+      "virtual_address": 8294368
+    },
+    {
+      "name": "RNG::game_constructor",
+      "file_offset": 4096912,
+      "rva": 4099984,
+      "virtual_address": 8294288
+    },
+    {
+      "name": "Seeds::IsStringValidSeed",
+      "file_offset": 6203792,
+      "rva": 6206864,
+      "virtual_address": 10401168
+    },
+    {
+      "name": "Seeds::Seed2String",
+      "file_offset": 6203824,
+      "rva": 6206896,
+      "virtual_address": 10401200
+    },
+    {
+      "name": "Seeds::String2Seed",
+      "file_offset": 6204080,
+      "rva": 6207152,
+      "virtual_address": 10401456
+    },
+    {
+      "name": "Seeds::constructor",
+      "file_offset": 6194832,
+      "rva": 6197904,
+      "virtual_address": 10392208
+    },
+    {
+      "name": "Seeds::set_start_seed",
+      "file_offset": 6204544,
+      "rva": 6207616,
+      "virtual_address": 10401920
+    },
+    {
+      "name": "seed_alphabet_ascii",
+      "file_offset": 7861040,
+      "rva": 7867696,
+      "virtual_address": 12062000
+    },
+    {
+      "name": "seed_xor_0x0FEF7FFD_le",
+      "file_offset": 6203879,
+      "rva": 6206951,
+      "virtual_address": 10401255
+    },
+    {
+      "name": "seed_xor_0x0FEF7FFD_le",
+      "file_offset": 6204323,
+      "rva": 6207395,
+      "virtual_address": 10401699
+    }
+  ]
+}

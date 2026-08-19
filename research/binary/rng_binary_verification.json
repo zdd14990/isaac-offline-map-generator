@@ -1,0 +1,15 @@
+{
+  "pe": "C:\\MyGames\\isaac-offline-map-generator\\research\\input\\isaac-ng.exe",
+  "image_base": 4194304,
+  "shift_table_rva": 7468232,
+  "shift_triples": 81,
+  "shift_table_matches_python": true,
+  "random_float_correction_rva": 8047360,
+  "random_float_corrections": [
+    0.0,
+    4294967296.0
+  ],
+  "random_float_scale_rva": 8036336,
+  "random_float_scale_bits": "0x2f7ffffe",
+  "random_float_scale": 2.3283061589829401e-10
+}

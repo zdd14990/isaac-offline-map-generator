@@ -1,0 +1,46 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE read as bytes only; no image loading or execution.",
+  "scope": "canonical Basement II shared Ultra/late-default accepted-layout tail",
+  "function_hashes": {
+    "post_topology": "7ae850e43abce93f33e12ef5881bf9d09043ea866ad7773d643965659ad16996",
+    "place_ultra": "6a2c1baf72d28e41207ecd46864dee53a7adf0a49e30b0c565d48354bc6ec3e8",
+    "collect_late_rooms": "34bf078b58f329e1aea931d7b5cf65712fce754b78729e0c91c4ae2fc4137b77"
+  },
+  "control_transfers": {
+    "derive_current_room_config_stage": "0x0042D030",
+    "type29_select_with_current_stage": "0x0042CDD0",
+    "place_ultra": "0x005AE640",
+    "collect_late_rooms": "0x005AF0E0",
+    "late_default_select": "0x0042C7D0",
+    "late_assign": "0x00338AB0"
+  },
+  "control_transfer_checks": {
+    "derive_current_room_config_stage": true,
+    "type29_select_with_current_stage": true,
+    "place_ultra": true,
+    "collect_late_rooms": true,
+    "late_default_select": true,
+    "late_assign": true
+  },
+  "instruction_checks": {
+    "room_config_stage_saved_once": true,
+    "type29_current_stage_argument": true,
+    "late_default_current_stage_argument": true,
+    "type29_null_continues_to_late": true,
+    "ultra_null_allowed": true,
+    "ultra_descriptor_tail_99": true,
+    "late_collect_unconditional_entry": true,
+    "late_null_returns_false": true,
+    "false_return": true,
+    "collect_non_dead_first": true,
+    "collect_dead_second": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "post_topology_hash": true,
+    "control_transfers": true,
+    "shared_tail_instruction_bytes": true
+  },
+  "matches": true
+}

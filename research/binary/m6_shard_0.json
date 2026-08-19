@@ -1,0 +1,127 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical fresh Basement I through Secret; Ultra and late default variants excluded",
+  "seed_range": [
+    1,
+    1250
+  ],
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 1250,
+      "total_attempts": 1342,
+      "retrying_seeds": 89,
+      "secret_missing": 0,
+      "secret_neighbor_counts": {
+        "3": 680,
+        "2": 503,
+        "1": 46,
+        "4": 21
+      },
+      "secret_tie_sizes": {
+        "1": 965,
+        "2": 214,
+        "3": 50,
+        "5": 5,
+        "4": 15,
+        "6": 1
+      },
+      "secret_boundary": 0,
+      "secret_large_neighbor": 250,
+      "secret_l_shape_neighbor": 227,
+      "blocks_assigned": {
+        "Curse": 649,
+        "Sacrifice": 345,
+        "Dice": 85,
+        "Planetarium": 11,
+        "Isaac": 1,
+        "MiniBoss": 82,
+        "Library": 40
+      },
+      "blocks_seen": {
+        "Planetarium": 1250,
+        "Sacrifice": 1000,
+        "Library": 1250,
+        "Curse": 1250,
+        "MiniBoss": 1250,
+        "Challenge": 1250,
+        "Arcade": 757,
+        "Isaac": 1250,
+        "Chest": 493,
+        "Dice": 250
+      },
+      "final_used_bit_sets": {
+        "none": 1168,
+        "9": 16,
+        "10": 17,
+        "11": 10,
+        "13": 13,
+        "14": 13,
+        "12": 13
+      }
+    },
+    "HARD": {
+      "comparisons": 1250,
+      "total_attempts": 1345,
+      "retrying_seeds": 88,
+      "secret_missing": 0,
+      "secret_neighbor_counts": {
+        "2": 373,
+        "3": 785,
+        "4": 79,
+        "1": 13
+      },
+      "secret_tie_sizes": {
+        "2": 230,
+        "1": 940,
+        "3": 54,
+        "4": 22,
+        "5": 4
+      },
+      "secret_boundary": 0,
+      "secret_large_neighbor": 297,
+      "secret_l_shape_neighbor": 256,
+      "blocks_assigned": {
+        "Dice": 91,
+        "Curse": 781,
+        "Sacrifice": 354,
+        "Library": 52,
+        "MiniBoss": 185,
+        "Isaac": 2,
+        "Planetarium": 10
+      },
+      "blocks_seen": {
+        "Planetarium": 1250,
+        "Dice": 250,
+        "Library": 1250,
+        "Curse": 1250,
+        "MiniBoss": 1250,
+        "Challenge": 1250,
+        "Arcade": 765,
+        "Isaac": 1250,
+        "Sacrifice": 1000,
+        "Chest": 485
+      },
+      "final_used_bit_sets": {
+        "none": 1065,
+        "14": 23,
+        "12": 29,
+        "11": 34,
+        "9": 33,
+        "10": 34,
+        "13": 32
+      }
+    }
+  },
+  "total_comparisons": 2500,
+  "dimensions": [
+    "full M4/M5 attempt state and persistent owners",
+    "ordered Treasure-to-Secret block/config/candidate traces",
+    "stable dead-end erase and tail reappend",
+    "RoomConfig candidates, binary32 weights, selector draws",
+    "Secret forbidden set and all 169 candidate evaluations",
+    "Secret neighbor masks, scores, ties and LevelGenerator RNG transitions",
+    "Secret descriptor/map/connection mutation and final RNG states"
+  ]
+}

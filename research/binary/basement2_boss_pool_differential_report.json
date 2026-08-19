@@ -1,0 +1,467 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical Basement II inherited Basement BossPool selection",
+  "total_comparisons": 20000,
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 10000,
+      "basement1_total_attempts": 10785,
+      "basement1_retrying_seeds": 740,
+      "persistent_rng_draws": 70000,
+      "local_rng_draws": 10000,
+      "repick_operations": 1188,
+      "repicking_seeds": 1062,
+      "fallback_seeds": 0,
+      "pool_reset_seeds": 0,
+      "basement1_removed_bosses": {
+        "44": 1155,
+        "1": 1161,
+        "60": 1153,
+        "2": 1133,
+        "65": 269,
+        "84": 1107,
+        "17": 1189,
+        "13": 1168,
+        "56": 1077,
+        "64": 291,
+        "20": 297
+      },
+      "basement2_selected_bosses": {
+        "56": 1095,
+        "44": 1124,
+        "2": 1122,
+        "84": 1091,
+        "60": 1172,
+        "64": 312,
+        "17": 1158,
+        "1": 1157,
+        "65": 338,
+        "13": 1131,
+        "20": 300
+      },
+      "repick_count_distribution": {
+        "0": 8938,
+        "1": 943,
+        "2": 112,
+        "3": 7
+      },
+      "fixture_examples": [
+        {
+          "seed": 7,
+          "basement1_removed": [
+            84
+          ],
+          "basement2_selected": 56,
+          "repick_count": 1
+        },
+        {
+          "seed": 12,
+          "basement1_removed": [
+            13
+          ],
+          "basement2_selected": 84,
+          "repick_count": 1
+        },
+        {
+          "seed": 16,
+          "basement1_removed": [
+            44
+          ],
+          "basement2_selected": 17,
+          "repick_count": 1
+        },
+        {
+          "seed": 27,
+          "basement1_removed": [
+            84
+          ],
+          "basement2_selected": 17,
+          "repick_count": 2
+        },
+        {
+          "seed": 43,
+          "basement1_removed": [
+            64
+          ],
+          "basement2_selected": 13,
+          "repick_count": 1
+        },
+        {
+          "seed": 98,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 17,
+          "repick_count": 1
+        },
+        {
+          "seed": 105,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 117,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 56,
+          "repick_count": 2
+        },
+        {
+          "seed": 121,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 1,
+          "repick_count": 1
+        },
+        {
+          "seed": 131,
+          "basement1_removed": [
+            13
+          ],
+          "basement2_selected": 17,
+          "repick_count": 1
+        },
+        {
+          "seed": 132,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 17,
+          "repick_count": 1
+        },
+        {
+          "seed": 136,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 65,
+          "repick_count": 1
+        },
+        {
+          "seed": 2506,
+          "basement1_removed": [
+            84
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 2509,
+          "basement1_removed": [
+            44
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 2518,
+          "basement1_removed": [
+            84
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 2560,
+          "basement1_removed": [
+            17
+          ],
+          "basement2_selected": 84,
+          "repick_count": 2
+        },
+        {
+          "seed": 2562,
+          "basement1_removed": [
+            2
+          ],
+          "basement2_selected": 1,
+          "repick_count": 2
+        },
+        {
+          "seed": 2565,
+          "basement1_removed": [
+            17
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 2574,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 1,
+          "repick_count": 3
+        },
+        {
+          "seed": 2578,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 13,
+          "repick_count": 1
+        }
+      ],
+      "seed_ranges": [
+        [
+          1,
+          2500
+        ],
+        [
+          2501,
+          5000
+        ],
+        [
+          5001,
+          7500
+        ],
+        [
+          7501,
+          10000
+        ]
+      ]
+    },
+    "HARD": {
+      "comparisons": 10000,
+      "basement1_total_attempts": 10741,
+      "basement1_retrying_seeds": 693,
+      "persistent_rng_draws": 70000,
+      "local_rng_draws": 10000,
+      "repick_operations": 1186,
+      "repicking_seeds": 1065,
+      "fallback_seeds": 0,
+      "pool_reset_seeds": 0,
+      "basement1_removed_bosses": {
+        "17": 1188,
+        "1": 1155,
+        "60": 1141,
+        "2": 1126,
+        "44": 1166,
+        "65": 273,
+        "84": 1124,
+        "13": 1166,
+        "56": 1082,
+        "64": 285,
+        "20": 294
+      },
+      "basement2_selected_bosses": {
+        "44": 1112,
+        "56": 1111,
+        "65": 334,
+        "60": 1159,
+        "64": 313,
+        "84": 1082,
+        "2": 1122,
+        "1": 1176,
+        "17": 1169,
+        "13": 1127,
+        "20": 295
+      },
+      "repick_count_distribution": {
+        "0": 8935,
+        "1": 950,
+        "2": 109,
+        "3": 6
+      },
+      "fixture_examples": [
+        {
+          "seed": 7,
+          "basement1_removed": [
+            84
+          ],
+          "basement2_selected": 56,
+          "repick_count": 1
+        },
+        {
+          "seed": 12,
+          "basement1_removed": [
+            13
+          ],
+          "basement2_selected": 84,
+          "repick_count": 1
+        },
+        {
+          "seed": 16,
+          "basement1_removed": [
+            44
+          ],
+          "basement2_selected": 1,
+          "repick_count": 1
+        },
+        {
+          "seed": 27,
+          "basement1_removed": [
+            84
+          ],
+          "basement2_selected": 17,
+          "repick_count": 2
+        },
+        {
+          "seed": 43,
+          "basement1_removed": [
+            64
+          ],
+          "basement2_selected": 13,
+          "repick_count": 1
+        },
+        {
+          "seed": 98,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 17,
+          "repick_count": 1
+        },
+        {
+          "seed": 105,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 117,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 56,
+          "repick_count": 2
+        },
+        {
+          "seed": 121,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 1,
+          "repick_count": 1
+        },
+        {
+          "seed": 131,
+          "basement1_removed": [
+            13
+          ],
+          "basement2_selected": 17,
+          "repick_count": 1
+        },
+        {
+          "seed": 132,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 17,
+          "repick_count": 1
+        },
+        {
+          "seed": 136,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 65,
+          "repick_count": 1
+        },
+        {
+          "seed": 2506,
+          "basement1_removed": [
+            84
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 2509,
+          "basement1_removed": [
+            44
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 2518,
+          "basement1_removed": [
+            84
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 2562,
+          "basement1_removed": [
+            2
+          ],
+          "basement2_selected": 1,
+          "repick_count": 2
+        },
+        {
+          "seed": 2565,
+          "basement1_removed": [
+            17
+          ],
+          "basement2_selected": 2,
+          "repick_count": 1
+        },
+        {
+          "seed": 2574,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 1,
+          "repick_count": 3
+        },
+        {
+          "seed": 2578,
+          "basement1_removed": [
+            60
+          ],
+          "basement2_selected": 13,
+          "repick_count": 1
+        },
+        {
+          "seed": 2588,
+          "basement1_removed": [
+            2
+          ],
+          "basement2_selected": 44,
+          "repick_count": 2
+        }
+      ],
+      "seed_ranges": [
+        [
+          1,
+          2500
+        ],
+        [
+          2501,
+          5000
+        ],
+        [
+          5001,
+          7500
+        ],
+        [
+          7501,
+          10000
+        ]
+      ]
+    }
+  },
+  "source_shards": [
+    "research\\binary\\basement2_boss_pool_normal_1.json",
+    "research\\binary\\basement2_boss_pool_normal_2501.json",
+    "research\\binary\\basement2_boss_pool_normal_5001.json",
+    "research\\binary\\basement2_boss_pool_normal_7501.json",
+    "research\\binary\\basement2_boss_pool_hard_1.json",
+    "research\\binary\\basement2_boss_pool_hard_2501.json",
+    "research\\binary\\basement2_boss_pool_hard_5001.json",
+    "research\\binary\\basement2_boss_pool_hard_7501.json"
+  ],
+  "matches": true,
+  "mismatch": null
+}

@@ -1,0 +1,33 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "fixtures": [
+    {
+      "start_seed": 3246,
+      "difficulty": "NORMAL",
+      "attempts": [
+        {"boss_id": 56, "boss_config": [0, 0, 545], "abort": "Boss geometry", "level_rng": [215644111, 1965010685], "generator_rng": [215644111, 1181648683], "boss_pool_rng": [357155218, 3462443232], "level_blacklist": [56], "permanent_removed": [], "weight_mutations": 1},
+        {"boss_id": 13, "boss_config": [0, 0, 248], "abort": null, "level_rng": [1965010685, 1711899761], "generator_rng": [1181648683, 1935069053], "boss_pool_rng": [3462443232, 1894887839], "level_blacklist": [13], "permanent_removed": [], "weight_mutations": 4}
+      ],
+      "committed_bosses": [13]
+    },
+    {
+      "start_seed": 9338,
+      "difficulty": "NORMAL",
+      "attempts": [
+        {"boss_id": 84, "boss_config": [0, 0, 557], "abort": "Boss geometry", "level_rng": [1819262716, 1986511009], "generator_rng": [1819262716, 2089245807], "boss_pool_rng": [2295238686, 3206205243], "level_blacklist": [84], "permanent_removed": [], "weight_mutations": 1},
+        {"boss_id": 56, "boss_config": [0, 0, 544], "abort": null, "level_rng": [1986511009, 3098929793], "generator_rng": [2089245807, 3030290874], "boss_pool_rng": [3206205243, 2954341600], "level_blacklist": [56], "permanent_removed": [], "weight_mutations": 5}
+      ],
+      "committed_bosses": [56]
+    },
+    {
+      "start_seed": 8909,
+      "difficulty": "HARD",
+      "attempts": [
+        {"boss_id": 1, "boss_config": [0, 0, 128], "abort": "Boss geometry", "level_rng": [1035768763, 2676114768], "generator_rng": [1035768763, 1787092206], "boss_pool_rng": [136596453, 1654472816], "level_blacklist": [1], "permanent_removed": [], "weight_mutations": 2},
+        {"boss_id": 44, "boss_config": [0, 0, 488], "abort": null, "level_rng": [2676114768, 1954843207], "generator_rng": [1787092206, 4057794069], "boss_pool_rng": [1654472816, 2300403895], "level_blacklist": [44], "permanent_removed": [], "weight_mutations": 4}
+      ],
+      "committed_bosses": [44]
+    }
+  ]
+}

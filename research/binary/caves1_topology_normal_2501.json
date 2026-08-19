@@ -1,0 +1,76 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "scope": "canonical base-profile ORIGINAL Caves I topology including natural XL",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "difficulty": "NORMAL",
+  "seed_range": [
+    2501,
+    5000
+  ],
+  "stats": {
+    "comparisons": 2500,
+    "generator_rng_draws": 1330231,
+    "outer_retries": 0,
+    "retrying_seeds": 0,
+    "max_retries": 0,
+    "curse_gate_successes": 33,
+    "xl_floors": 6,
+    "xl_exception_draws": 133,
+    "curse_masks": {
+      "0": 2467,
+      "8": 10,
+      "64": 5,
+      "1": 4,
+      "2": 6,
+      "4": 4,
+      "32": 4
+    },
+    "curse_selector_modulo_six": {
+      "3": 10,
+      "5": 5,
+      "2": 4,
+      "0": 6,
+      "1": 4,
+      "4": 4
+    },
+    "difficulty_windows": {
+      "1..5": 2494,
+      "1..10": 6
+    },
+    "target_room_counts": {
+      "15": 1241,
+      "16": 1249,
+      "27": 6,
+      "19": 4
+    },
+    "accepted_room_counts": {
+      "16": 1009,
+      "17": 1322,
+      "18": 105,
+      "19": 41,
+      "20": 15,
+      "21": 2,
+      "28": 6
+    },
+    "shapes": {
+      "1": 34408,
+      "6": 952,
+      "8": 1424,
+      "5": 350,
+      "9": 617,
+      "12": 638,
+      "4": 944,
+      "11": 638,
+      "10": 674,
+      "2": 404,
+      "7": 364,
+      "3": 384
+    },
+    "boundary_skips": 93714,
+    "large_rooms_placed": 7389,
+    "forced_dead_end_attempts": 460
+  },
+  "matches": true,
+  "mismatch": null
+}

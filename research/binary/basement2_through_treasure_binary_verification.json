@@ -1,0 +1,45 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE read as bytes only; no image loading or execution.",
+  "scope": "canonical Basement II shared Boss/Type8/Shop/Treasure boundary",
+  "function_rva": "0x00339370",
+  "function_size": 17370,
+  "function_sha256": "7ae850e43abce93f33e12ef5881bf9d09043ea866ad7773d643965659ad16996",
+  "control_transfers": {
+    "boss_identity": "0x00022830",
+    "boss_config": "0x00339080",
+    "boss_geometry": "0x005AEF10",
+    "type8_config": "0x0042C7D0",
+    "type8_geometry": "0x005AE0E0",
+    "shop_config": "0x0042C7D0",
+    "shop_geometry": "0x005AE0E0",
+    "treasure_stage_wrapper": "0x0042CDD0",
+    "treasure_geometry": "0x005AE0E0"
+  },
+  "control_transfer_checks": {
+    "boss_identity": true,
+    "boss_config": true,
+    "boss_geometry": true,
+    "type8_config": true,
+    "type8_geometry": true,
+    "shop_config": true,
+    "shop_geometry": true,
+    "treasure_stage_wrapper": true,
+    "treasure_geometry": true
+  },
+  "instruction_checks": {
+    "additional_boss_only_stage_twelve": true,
+    "xl_uses_curse_bit_two": true,
+    "shop_accepts_stage_below_seven": true,
+    "treasure_accepts_stage_below_seven": true,
+    "treasure_passes_current_config_stage": true,
+    "treasure_geometry_failure_rejects_attempt": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "function_hash": true,
+    "control_transfers": true,
+    "stage_predicates": true
+  },
+  "matches": true
+}

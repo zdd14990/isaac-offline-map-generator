@@ -1,0 +1,529 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical Basement II replay through uncommitted Treasure boundary",
+  "total_comparisons": 20000,
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 10000,
+      "basement1_attempts": 10785,
+      "basement1_retrying_seeds": 740,
+      "basement2_attempts": 10449,
+      "basement2_retrying_seeds": 432,
+      "boss_repick_operations": 1246,
+      "boss_repick_attempts": 1107,
+      "post_topology_rng_transitions": 194247,
+      "room_config_selector_calls": 55394,
+      "candidate_tests": 44584,
+      "curse_masks": {
+        "0": 9901,
+        "32": 22,
+        "1": 14,
+        "4": 19,
+        "64": 25,
+        "8": 19
+      },
+      "target_counts": {
+        "11": 4980,
+        "12": 5001,
+        "15": 19
+      },
+      "abort_operations": {
+        "Treasure geometry": 448,
+        "Topology unusable": 1
+      },
+      "boss_ids": {
+        "56": 1139,
+        "44": 1183,
+        "2": 1171,
+        "84": 1138,
+        "60": 1222,
+        "64": 326,
+        "17": 1222,
+        "1": 1214,
+        "65": 353,
+        "13": 1173,
+        "20": 307
+      },
+      "accepted_room_counts": {
+        "14": 2363,
+        "12": 1579,
+        "15": 1429,
+        "13": 3908,
+        "16": 544,
+        "17": 156,
+        "18": 21
+      },
+      "pending_bosses": {
+        "56": 1078,
+        "44": 1137,
+        "2": 1124,
+        "84": 1092,
+        "60": 1171,
+        "64": 309,
+        "17": 1167,
+        "1": 1169,
+        "65": 337,
+        "13": 1121,
+        "20": 295
+      },
+      "basement2_max_attempts": 3,
+      "retry_examples": [
+        {
+          "seed": 23,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 29,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 42,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 84,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 100,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 104,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 109,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 128,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 132,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 183,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 189,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 195,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 260,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 287,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 293,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 338,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2559,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2576,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2586,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2602,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2647,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2650,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2677,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2698,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        }
+      ],
+      "seed_ranges": [
+        [
+          1,
+          2500
+        ],
+        [
+          2501,
+          5000
+        ],
+        [
+          5001,
+          7500
+        ],
+        [
+          7501,
+          10000
+        ]
+      ]
+    },
+    "HARD": {
+      "comparisons": 10000,
+      "basement1_attempts": 10741,
+      "basement1_retrying_seeds": 693,
+      "basement2_attempts": 10403,
+      "basement2_retrying_seeds": 394,
+      "boss_repick_operations": 1244,
+      "boss_repick_attempts": 1115,
+      "post_topology_rng_transitions": 193434,
+      "room_config_selector_calls": 55167,
+      "candidate_tests": 44552,
+      "curse_masks": {
+        "0": 9789,
+        "32": 45,
+        "4": 42,
+        "1": 39,
+        "64": 48,
+        "8": 37
+      },
+      "target_counts": {
+        "13": 2478,
+        "14": 4979,
+        "15": 2501,
+        "18": 23,
+        "17": 19
+      },
+      "abort_operations": {
+        "Treasure geometry": 403
+      },
+      "boss_ids": {
+        "44": 1163,
+        "56": 1148,
+        "65": 352,
+        "60": 1203,
+        "84": 1133,
+        "64": 330,
+        "2": 1164,
+        "1": 1219,
+        "17": 1217,
+        "13": 1173,
+        "20": 301
+      },
+      "accepted_room_counts": {
+        "15": 4193,
+        "17": 746,
+        "14": 1524,
+        "16": 3207,
+        "20": 4,
+        "18": 250,
+        "19": 75,
+        "21": 1
+      },
+      "pending_bosses": {
+        "56": 1094,
+        "44": 1128,
+        "65": 335,
+        "84": 1095,
+        "60": 1158,
+        "64": 321,
+        "2": 1114,
+        "1": 1165,
+        "17": 1165,
+        "13": 1137,
+        "20": 288
+      },
+      "basement2_max_attempts": 3,
+      "retry_examples": [
+        {
+          "seed": 1,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 6,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 20,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 23,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 29,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 42,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 84,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 104,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 128,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 132,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 183,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 189,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 195,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 293,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 338,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 366,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2559,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2576,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2583,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2602,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2647,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2650,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2656,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        },
+        {
+          "seed": 2698,
+          "attempts": 2,
+          "aborts": [
+            "Treasure geometry"
+          ]
+        }
+      ],
+      "seed_ranges": [
+        [
+          1,
+          2500
+        ],
+        [
+          2501,
+          5000
+        ],
+        [
+          5001,
+          7500
+        ],
+        [
+          7501,
+          10000
+        ]
+      ]
+    }
+  },
+  "source_shards": [
+    "research\\binary\\basement2_through_treasure_normal_1.json",
+    "research\\binary\\basement2_through_treasure_normal_2501.json",
+    "research\\binary\\basement2_through_treasure_normal_5001.json",
+    "research\\binary\\basement2_through_treasure_normal_7501.json",
+    "research\\binary\\basement2_through_treasure_hard_1.json",
+    "research\\binary\\basement2_through_treasure_hard_2501.json",
+    "research\\binary\\basement2_through_treasure_hard_5001.json",
+    "research\\binary\\basement2_through_treasure_hard_7501.json"
+  ],
+  "matches": true,
+  "mismatch": null
+}

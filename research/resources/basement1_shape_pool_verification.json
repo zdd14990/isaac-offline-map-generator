@@ -1,0 +1,75 @@
+{
+  "stb": "C:\\MyGames\\isaac-offline-map-generator\\research\\input\\extracted_resources\\merged\\resources\\rooms\\01.basement.stb",
+  "windows": {
+    "NORMAL": {
+      "minimum_difficulty": 1,
+      "maximum_difficulty": 5,
+      "positive_weight_default_rooms": 712,
+      "shape_counts": {
+        "1": 449,
+        "2": 29,
+        "3": 33,
+        "4": 52,
+        "5": 14,
+        "6": 46,
+        "7": 12,
+        "8": 27,
+        "9": 9,
+        "10": 14,
+        "11": 11,
+        "12": 16
+      },
+      "shapes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "all_shapes_1_through_12": true
+    },
+    "HARD": {
+      "minimum_difficulty": 5,
+      "maximum_difficulty": 10,
+      "positive_weight_default_rooms": 804,
+      "shape_counts": {
+        "1": 506,
+        "2": 28,
+        "3": 35,
+        "4": 52,
+        "5": 14,
+        "6": 53,
+        "7": 12,
+        "8": 35,
+        "9": 18,
+        "10": 16,
+        "11": 17,
+        "12": 18
+      },
+      "shapes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "all_shapes_1_through_12": true
+    }
+  },
+  "allowed_shapes_mask": "0x00001ffe",
+  "matches": true
+}

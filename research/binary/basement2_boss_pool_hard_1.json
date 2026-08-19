@@ -1,0 +1,153 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical Basement II inherited Basement BossPool selection",
+  "difficulty": "HARD",
+  "seed_range": [
+    1,
+    2500
+  ],
+  "stats": {
+    "comparisons": 2500,
+    "basement1_total_attempts": 2690,
+    "basement1_retrying_seeds": 176,
+    "basement1_removed_bosses": {
+      "17": 279,
+      "1": 309,
+      "60": 267,
+      "2": 284,
+      "44": 307,
+      "65": 74,
+      "84": 272,
+      "13": 301,
+      "56": 264,
+      "64": 65,
+      "20": 78
+    },
+    "basement2_selected_bosses": {
+      "44": 263,
+      "56": 256,
+      "65": 76,
+      "60": 281,
+      "64": 71,
+      "84": 257,
+      "2": 298,
+      "1": 297,
+      "17": 328,
+      "13": 300,
+      "20": 73
+    },
+    "persistent_rng_draws": 17500,
+    "local_rng_draws": 2500,
+    "repick_operations": 293,
+    "repicking_seeds": 258,
+    "repick_count_distribution": {
+      "0": 2242,
+      "1": 223,
+      "2": 35
+    },
+    "fallback_seeds": 0,
+    "pool_reset_seeds": 0,
+    "fixture_examples": [
+      {
+        "seed": 7,
+        "basement1_removed": [
+          84
+        ],
+        "basement2_selected": 56,
+        "repick_count": 1
+      },
+      {
+        "seed": 12,
+        "basement1_removed": [
+          13
+        ],
+        "basement2_selected": 84,
+        "repick_count": 1
+      },
+      {
+        "seed": 16,
+        "basement1_removed": [
+          44
+        ],
+        "basement2_selected": 1,
+        "repick_count": 1
+      },
+      {
+        "seed": 27,
+        "basement1_removed": [
+          84
+        ],
+        "basement2_selected": 17,
+        "repick_count": 2
+      },
+      {
+        "seed": 43,
+        "basement1_removed": [
+          64
+        ],
+        "basement2_selected": 13,
+        "repick_count": 1
+      },
+      {
+        "seed": 98,
+        "basement1_removed": [
+          60
+        ],
+        "basement2_selected": 17,
+        "repick_count": 1
+      },
+      {
+        "seed": 105,
+        "basement1_removed": [
+          60
+        ],
+        "basement2_selected": 2,
+        "repick_count": 1
+      },
+      {
+        "seed": 117,
+        "basement1_removed": [
+          60
+        ],
+        "basement2_selected": 56,
+        "repick_count": 2
+      },
+      {
+        "seed": 121,
+        "basement1_removed": [
+          60
+        ],
+        "basement2_selected": 1,
+        "repick_count": 1
+      },
+      {
+        "seed": 131,
+        "basement1_removed": [
+          13
+        ],
+        "basement2_selected": 17,
+        "repick_count": 1
+      },
+      {
+        "seed": 132,
+        "basement1_removed": [
+          60
+        ],
+        "basement2_selected": 17,
+        "repick_count": 1
+      },
+      {
+        "seed": 136,
+        "basement1_removed": [
+          60
+        ],
+        "basement2_selected": 65,
+        "repick_count": 1
+      }
+    ]
+  },
+  "matches": true,
+  "mismatch": null
+}

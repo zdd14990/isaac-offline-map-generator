@@ -1,0 +1,21 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical Caves II complete accepted 13x13 layout plus successful lifecycle handoff",
+  "normal_seeds": 10000,
+  "hard_seeds": 10000,
+  "stats": {
+    "comparisons": 20000,
+    "attempts": 20413,
+    "retrying_seeds": 406,
+    "max_attempts": 3,
+    "rng_transitions": 720000,
+    "room_config_selections": 160000,
+    "boss_selections": 20000,
+    "xl_floors": 0,
+    "mismatches": 0
+  },
+  "matches": true,
+  "mismatch": null
+}

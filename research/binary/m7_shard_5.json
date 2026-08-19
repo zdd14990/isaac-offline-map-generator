@@ -1,0 +1,169 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical fresh Basement I through Ultra; late default variants excluded",
+  "seed_range": [
+    6251,
+    7500
+  ],
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 1250,
+      "total_attempts": 1370,
+      "retrying_seeds": 108,
+      "ultra_missing": 1,
+      "ultra_boundary": 11,
+      "ultra_diagonal_neighbor": 981,
+      "ultra_distance_two_neighbor": 1432,
+      "ultra_secret_neighbor": 0,
+      "ultra_super_secret_neighbor": 0,
+      "ultra_large_neighbor": 169,
+      "ultra_l_shape_neighbor": 162,
+      "ultra_neighbor_counts": {
+        "2": 735,
+        "3": 191,
+        "1": 308,
+        "4": 13,
+        "5": 2
+      },
+      "ultra_tie_sizes": {
+        "1": 923,
+        "2": 236,
+        "3": 63,
+        "4": 21,
+        "6": 2,
+        "0": 1,
+        "5": 4
+      },
+      "ultra_red_door_write_counts": {
+        "3": 612,
+        "2": 160,
+        "5": 41,
+        "1": 236,
+        "4": 109,
+        "7": 41,
+        "6": 44,
+        "9": 3,
+        "0": 1,
+        "8": 2,
+        "13": 1
+      },
+      "ultra_config_variants": {
+        "4": 150,
+        "3": 207,
+        "5": 101,
+        "8": 192,
+        "6": 52,
+        "7": 15,
+        "2": 185,
+        "1": 184,
+        "0": 163
+      },
+      "eligible_candidate_counts": {
+        "145": 108,
+        "148": 147,
+        "144": 77,
+        "149": 175,
+        "150": 135,
+        "152": 47,
+        "146": 150,
+        "143": 55,
+        "147": 189,
+        "153": 13,
+        "151": 74,
+        "142": 38,
+        "137": 1,
+        "141": 20,
+        "140": 12,
+        "139": 6,
+        "138": 2,
+        "136": 1
+      }
+    },
+    "HARD": {
+      "comparisons": 1250,
+      "total_attempts": 1357,
+      "retrying_seeds": 98,
+      "ultra_missing": 0,
+      "ultra_boundary": 34,
+      "ultra_diagonal_neighbor": 1121,
+      "ultra_distance_two_neighbor": 1483,
+      "ultra_secret_neighbor": 0,
+      "ultra_super_secret_neighbor": 0,
+      "ultra_large_neighbor": 203,
+      "ultra_l_shape_neighbor": 173,
+      "ultra_neighbor_counts": {
+        "2": 707,
+        "3": 293,
+        "1": 230,
+        "4": 19,
+        "5": 1
+      },
+      "ultra_tie_sizes": {
+        "1": 889,
+        "2": 247,
+        "3": 74,
+        "5": 14,
+        "4": 24,
+        "6": 2
+      },
+      "ultra_red_door_write_counts": {
+        "3": 596,
+        "5": 96,
+        "2": 147,
+        "4": 154,
+        "1": 164,
+        "7": 45,
+        "6": 36,
+        "9": 5,
+        "8": 6,
+        "11": 1
+      },
+      "ultra_config_variants": {
+        "4": 156,
+        "3": 194,
+        "5": 104,
+        "8": 197,
+        "6": 49,
+        "7": 18,
+        "2": 189,
+        "1": 180,
+        "0": 163
+      },
+      "eligible_candidate_counts": {
+        "143": 138,
+        "144": 150,
+        "141": 83,
+        "147": 131,
+        "146": 182,
+        "150": 40,
+        "142": 94,
+        "148": 101,
+        "140": 43,
+        "145": 167,
+        "149": 48,
+        "138": 13,
+        "151": 20,
+        "136": 2,
+        "139": 27,
+        "137": 7,
+        "152": 1,
+        "134": 2,
+        "133": 1
+      }
+    }
+  },
+  "total_comparisons": 2500,
+  "dimensions": [
+    "full M4/M5/M6 attempt state and persistent owners",
+    "index-71 Ultra RoomConfig seed derivation and index-7 selector draws",
+    "red-door exclusion set from every configured descriptor and door slot",
+    "all 169 Ultra candidate evaluations in stable scan order",
+    "immediate-cell rejection, ordered outer-ring neighbors and door compatibility",
+    "persistent index-35 candidate/tie RNG transitions",
+    "type-29 1x1 descriptor/map mutation and red-door bit writes",
+    "Ultra null result continues without floor retry",
+    "pre-late pending BossPool blacklist remains uncommitted"
+  ]
+}

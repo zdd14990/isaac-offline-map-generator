@@ -1,0 +1,98 @@
+{
+  "pe": "C:\\MyGames\\isaac-offline-map-generator\\research\\input\\isaac-ng.exe",
+  "level_init_rva": "0x00344940",
+  "level_generate_dungeon_rva": "0x00340e10",
+  "level_generator_constructor_rva": "0x005adaf0",
+  "level_generator_generate_rva": "0x005adbb0",
+  "level_generator_generate_rooms_rva": "0x005b04d0",
+  "level_generator_neighbors_rva": "0x005b0b00",
+  "level_rng_shifts": [
+    5,
+    9,
+    7
+  ],
+  "shape_dimensions": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      2
+    ]
+  ],
+  "direction_offsets": [
+    [
+      -1,
+      0
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "start_position": [
+    6,
+    6
+  ],
+  "start_grid_index": 84,
+  "checks": {
+    "level_rng_shifts": true,
+    "shape_dimensions": true,
+    "direction_offsets": true,
+    "start_position": true
+  },
+  "matches": true
+}

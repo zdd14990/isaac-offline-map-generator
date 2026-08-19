@@ -1,0 +1,34 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "engine": "Unicorn 2.1.4 x86-32",
+  "safety": {
+    "target_process_created": false,
+    "windows_loader_used": false,
+    "pe_entry_point_executed": false,
+    "imports_executed": false,
+    "game_loop_executed": false,
+    "method": "Exact leaf-function/data bytes copied into Unicorn-owned memory"
+  },
+  "emulated_functions": [
+    {
+      "name": "LevelGenerator::canonical_grid_index",
+      "rva": "0x005afd70",
+      "byte_sha256": "07b09a40c4a3325edae9bbd32bc9a4adb21039d03d34cb35626372ac4257fcfd",
+      "cases": 289,
+      "matches_python": true
+    },
+    {
+      "name": "LevelGenerator::has_shape_slot",
+      "rva": "0x005af370",
+      "byte_sha256": "ec8c165136448249a1affb94a593ed9dc62396a6913ed15ca41e69be63d763de",
+      "cases": 192,
+      "matches_python": true
+    }
+  ],
+  "full_level_generator_assessment": {
+    "feasible_in_principle": true,
+    "implemented": false,
+    "status": "HIGH_ISOLATION_COST_NOT_BLOCKING_STATIC_PROOF",
+    "reason": "Generate/get_neighbor_candidates use MSVC vector/deque/set code, heap allocation, SEH/TLS, security cookies, logging, and global data. Full emulation needs a PE memory mapper plus deterministic allocator/container/logger/TLS stubs; leaf emulation proves the safe method but is not yet an independent whole-generator oracle."
+  }
+}

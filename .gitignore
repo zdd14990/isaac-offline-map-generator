@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Outputs (preview exports, screenshots, icon caches, logs)
+output/*
+!output/.gitkeep
+*.log
+
+# Third-party tools used during research (Ghidra, JDK, pip package copies).
+# They are not part of the published source and are never redistributed.
+tools/
+research/tools/
+
+# Reverse-engineering working copies. These contain a locally copied game
+# executable, packed game archives, extraction outputs, Ghidra project
+# databases, decompiler dumps and cloned reference repositories. They are
+# never redistributed; resource-dependent functionality reads from a user's
+# own legal game installation (see README, "Game resources").
+research/input/
+research/ghidra-project/
+research/ghidra-user/
+research/references/*/
+research/decomp/ghidra/
+research/resources/ResourceExtractor_log*.txt

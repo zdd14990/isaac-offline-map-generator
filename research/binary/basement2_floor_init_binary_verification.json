@@ -1,0 +1,50 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "PE read as bytes only; no image loading or execution.",
+  "level_init_slice_rva": "0x00344CF3",
+  "level_init_slice_size": 845,
+  "level_init_slice_sha256": "e86bace4db9caaedb3e70d16f3860f6e386744fde3f4b24bd104812043716d71",
+  "generate_dungeon_slice_rva": "0x00340E8E",
+  "generate_dungeon_slice_size": 933,
+  "generate_dungeon_slice_sha256": "76f7e6049d1ea452d3a0f4008d123bca7b8f578c2696eaa8960e94d83923a555",
+  "control_transfers": {
+    "curse_gate_random_int": "0x003E9020",
+    "labyrinth_stage_predicate": "0x003385C0",
+    "lost_mode_predicate": "0x002F8120",
+    "maze_mode_predicate": "0x002F8120",
+    "curse_normalizer": "0x00464AE0",
+    "level_generator_constructor": "0x005ADAF0"
+  },
+  "control_transfer_checks": {
+    "curse_gate_random_int": true,
+    "labyrinth_stage_predicate": true,
+    "lost_mode_predicate": true,
+    "maze_mode_predicate": true,
+    "curse_normalizer": true,
+    "level_generator_constructor": true
+  },
+  "instruction_checks": {
+    "normal_curse_denominator_80": true,
+    "hard_curse_denominator_40": true,
+    "curse_modulo_six": true,
+    "labyrinth_bit": true,
+    "lost_bit": true,
+    "darkness_bit": true,
+    "unknown_bit": true,
+    "maze_bit": true,
+    "blind_bit": true,
+    "target_formula_divide_three": true,
+    "target_add_five": true,
+    "target_cap_twenty": true,
+    "lost_add_four": true,
+    "hard_add_two_plus_bit": true,
+    "required_dead_end_base": true,
+    "required_dead_end_add_five": true
+  },
+  "checks": {
+    "profile_hash": true,
+    "control_transfers": true,
+    "instruction_constants": true
+  },
+  "matches": true
+}

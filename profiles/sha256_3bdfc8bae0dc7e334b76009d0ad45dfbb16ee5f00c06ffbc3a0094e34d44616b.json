@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "game": {
+    "name": "The Binding of Isaac: Repentance+",
+    "static_version": "v1.9.7.17.J460",
+    "steam_build_id": "22878971",
+    "exe_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+    "exe_size": 9362440,
+    "architecture": "x86",
+    "pe_timestamp": "0x69e6e3a7"
+  },
+  "support": {
+    "status": "research_only",
+    "exact_floor_generation": false,
+    "failure_mode": "reject_unproven_generation"
+  },
+  "seed_codec": {
+    "status": "CONFIRMED_BINARY",
+    "alphabet": "ABCDEFGHJKLMNPQRSTWXYZ01234V6789",
+    "xor_mask": "0x0fef7ffd",
+    "seed_to_string_rva": "0x005eb5b0",
+    "string_to_seed_rva": "0x005eb6b0",
+    "validity_wrapper_rva": "0x005eb590",
+    "alphabet_rva": "0x00780d30"
+  },
+  "rng": {
+    "status": "CONFIRMED_BINARY",
+    "constructor_rva": "0x003e8f90",
+    "set_seed_rva": "0x003e8fe0",
+    "random_int_rva": "0x003e9020",
+    "random_float_rva": "0x003e9080",
+    "next_rva": "0x003e90f0",
+    "shift_table_rva": "0x0071f4c8",
+    "shift_triple_count": 81,
+    "random_float_scale_bits": "0x2f7ffffe"
+  },
+  "initial_stage_seeds": {
+    "status": "CONFIRMED_BINARY",
+    "set_start_seed_rva": "0x005eb880",
+    "sequence_shifts_rva": "0x0071f60c",
+    "sequence_shifts": [3, 23, 25],
+    "stage_seed_count": 14,
+    "stage_index_min": 0,
+    "stage_index_max": 13,
+    "player_init_draws_after_stage_seeds": 1,
+    "floor_consumer_call_order_status": "CONFIRMED_BINARY_FOR_INITIAL_ENTRY",
+    "level_init_rva": "0x00344940",
+    "repentance_stage_types_use_next_slot": [4, 5],
+    "floor_slot_cap": 13
+  },
+  "level_generator": {
+    "identity_status": "CONFIRMED_BINARY",
+    "control_flow_status": "CONFIRMED_BINARY_RESEARCH_PORT",
+    "end_to_end_output_status": "UNVERIFIED",
+    "constructor_rva": "0x005adaf0",
+    "generate_rva": "0x005adbb0",
+    "generate_rooms_rva": "0x005b04d0",
+    "neighbor_candidates_rva": "0x005b0b00",
+    "shuffle_candidates_rva": "0x005b1b20",
+    "force_dead_end_rva": "0x005af1e0",
+    "determine_boss_room_rva": "0x005aed50",
+    "mark_dead_ends_rva": "0x005afb10",
+    "grid_width": 13,
+    "grid_height": 13,
+    "level_rng_shifts": [5, 9, 7],
+    "start_position": [6, 6],
+    "start_grid_index": 84
+  },
+  "basement1_original_fresh_run": {
+    "status": "CONFIRMED_BINARY_PRE_GENERATE_ONLY",
+    "normal_target_count": "8 + bit",
+    "hard_target_count": "10 + 2*bit",
+    "required_dead_ends": 5,
+    "allowed_shapes_mask": "0x00001ffe",
+    "generator_seed_level_rng_draw": 4
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical Basement II replay through uncommitted Treasure boundary",
+  "difficulty": "HARD",
+  "seed_range": [
+    1,
+    2500
+  ],
+  "stats": {
+    "comparisons": 2500,
+    "basement1_attempts": 2690,
+    "basement1_retrying_seeds": 176,
+    "basement2_attempts": 2608,
+    "basement2_retrying_seeds": 106,
+    "basement2_max_attempts": 3,
+    "curse_masks": {
+      "0": 2450,
+      "32": 13,
+      "4": 17,
+      "1": 6,
+      "64": 8,
+      "8": 6
+    },
+    "target_counts": {
+      "13": 622,
+      "14": 1237,
+      "15": 624,
+      "18": 8,
+      "17": 9
+    },
+    "abort_operations": {
+      "Treasure geometry": 108
+    },
+    "boss_ids": {
+      "44": 277,
+      "56": 267,
+      "65": 82,
+      "60": 288,
+      "84": 267,
+      "64": 76,
+      "2": 311,
+      "1": 309,
+      "17": 343,
+      "13": 314,
+      "20": 74
+    },
+    "boss_repick_operations": 311,
+    "boss_repick_attempts": 273,
+    "post_topology_rng_transitions": 48461,
+    "room_config_selector_calls": 13815,
+    "candidate_tests": 11150,
+    "accepted_room_counts": {
+      "15": 1059,
+      "17": 178,
+      "14": 381,
+      "16": 783,
+      "20": 2,
+      "18": 76,
+      "19": 21
+    },
+    "pending_bosses": {
+      "56": 257,
+      "44": 270,
+      "65": 77,
+      "84": 255,
+      "60": 277,
+      "64": 73,
+      "2": 292,
+      "1": 297,
+      "17": 330,
+      "13": 304,
+      "20": 68
+    },
+    "retry_examples": [
+      {
+        "seed": 1,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 6,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 20,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 23,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 29,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 42,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 84,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 104,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 128,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 132,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 183,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 189,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 195,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 293,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 338,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      },
+      {
+        "seed": 366,
+        "attempts": 2,
+        "aborts": [
+          "Treasure geometry"
+        ]
+      }
+    ]
+  },
+  "matches": true,
+  "mismatch": null
+}

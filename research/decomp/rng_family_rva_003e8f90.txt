@@ -1,0 +1,180 @@
+007e8f90  55                              push     ebp
+007e8f91  8b ec                           mov      ebp, esp
+007e8f93  8b 45 08                        mov      eax, dword ptr [ebp + 8]
+007e8f96  56                              push     esi
+007e8f97  8b f1                           mov      esi, ecx
+007e8f99  57                              push     edi
+007e8f9a  8b 7d 0c                        mov      edi, dword ptr [ebp + 0xc]
+007e8f9d  89 06                           mov      dword ptr [esi], eax
+007e8f9f  83 ff 51                        cmp      edi, 0x51
+007e8fa2  72 0f                           jb       0x7e8fb3
+007e8fa4  68 68 bf b6 00                  push     0xb6bf68
+007e8fa9  6a 10                           push     0x10
+007e8fab  e8 10 83 22 00                  call     0xa112c0
+007e8fb0  83 c4 08                        add      esp, 8
+007e8fb3  8d 04 7f                        lea      eax, [edi + edi*2]
+007e8fb6  f3 0f 7e 04 85 c8 f4 b1 00      movq     xmm0, qword ptr [eax*4 + 0xb1f4c8]
+007e8fbf  8b 04 85 d0 f4 b1 00            mov      eax, dword ptr [eax*4 + 0xb1f4d0]
+007e8fc6  66 0f d6 46 04                  movq     qword ptr [esi + 4], xmm0
+007e8fcb  89 46 0c                        mov      dword ptr [esi + 0xc], eax
+007e8fce  8b c6                           mov      eax, esi
+007e8fd0  5f                              pop      edi
+007e8fd1  5e                              pop      esi
+007e8fd2  5d                              pop      ebp
+007e8fd3  c2 08 00                        ret      8
+007e8fd6  cc                              int3     
+007e8fd7  cc                              int3     
+007e8fd8  cc                              int3     
+007e8fd9  cc                              int3     
+007e8fda  cc                              int3     
+007e8fdb  cc                              int3     
+007e8fdc  cc                              int3     
+007e8fdd  cc                              int3     
+007e8fde  cc                              int3     
+007e8fdf  cc                              int3     
+007e8fe0  55                              push     ebp
+007e8fe1  8b ec                           mov      ebp, esp
+007e8fe3  8b 45 08                        mov      eax, dword ptr [ebp + 8]
+007e8fe6  33 d2                           xor      edx, edx
+007e8fe8  3b 55 0c                        cmp      edx, dword ptr [ebp + 0xc]
+007e8feb  89 01                           mov      dword ptr [ecx], eax
+007e8fed  b8 50 00 00 00                  mov      eax, 0x50
+007e8ff2  1b d2                           sbb      edx, edx
+007e8ff4  23 55 0c                        and      edx, dword ptr [ebp + 0xc]
+007e8ff7  3b d0                           cmp      edx, eax
+007e8ff9  0f 42 c2                        cmovb    eax, edx
+007e8ffc  8d 04 40                        lea      eax, [eax + eax*2]
+007e8fff  f3 0f 7e 04 85 c8 f4 b1 00      movq     xmm0, qword ptr [eax*4 + 0xb1f4c8]
+007e9008  8b 04 85 d0 f4 b1 00            mov      eax, dword ptr [eax*4 + 0xb1f4d0]
+007e900f  66 0f d6 41 04                  movq     qword ptr [ecx + 4], xmm0
+007e9014  89 41 0c                        mov      dword ptr [ecx + 0xc], eax
+007e9017  5d                              pop      ebp
+007e9018  c2 08 00                        ret      8
+007e901b  cc                              int3     
+007e901c  cc                              int3     
+007e901d  cc                              int3     
+007e901e  cc                              int3     
+007e901f  cc                              int3     
+007e9020  55                              push     ebp
+007e9021  8b ec                           mov      ebp, esp
+007e9023  56                              push     esi
+007e9024  8b f1                           mov      esi, ecx
+007e9026  8b 16                           mov      edx, dword ptr [esi]
+007e9028  85 d2                           test     edx, edx
+007e902a  75 16                           jne      0x7e9042
+007e902c  68 54 bf b6 00                  push     0xb6bf54
+007e9031  6a 10                           push     0x10
+007e9033  e8 88 82 22 00                  call     0xa112c0
+007e9038  8b 16                           mov      edx, dword ptr [esi]
+007e903a  83 c4 08                        add      esp, 8
+007e903d  85 d2                           test     edx, edx
+007e903f  75 01                           jne      0x7e9042
+007e9041  cc                              int3     
+007e9042  8b 4e 04                        mov      ecx, dword ptr [esi + 4]
+007e9045  8b c2                           mov      eax, edx
+007e9047  d3 e8                           shr      eax, cl
+007e9049  8b 4e 08                        mov      ecx, dword ptr [esi + 8]
+007e904c  33 c2                           xor      eax, edx
+007e904e  8b d0                           mov      edx, eax
+007e9050  d3 e2                           shl      edx, cl
+007e9052  8b 4e 0c                        mov      ecx, dword ptr [esi + 0xc]
+007e9055  33 d0                           xor      edx, eax
+007e9057  8b c2                           mov      eax, edx
+007e9059  d3 e8                           shr      eax, cl
+007e905b  8b 4d 08                        mov      ecx, dword ptr [ebp + 8]
+007e905e  33 c2                           xor      eax, edx
+007e9060  89 06                           mov      dword ptr [esi], eax
+007e9062  85 c9                           test     ecx, ecx
+007e9064  75 07                           jne      0x7e906d
+007e9066  33 c0                           xor      eax, eax
+007e9068  5e                              pop      esi
+007e9069  5d                              pop      ebp
+007e906a  c2 04 00                        ret      4
+007e906d  33 d2                           xor      edx, edx
+007e906f  f7 f1                           div      ecx
+007e9071  5e                              pop      esi
+007e9072  8b c2                           mov      eax, edx
+007e9074  5d                              pop      ebp
+007e9075  c2 04 00                        ret      4
+007e9078  cc                              int3     
+007e9079  cc                              int3     
+007e907a  cc                              int3     
+007e907b  cc                              int3     
+007e907c  cc                              int3     
+007e907d  cc                              int3     
+007e907e  cc                              int3     
+007e907f  cc                              int3     
+007e9080  55                              push     ebp
+007e9081  8b ec                           mov      ebp, esp
+007e9083  51                              push     ecx
+007e9084  56                              push     esi
+007e9085  8b f1                           mov      esi, ecx
+007e9087  8b 16                           mov      edx, dword ptr [esi]
+007e9089  85 d2                           test     edx, edx
+007e908b  75 16                           jne      0x7e90a3
+007e908d  68 54 bf b6 00                  push     0xb6bf54
+007e9092  6a 10                           push     0x10
+007e9094  e8 27 82 22 00                  call     0xa112c0
+007e9099  8b 16                           mov      edx, dword ptr [esi]
+007e909b  83 c4 08                        add      esp, 8
+007e909e  85 d2                           test     edx, edx
+007e90a0  75 01                           jne      0x7e90a3
+007e90a2  cc                              int3     
+007e90a3  8b 4e 04                        mov      ecx, dword ptr [esi + 4]
+007e90a6  8b c2                           mov      eax, edx
+007e90a8  d3 e8                           shr      eax, cl
+007e90aa  8b 4e 08                        mov      ecx, dword ptr [esi + 8]
+007e90ad  33 c2                           xor      eax, edx
+007e90af  8b d0                           mov      edx, eax
+007e90b1  d3 e2                           shl      edx, cl
+007e90b3  8b 4e 0c                        mov      ecx, dword ptr [esi + 0xc]
+007e90b6  33 d0                           xor      edx, eax
+007e90b8  8b c2                           mov      eax, edx
+007e90ba  d3 e8                           shr      eax, cl
+007e90bc  33 c2                           xor      eax, edx
+007e90be  89 06                           mov      dword ptr [esi], eax
+007e90c0  5e                              pop      esi
+007e90c1  66 0f 6e c0                     movd     xmm0, eax
+007e90c5  f3 0f e6 c0                     cvtdq2pd xmm0, xmm0
+007e90c9  c1 e8 1f                        shr      eax, 0x1f
+007e90cc  f2 0f 58 04 c5 00 cb ba 00      addsd    xmm0, qword ptr [eax*8 + 0xbacb00]
+007e90d5  66 0f 5a c0                     cvtpd2ps xmm0, xmm0
+007e90d9  f3 0f 59 05 f0 9f ba 00         mulss    xmm0, dword ptr [0xba9ff0]
+007e90e1  f3 0f 11 45 fc                  movss    dword ptr [ebp - 4], xmm0
+007e90e6  d9 45 fc                        fld      dword ptr [ebp - 4]
+007e90e9  8b e5                           mov      esp, ebp
+007e90eb  5d                              pop      ebp
+007e90ec  c3                              ret      
+007e90ed  cc                              int3     
+007e90ee  cc                              int3     
+007e90ef  cc                              int3     
+007e90f0  56                              push     esi
+007e90f1  8b f1                           mov      esi, ecx
+007e90f3  8b 16                           mov      edx, dword ptr [esi]
+007e90f5  85 d2                           test     edx, edx
+007e90f7  75 16                           jne      0x7e910f
+007e90f9  68 54 bf b6 00                  push     0xb6bf54
+007e90fe  6a 10                           push     0x10
+007e9100  e8 bb 81 22 00                  call     0xa112c0
+007e9105  8b 16                           mov      edx, dword ptr [esi]
+007e9107  83 c4 08                        add      esp, 8
+007e910a  85 d2                           test     edx, edx
+007e910c  75 01                           jne      0x7e910f
+007e910e  cc                              int3     
+007e910f  8b 4e 04                        mov      ecx, dword ptr [esi + 4]
+007e9112  8b c2                           mov      eax, edx
+007e9114  d3 e8                           shr      eax, cl
+007e9116  8b 4e 08                        mov      ecx, dword ptr [esi + 8]
+007e9119  33 c2                           xor      eax, edx
+007e911b  8b d0                           mov      edx, eax
+007e911d  d3 e2                           shl      edx, cl
+007e911f  8b 4e 0c                        mov      ecx, dword ptr [esi + 0xc]
+007e9122  33 d0                           xor      edx, eax
+007e9124  8b c2                           mov      eax, edx
+007e9126  d3 e8                           shr      eax, cl
+007e9128  33 c2                           xor      eax, edx
+007e912a  89 06                           mov      dword ptr [esi], eax
+007e912c  5e                              pop      esi
+007e912d  c3                              ret      
+007e912e  cc                              int3     
+007e912f  cc                              int3     

@@ -1,0 +1,165 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "scope": "canonical base-profile ORIGINAL Caves I topology including natural XL",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "shards": [
+    "research\\binary\\caves1_topology_normal_1.json",
+    "research\\binary\\caves1_topology_normal_2501.json",
+    "research\\binary\\caves1_topology_normal_5001.json",
+    "research\\binary\\caves1_topology_normal_7501.json",
+    "research\\binary\\caves1_topology_hard_1.json",
+    "research\\binary\\caves1_topology_hard_2501.json",
+    "research\\binary\\caves1_topology_hard_5001.json",
+    "research\\binary\\caves1_topology_hard_7501.json"
+  ],
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 10000,
+      "generator_rng_draws": 5326393,
+      "outer_retries": 0,
+      "retrying_seeds": 0,
+      "curse_gate_successes": 146,
+      "xl_floors": 27,
+      "xl_exception_draws": 570,
+      "boundary_skips": 378567,
+      "large_rooms_placed": 29528,
+      "forced_dead_end_attempts": 1851,
+      "curse_masks": {
+        "0": 9854,
+        "8": 31,
+        "32": 22,
+        "4": 29,
+        "64": 22,
+        "2": 27,
+        "1": 15
+      },
+      "curse_selector_modulo_six": {
+        "3": 31,
+        "4": 22,
+        "1": 29,
+        "5": 22,
+        "0": 27,
+        "2": 15
+      },
+      "difficulty_windows": {
+        "1..5": 9973,
+        "1..10": 27
+      },
+      "target_room_counts": {
+        "15": 4944,
+        "16": 5000,
+        "19": 29,
+        "27": 27
+      },
+      "accepted_room_counts": {
+        "16": 4037,
+        "18": 413,
+        "17": 5269,
+        "19": 169,
+        "20": 70,
+        "21": 15,
+        "28": 24,
+        "30": 1,
+        "31": 1,
+        "33": 1
+      },
+      "shapes": {
+        "1": 137763,
+        "12": 2529,
+        "3": 1510,
+        "2": 1596,
+        "8": 5864,
+        "7": 1419,
+        "6": 3868,
+        "9": 2468,
+        "5": 1419,
+        "4": 3849,
+        "11": 2426,
+        "10": 2580
+      },
+      "max_retries": 0,
+      "seed_range": [
+        1,
+        10000
+      ]
+    },
+    "HARD": {
+      "comparisons": 10000,
+      "generator_rng_draws": 6018562,
+      "outer_retries": 0,
+      "retrying_seeds": 0,
+      "curse_gate_successes": 273,
+      "xl_floors": 49,
+      "xl_exception_draws": 1166,
+      "boundary_skips": 425780,
+      "large_rooms_placed": 33330,
+      "forced_dead_end_attempts": 377,
+      "curse_masks": {
+        "0": 9727,
+        "32": 42,
+        "8": 55,
+        "4": 50,
+        "1": 36,
+        "64": 41,
+        "2": 49
+      },
+      "curse_selector_modulo_six": {
+        "4": 42,
+        "3": 55,
+        "1": 50,
+        "2": 36,
+        "5": 41,
+        "0": 49
+      },
+      "difficulty_windows": {
+        "5..10": 9951,
+        "5..15": 49
+      },
+      "target_room_counts": {
+        "18": 4935,
+        "17": 2466,
+        "19": 2500,
+        "22": 21,
+        "21": 29,
+        "30": 27,
+        "29": 22
+      },
+      "accepted_room_counts": {
+        "19": 4879,
+        "18": 2376,
+        "20": 2551,
+        "21": 65,
+        "23": 28,
+        "22": 51,
+        "31": 25,
+        "30": 21,
+        "32": 2,
+        "24": 1,
+        "35": 1
+      },
+      "shapes": {
+        "1": 157818,
+        "8": 6570,
+        "11": 2726,
+        "9": 2746,
+        "7": 1576,
+        "4": 4435,
+        "3": 1712,
+        "6": 4397,
+        "12": 2808,
+        "5": 1731,
+        "2": 1777,
+        "10": 2852
+      },
+      "max_retries": 0,
+      "seed_range": [
+        1,
+        10000
+      ]
+    }
+  },
+  "total_comparisons": 20000,
+  "total_generator_rng_draws": 11344955,
+  "matches": true
+}

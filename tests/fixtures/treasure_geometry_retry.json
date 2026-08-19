@@ -1,0 +1,10 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "start_seed": 1,
+  "difficulty": "NORMAL",
+  "attempts": [
+    {"boss_id": 17, "abort": "Treasure geometry", "level_rng": [3892950396, 3565245368], "generator_rng": [3892950396, 3851412972], "boss_pool_rng": [75503169, 1817273056], "weight_mutations": 4},
+    {"boss_id": 44, "abort": null, "level_rng": [3565245368, 88645014], "generator_rng": [3851412972, 3933608782], "boss_pool_rng": [1817273056, 1500188963], "weight_mutations": 5}
+  ],
+  "committed_bosses": [44]
+}

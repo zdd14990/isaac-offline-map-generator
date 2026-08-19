@@ -1,0 +1,129 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "scope": "canonical base-profile ORIGINAL Basement II topology",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "seed_range": [
+    1,
+    10000
+  ],
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 10000,
+      "generator_rng_draws": 4704638,
+      "outer_retries": 1,
+      "retrying_seeds": 1,
+      "max_retries": 1,
+      "curse_gate_successes": 121,
+      "curse_masks": {
+        "0": 9901,
+        "32": 22,
+        "1": 14,
+        "4": 19,
+        "64": 25,
+        "8": 19
+      },
+      "curse_selector_modulo_six": {
+        "4": 22,
+        "0": 22,
+        "2": 14,
+        "1": 19,
+        "5": 25,
+        "3": 19
+      },
+      "target_room_counts": {
+        "11": 4980,
+        "12": 5001,
+        "15": 19
+      },
+      "accepted_room_counts": {
+        "14": 2370,
+        "12": 1586,
+        "15": 1439,
+        "13": 3892,
+        "16": 542,
+        "17": 151,
+        "18": 20
+      },
+      "shapes": {
+        "1": 112980,
+        "4": 3113,
+        "6": 2898,
+        "9": 1949,
+        "7": 1168,
+        "8": 4564,
+        "12": 1788,
+        "2": 1206,
+        "11": 1959,
+        "10": 1996,
+        "5": 1151,
+        "3": 1220
+      },
+      "boundary_skips": 384722,
+      "large_rooms_placed": 23015,
+      "forced_dead_end_attempts": 10920
+    },
+    "HARD": {
+      "comparisons": 10000,
+      "generator_rng_draws": 5028824,
+      "outer_retries": 0,
+      "retrying_seeds": 0,
+      "max_retries": 0,
+      "curse_gate_successes": 252,
+      "curse_masks": {
+        "0": 9789,
+        "32": 45,
+        "4": 42,
+        "1": 39,
+        "64": 48,
+        "8": 37
+      },
+      "curse_selector_modulo_six": {
+        "4": 45,
+        "0": 41,
+        "1": 42,
+        "2": 39,
+        "5": 48,
+        "3": 37
+      },
+      "target_room_counts": {
+        "13": 2478,
+        "14": 4979,
+        "15": 2501,
+        "18": 23,
+        "17": 19
+      },
+      "accepted_room_counts": {
+        "15": 4202,
+        "17": 731,
+        "14": 1526,
+        "16": 3209,
+        "18": 252,
+        "20": 4,
+        "19": 75,
+        "21": 1
+      },
+      "shapes": {
+        "1": 126619,
+        "6": 3536,
+        "4": 3696,
+        "9": 2333,
+        "7": 1401,
+        "11": 2290,
+        "8": 5420,
+        "12": 2166,
+        "2": 1497,
+        "10": 2400,
+        "5": 1363,
+        "3": 1506
+      },
+      "boundary_skips": 367884,
+      "large_rooms_placed": 27608,
+      "forced_dead_end_attempts": 4055
+    }
+  },
+  "total_comparisons": 20000,
+  "total_generator_rng_draws": 9733462,
+  "matches": true,
+  "mismatch": null
+}

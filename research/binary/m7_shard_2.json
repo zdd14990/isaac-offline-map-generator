@@ -1,0 +1,164 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "scope": "canonical fresh Basement I through Ultra; late default variants excluded",
+  "seed_range": [
+    2501,
+    3750
+  ],
+  "difficulties": {
+    "NORMAL": {
+      "comparisons": 1250,
+      "total_attempts": 1351,
+      "retrying_seeds": 95,
+      "ultra_missing": 0,
+      "ultra_boundary": 4,
+      "ultra_diagonal_neighbor": 991,
+      "ultra_distance_two_neighbor": 1459,
+      "ultra_secret_neighbor": 0,
+      "ultra_super_secret_neighbor": 0,
+      "ultra_large_neighbor": 176,
+      "ultra_l_shape_neighbor": 174,
+      "ultra_neighbor_counts": {
+        "3": 235,
+        "1": 302,
+        "2": 705,
+        "4": 7,
+        "5": 1
+      },
+      "ultra_tie_sizes": {
+        "1": 902,
+        "2": 240,
+        "3": 78,
+        "4": 21,
+        "5": 8,
+        "6": 1
+      },
+      "ultra_red_door_write_counts": {
+        "4": 140,
+        "1": 234,
+        "7": 48,
+        "3": 597,
+        "5": 41,
+        "2": 148,
+        "6": 33,
+        "9": 2,
+        "8": 6,
+        "10": 1
+      },
+      "ultra_config_variants": {
+        "8": 209,
+        "5": 97,
+        "6": 53,
+        "7": 19,
+        "4": 141,
+        "2": 163,
+        "3": 187,
+        "0": 194,
+        "1": 187
+      },
+      "eligible_candidate_counts": {
+        "145": 113,
+        "146": 128,
+        "143": 46,
+        "153": 14,
+        "150": 124,
+        "152": 55,
+        "148": 187,
+        "147": 177,
+        "149": 161,
+        "144": 83,
+        "151": 76,
+        "140": 8,
+        "142": 35,
+        "141": 26,
+        "139": 7,
+        "154": 3,
+        "137": 3,
+        "138": 4
+      }
+    },
+    "HARD": {
+      "comparisons": 1250,
+      "total_attempts": 1341,
+      "retrying_seeds": 84,
+      "ultra_missing": 0,
+      "ultra_boundary": 26,
+      "ultra_diagonal_neighbor": 1129,
+      "ultra_distance_two_neighbor": 1489,
+      "ultra_secret_neighbor": 0,
+      "ultra_super_secret_neighbor": 0,
+      "ultra_large_neighbor": 216,
+      "ultra_l_shape_neighbor": 189,
+      "ultra_neighbor_counts": {
+        "4": 17,
+        "2": 723,
+        "3": 297,
+        "1": 213
+      },
+      "ultra_tie_sizes": {
+        "1": 898,
+        "2": 244,
+        "4": 36,
+        "3": 64,
+        "5": 8
+      },
+      "ultra_red_door_write_counts": {
+        "6": 50,
+        "3": 610,
+        "7": 41,
+        "2": 126,
+        "4": 163,
+        "1": 160,
+        "5": 90,
+        "9": 3,
+        "8": 7
+      },
+      "ultra_config_variants": {
+        "8": 215,
+        "5": 96,
+        "6": 53,
+        "7": 21,
+        "4": 147,
+        "2": 155,
+        "3": 184,
+        "0": 194,
+        "1": 185
+      },
+      "eligible_candidate_counts": {
+        "141": 81,
+        "146": 163,
+        "142": 100,
+        "151": 22,
+        "139": 19,
+        "149": 60,
+        "147": 121,
+        "145": 173,
+        "144": 170,
+        "143": 125,
+        "150": 37,
+        "138": 14,
+        "148": 102,
+        "140": 43,
+        "137": 14,
+        "132": 1,
+        "135": 2,
+        "152": 1,
+        "136": 2
+      }
+    }
+  },
+  "total_comparisons": 2500,
+  "dimensions": [
+    "full M4/M5/M6 attempt state and persistent owners",
+    "index-71 Ultra RoomConfig seed derivation and index-7 selector draws",
+    "red-door exclusion set from every configured descriptor and door slot",
+    "all 169 Ultra candidate evaluations in stable scan order",
+    "immediate-cell rejection, ordered outer-ring neighbors and door compatibility",
+    "persistent index-35 candidate/tie RNG transitions",
+    "type-29 1x1 descriptor/map mutation and red-door bit writes",
+    "Ultra null result continues without floor retry",
+    "pre-late pending BossPool blacklist remains uncommitted"
+  ]
+}
