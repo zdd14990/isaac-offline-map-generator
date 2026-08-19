@@ -885,6 +885,39 @@ the canonical ORIGINAL route:
   collectible 626; third branch ORIGINAL-only flag) — CONFIRMED;
   Secret/Ultra shared; late branches 0x73e422 (ORIGINAL-only
   achievement-187 gate) and 0x73ea83 (Mines/Ashpit chapter) — OPEN.
-- ALT floors stay FAIL CLOSED until the special-room gate shapes
-  (0x0033BCF5..0x0033C0B6 and late) are reconstructed — see
-  `research/notes/alt_special_room_condition_matrix.md`.
+
+## Round 5 (2026-08-18, complete): ALT floors 1+..6+ OPEN
+
+- **All six ALT floors implemented and registered** (Downpour I/II, Mines
+  I/II, Mausoleum I/II). Each floor: 50 NORMAL + 50 HARD ordered
+  clean-vs-reference comparisons, 0 mismatches (artifacts
+  `research/binary/alt{downpour1,dross,mines1,ashpit,mausoleum1,gehenna}_
+  100_differential_report.json`; the downpour/dross pairs keep their
+  round-5 file names `alt1_/alt2_`). Evidence grade per floor:
+  `PARTIAL_BINARY` (intentionally capped — 100 samples, not 20k-class).
+- **12 targeted XL fixtures all match** (seeds 143/158/229/236/344/520/787/
+  925/987 across N+H): Downpour I XL exercises the first-half mandatory end
+  room; Mines I XL exercises the second-half predicate with the
+  collectible-626 gate keeping it a no-op; Mausoleum I XL exercises
+  XL target/dead-end arithmetic on a level outside both half sets.
+- **Gehenna fixed boss verified in the clean pipeline**: `select_floor_boss`
+  returns 89 (Mom-Mausoleum) with pool-32 RNG pre == post state across
+  seeds 1/2/7 (differential also covers 100 seeds).
+- **Alternate-path mandatory end room** implemented in both M6 leaves:
+  first-half fires on Dross always and Downpour I on XL; second-half is a
+  canonical no-op (needs collectible 626); stages 5/6 evaluate the branch
+  and skip (config None) — block traces asserted per floor in
+  `tests/differential/test_{floor}_full_pipeline_differential.py`.
+- **Registry/bot**: `SUPPORTED_FLOORS` opens `1+..6+`; `/map B911 99AC
+  {0,1} {1+..6+}` produce real 1400x900 PNGs (`B91199AC_ALT_{NORMAL|HARD}_
+  stage{N}_{ver}.png`, PARTIAL_BINARY in the JSON payload); MAIN `stage1`
+  vs ALT `stage1` cache filenames stay separated by route.
+- **UI**: ALT floor dropdown entries (Downpour I/II, Mines I/II, Mausoleum
+  I/II) tagged SUPPORTED; `supported_stage_summary()` is now route-aware:
+  "stage 1-8（Baseline I 到 Womb II）；stage 1+-6+（Downpour I 到 Mausoleum
+  II）".
+- Generator tests: 617 passed (545 baseline + 72 ALT). MAIN 1..8 unchanged
+  this round.
+- Remaining boundary: Corpse (rcs 33, `-10` descriptor domain, level 8
+  fixed Mother 88) and the Sheol/Cathedral/Chest/Dark Room/Void endings
+  remain FAIL CLOSED.

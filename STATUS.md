@@ -183,80 +183,63 @@ External gameplay status for all of the above remains independently
 
 ## Partial / not yet complete
 
-Womb I (LevelStage 7) and Womb II (LevelStage 8) are implemented with
-`PARTIAL_BINARY` evidence (100 ordered clean-vs-reference comparisons each).
-All alternate-route floors (Downpour/Dross/Mines/Ashpit/Mausoleum/Gehenna)
-remain unsupported and fail closed: their StageType lifecycle, floor-init
-matrix and BossPool mapping are binary-confirmed, but the special-room gate
-shapes (Challenge/Chest/Arcade/super-secret adjusted-stage gates and the
-alternate-path mandatory end room) are still being reconstructed — see
-`research/notes/alt_special_room_condition_matrix.md`. Stage-7/8 constants
-and RoomConfig/BossPool profiles were reconstructed from the binary; nothing
-was copied from earlier floors.
+Womb I (LevelStage 7), Womb II (LevelStage 8) and all six alternate-route
+floors (Downpour I/II, Mines I/II, Mausoleum I/II) are implemented with
+`PARTIAL_BINARY` evidence (100 ordered clean-vs-reference comparisons per
+floor). These floors are intentionally capped at `PARTIAL_BINARY`: 100
+samples per floor is not the 20k-class corpus used for the ORIGINAL-route
+floors. Nothing in this round extrapolates patterns from earlier floors;
+every parameter was read from the binary (`generate_dungeon` floor-init
+formulas, `get_room_config_stage`, the stage-type 4/5 lifecycle,
+`select_boss_id` fixed-boss switch, the alternate-path mandatory end room).
 
-### Womb I/II and alternate-route floors: status (2026-08-18, round 5)
+### Alternate-route floors: status (2026-08-18, round 5, complete)
 
-**Womb I/II generation is OPEN on the MAIN route** (bot tokens `7`/`8`).
-Evidence grade `PARTIAL_BINARY` per floor: 50 NORMAL + 50 HARD ordered
-clean-vs-reference comparisons with 0 mismatches
-(`research/binary/womb1_100_differential_report.json`,
-`womb2_100_differential_report.json`), plus a targeted Womb I XL fixture
-(seeds 106/244/1381). **Round 5 correction:** `select_boss_id` returns FIXED
-bosses for levels 6/8/10/11/12 — Depths II = Mom (6), Womb II = Mom's Heart
-(8), ALT Gehenna = Mom-Mausoleum (89), ALT Corpse II = Mother (88) — so the
-earlier pool picks for Depths II / Womb II (and XL second bosses at level
-6/8) were corrected in both leaves. ALT 1+..6+ remain FAIL CLOSED until the
-special-room gate shapes are reconstructed.
+**ALL alternate-route floors 1+..6+ are OPEN** (bot tokens `1+`..`6+`):
 
-New binary findings this round (post-layout lifecycle tail
-`0x0033D1D6..0x0033D925`, disassembled with `scripts/disassemble_range.py`):
+| Floor | Token | Level | StageType | rcs | pool | slot | Evidence |
+|-------|-------|-------|-----------|-----|------|------|----------|
+| Downpour I | `1+` | 1 | 4 | 27 | 27 | 2 | PARTIAL_BINARY |
+| Downpour II (Dross) | `2+` | 2 | 5 | 28 | 28 | 3 | PARTIAL_BINARY |
+| Mines I | `3+` | 3 | 4 | 29 | 29 | 4 | PARTIAL_BINARY |
+| Mines II (Ashpit) | `4+` | 4 | 5 | 30 | 30 | 5 | PARTIAL_BINARY |
+| Mausoleum I | `5+` | 5 | 4 | 31 | 31 | 6 | PARTIAL_BINARY |
+| Mausoleum II (Gehenna) | `6+` | 6 | 5 | 32 | 32 | 7 | PARTIAL_BINARY |
 
-- **`-10` descriptor** (`post_layout_descriptor_minus10.md`): predicate is
-  `stage_type in (4, 5) AND level_stage in (7, 8)` — i.e. the Corpse (Mother
-  route) chapter pair, which is **out of scope**. Every target floor skips
-  it: Womb (stage_type 0) and Downpour/Mines/Mausoleum (level_stage 1..6).
-  It consumes 2 extra Level RNG draws only when entered.
-- **`-9` descriptor** (`post_layout_descriptor_minus9.md`): predicate is
-  `room_config_stage == 13` (Blue Womb). It replaces the `-8` slot with the
-  same 1-draw cost. Never fires for the eight target floors (rcs 10 / 27..32).
-- **28-draw invariant holds for all eight target floors.** The door-chance
-  flag writes in the tail use a local `IsaacRNG::Next` copy seeded from the
-  current Level RNG state (`0x3E9020` disassembly) and do NOT advance the
-  persistent Level RNG; the `-9`/`-10` branches are skipped; therefore the
-  persistent Level RNG sequence is identical to Depths II for every target
-  floor. The tail guard can be relaxed on this binary evidence, but that is
-  deferred until the pipelines that would call it exist.
-- Chapter resources are authoritative in `stages.xml` (Womb 10, Utero 11,
-  Downpour 27, Dross 28, Mines 29, Ashpit 30, Mausoleum 31, Gehenna 32);
-  `boss_pool.py` confirms pool index == ORIGINAL room-config stage.
-  `stage_seed.py` already confirms the alt route seed-slot rule
-  (`level_stage + 1`, capped at Home).
-- **`get_room_config_stage` fully reconstructed**
-  (`research/decomp/ghidra/Level__get_room_config_stage.c`, note
-  `get_room_config_stage_stage7_8_alt.md`): ORIGINAL `(7,0)->10` and
-  `(8,0)->10` (Utero 11 is NOT the canonical Womb II rcs); alt I floors
-  `(1..6, stage_type 4) -> 27/29/31`; alt II floors `(1..6, stage_type 5)
-  -> 28/30/32` (Dross/Ashpit/Gehenna are stage_type 5, the "second chapter"
-  variant); `(7/8, 4/5) -> 33` Corpse (the `-10` domain); Greed-mode special
-  mapping documented.
+Per floor: 50 NORMAL + 50 HARD ordered clean-vs-reference comparisons, 0
+mismatches (`research/binary/alt{downpour1,dross,mines1,ashpit,mausoleum1,
+gehenna}_100_differential_report.json` — downpour1/dross were named after
+their chapter pairs in round 5). 12 targeted XL fixtures (Labyrinth-eligible
+odd stages 1/3/5, seeds 143/158/229/236/344/520/787/925/987 across N+H)
+all match, covering the first-half XL mandatory end room (Downpour I XL),
+the second-half collectible-626 no-op (Mines I even on XL), and XL
+target/dead-end arithmetic on Mausoleum I.
 
-Remaining open work for alternate/later floors (Womb itself is DONE; see
-`research/notes/floors/womb1.md`, `womb2.md`,
-`research/notes/stage_type_4_5_binary_proof.md`):
+Key binary-confirmed facts (documented in
+`research/notes/alt_route_stage_type_lifecycle.md` and
+`research/notes/alt_floor_init_matrix.md`):
 
-1. alt floor-init parameters for stage_type 4/5 (target-3 confirmed;
-   everything else must not be extrapolated from ORIGINAL);
-2. through-Treasure / Secret / Ultra / late RoomConfig stage gates for
-   stage_type 4/5;
-3. route-progression stage_type assignment (I floors = 4, II floors = 5)
-   in the level-transition code;
-4. alternate-route RunGenerationState fields and BossPool entries for the
-   alt chapters (pools 27..32).
+- StageType alternates `4,5,4,5,4,5`; `get_room_config_stage` maps
+  `(stage, 4) -> 27/29/31` and `(stage, 5) -> 28/30/32`.
+- BossPool index == room-config stage (27..32), wired by the hard-coded
+  `bosspools.xml` name→index table in the parser (0x421bf0).
+- `select_boss_id` fixed-boss switch: ALT level 6 (Gehenna) -> Mom-Mausoleum
+  (89) with the pool-32 RNG untouched (pre == post state).
+- Alternate-path mandatory end room (0x0033C416..0x0033C69E): first-half
+  fires on Dross always and Downpour I on XL; second-half additionally
+  requires collectible 626 so it is a canonical no-op (Mines I even on XL);
+  Mausoleum I / Gehenna (levels 5/6) are outside both half sets — branch
+  evaluated, no placement.
+- The post-layout lifecycle tail `-9`/`-10` skip guards hold for all six ALT
+  floors (rcs 27..32, levels 1..6): the persistent 28-draw tail is
+  unchanged.
 
-Validation target when implemented: 50 NORMAL + 50 HARD per floor (~100
-comparisons per floor), graded at most `PARTIAL_BINARY` /
-`PREVIEW_SUPPORTED` — never `CONFIRMED_BINARY` on 100 samples.
+MAIN route 1..8 is unchanged this round: Depths II / Womb II fixed-boss
+corrections shipped in the earlier Womb checkpoint remain in place.
 
+`PARTIAL_BINARY` never implies `EXTERNALLY_VALIDATED_GAMEPLAY`: external
+gameplay validation for every floor remains independently
+`NOT_EXTERNALLY_VALIDATED_GAMEPLAY`.
 
 Noncanonical character, collectible, challenge/game-mode, unlock and continue
 profiles are rejected rather than silently taking the canonical branch.
@@ -330,20 +313,21 @@ RoomConfig stage (7) and the Depths BossPool (index 7) with Depths I; the
 pool-7 RNG state is inherited (advanced) from the Depths-I snapshot. Even
 Stage 6 is never XL. The full layout and post-layout lifecycle are confirmed
 via an independent mechanical reference compared over 20,000 seeds with zero
-mismatch. Womb I and later alternate routes: `UNSUPPORTED — FAIL CLOSED`.
+mismatch.
 
 FIRST_RELEASE_SCOPE_COMPLETE: the six ORIGINAL-route floors Basement I,
 Basement II, Caves I, Caves II, Depths I and Depths II are all
 `CONFIRMED_BINARY`. External gameplay validation remains
 `NOT_EXTERNALLY_VALIDATED_GAMEPLAY`.
 
-Research Preview UI: canonical Basement I, Basement II, Caves I, Caves II,
-Depths I and Depths II NORMAL/HARD. It dispatches through a
+Research Preview UI: canonical Basement I..Womb II (MAIN) plus Downpour
+I/II, Mines I/II, Mausoleum I/II (ALT) NORMAL/HARD. It dispatches through a
 `SUPPORTED_FLOORS` registry, replays the preceding floors' generation-only
 lifecycle when a later Stage is requested, and renders the selected clean
 pipeline's accepted descriptors/map/connections after all special-room
 geometry succeeds. Failed-attempt descriptors are never combined with the
-accepted map. Womb I and later floors remain fail closed in the UI.
+accepted map. ALT floors are listed in the dropdown as `SUPPORTED` with
+their in-game names; everything else fails closed in the UI.
 
 UI P0/P1 integration: completed. Icons are positioned at the centroid of the
 actual rendered RoomShape union mask and official sprites are aligned by their
@@ -359,11 +343,48 @@ The product-facing UI remains explicitly a Research Preview because external
 gameplay validation is unavailable. No later floor or noncanonical profile is
 silently approximated.
 
-## Tests
+Current local result: `617 passed` (545 round-5 baseline + 72 new
+ALT-floor tests: `tests/differential/test_{downpour1,dross,mines1,ashpit,
+mausoleum1,gehenna}_full_pipeline_differential.py`, 18 per floor, plus the
+expanded `test_alt_floors_1_to_6_generate_for_bot` API test).
 
-Current local result: `494 passed` (462 baseline + 32 new Womb tests:
-`tests/unit/test_womb_floor_init.py` and
-`tests/differential/test_womb_full_pipeline_differential.py`).
+Downpour I full-layout/lifecycle differential: 50 NORMAL and 50 HARD start
+seeds (100 comparisons) against an independent mechanical reference, with
+zero mismatch, plus targeted XL fixtures (seeds 143/158 N+H) covering the
+first-half XL mandatory end room. Evidence grade `PARTIAL_BINARY`.
+Artifact: `research/binary/alt1_100_differential_report.json` (round-5 name
+kept: chapter pair "Downpour I").
+
+Downpour II (Dross) full-layout/lifecycle differential: 50 NORMAL and 50
+HARD start seeds (100 comparisons), zero mismatch. First-half mandatory end
+room placed when a matching dead end exists (topology-dependent). Evidence
+grade `PARTIAL_BINARY`. Artifact:
+`research/binary/alt2_100_differential_report.json` (round-5 name kept:
+chapter pair "Downpour II").
+
+Mines I full-layout/lifecycle differential: 50 NORMAL and 50 HARD start
+seeds (100 comparisons), zero mismatch, plus targeted XL fixtures (seeds
+787/987 NORMAL, 229/344 HARD) proving the second-half collectible-626 gate
+keeps the mandatory end room a no-op even on XL. Evidence grade
+`PARTIAL_BINARY`. Artifact:
+`research/binary/altmines1_100_differential_report.json`.
+
+Ashpit (Mines II) full-layout/lifecycle differential: 50 NORMAL and 50 HARD
+start seeds (100 comparisons), zero mismatch. Evidence grade
+`PARTIAL_BINARY`. Artifact:
+`research/binary/altashpit_100_differential_report.json`.
+
+Mausoleum I full-layout/lifecycle differential: 50 NORMAL and 50 HARD start
+seeds (100 comparisons), zero mismatch, plus targeted XL fixtures (seeds
+520/925 NORMAL, 236/520 HARD) exercising XL target/dead-end arithmetic on a
+level outside both half sets. Evidence grade `PARTIAL_BINARY`. Artifact:
+`research/binary/altmausoleum1_100_differential_report.json`.
+
+Gehenna (Mausoleum II) full-layout/lifecycle differential: 50 NORMAL and 50
+HARD start seeds (100 comparisons), zero mismatch, with the fixed
+Mom-Mausoleum (89) boss verified across seeds (pool-32 RNG untouched).
+Evidence grade `PARTIAL_BINARY`. Artifact:
+`research/binary/altgehenna_100_differential_report.json`.
 
 Caves I full-layout/lifecycle differential: 10,000 NORMAL and 10,000 HARD
 start seeds (20,000 comparisons) against an independent mechanical reference,
@@ -514,14 +535,20 @@ Artifacts:
 - `research/notes/secret_binary_proof.md`;
 - `research/notes/ultra_secret_entry.md`;
 - `research/notes/ultra_secret_binary_proof.md`;
+- `research/binary/womb1_100_differential_report.json`;
+- `research/binary/womb2_100_differential_report.json`;
+- `research/binary/alt1_100_differential_report.json` (Downpour I);
+- `research/binary/alt2_100_differential_report.json` (Downpour II / Dross);
+- `research/binary/altmines1_100_differential_report.json`;
+- `research/binary/altashpit_100_differential_report.json`;
+- `research/binary/altmausoleum1_100_differential_report.json`;
+- `research/binary/altgehenna_100_differential_report.json`;
 - `research/notes/ultra_secret_rng_ledger.md`;
 - `research/notes/late_variant_failure_semantics.md`;
 - `research/notes/late_room_config_binary_proof.md`;
 - `research/notes/basement1_full_layout_proof.md`.
 - `research/notes/post_layout_lifecycle_binary_proof.md`;
 - `research/notes/canonical_run_profile.md`.
-- `research/binary/womb1_100_differential_report.json`;
-- `research/binary/womb2_100_differential_report.json`;
 
 ## Blockers
 
@@ -535,8 +562,7 @@ for suitable helpers only.
 
 No qualified current-version public complete-floor fixture has been accepted.
 This keeps external validation independent and unvalidated, but does not
-downgrade the complete static-binary proofs. The next reconstruction boundary
-is the alternate-route chapters (Downpour/Dross/Mines/Ashpit/Mausoleum/
-Gehenna): Stage-1..6 floor initialization for stage_type 4/5, alt BossPool
-entries, post-topology predicate changes and the successful lifecycle
-handoff.
+downgrade the complete static-binary proofs. The remaining reconstruction
+boundary is the late-game chapters after the alternate route: Corpse (rcs 33)
+uses the `-10` descriptor domain and the level 8 fixed Mother boss; the
+Sheol/Dark Room / Cathedral / Chest / Void endings remain out of scope.

@@ -304,3 +304,43 @@ Tests: generator 494 passed. Commits: `17ccc4d` (evidence [checkpoint A]).
   `-8` descriptor queries stage 13 (Blue Womb) on ALT too.
 - Generator tests 527 passed (494 + 14 alt floor-init + 18 downpour1
   differential + 1 bot-api); fraq bot 94 passed, typecheck green.
+## Round 5 cont.: ALL ALT floors 1+..6+ IMPLEMENTED [checkpoints C/D/E/F]
+
+**All six alternate-route floors are now generated end-to-end and OPEN.**
+
+- Downpour II (Dross, 2+): level 2, stage_type 5, rcs 28, pool 28, slot 3;
+  first-half mandatory end room fires every floor (placement topology-
+  dependent). 100/100 differentials
+  (`research/binary/alt2_100_differential_report.json`).
+- Mines I (3+): level 3, type 4, rcs 29, pool 29, slot 4. XL-capable
+  (Labyrinth-eligible odd stage); second-half mandatory-end-room predicate
+  fires on XL but the collectible-626 gate keeps it a canonical no-op
+  (verified on seeds 787/987 N, 229/344 H).
+- Ashpit (Mines II, 4+): level 4, type 5, rcs 30, pool 30, slot 5; never
+  XL; second-half branch evaluates and skips (no 626).
+- Mausoleum I (5+): level 5, type 4, rcs 31, pool 31, slot 6; XL-capable;
+  outside both half sets (no mandatory room; XL fixtures 520/925 N, 236/520
+  H match).
+- Gehenna (Mausoleum II, 6+): level 6, type 5, rcs 32, pool 32, slot 7;
+  never XL; FIXED boss 89 (Mom-Mausoleum) via `select_boss_id` level-6 ALT
+  switch with pool-32 RNG untouched (pre == post state).
+- 100 ordered differentials per floor (50 N + 50 H), 0 mismatches each:
+  `research/binary/alt{mines1,ashpit,mausoleum1,gehenna}_
+  100_differential_report.json`.
+- Registry: `SUPPORTED_FLOORS` opens Mines I / Mines II / Mausoleum I /
+  Mausoleum II (keys equal `floor_name_for(ALT_ROUTE, N)`).
+- Bot smoke: `/map B911 99AC {0,1} {1+..6+}` → 12 real 1400x900 PNGs,
+  `B91199AC_ALT_{NORMAL|HARD}_stage{N}_{ver}.png`, PARTIAL_BINARY in JSON
+  payloads; MAIN/ALT cache filenames stay route-separated.
+- UI: ALT floors listed as SUPPORTED in the floor dropdown;
+  `supported_stage_summary()` route-aware:
+  "stage 1-8（Basement I 到 Womb II）；stage 1+-6+（Downpour I 到
+  Mausoleum II）".
+- Mandatory-end-room tests corrected per the binary: second-half + 626 gate
+  and stage 5/6 out-of-set floors emit AltEndRoom blocks with config None
+  (skip recorded, no placement).
+- Tests: generator `617 passed` (545 round-5 baseline + 72 ALT); fraq bot
+  94 passed. MAIN 1..8 zero regression this round.
+
+Remaining boundary: Corpse (rcs 33, `-10` domain, level 8 fixed Mother 88)
+and Sheol/Cathedral/Chest/Dark Room/Void endings stay FAIL CLOSED.
