@@ -313,11 +313,60 @@ def run_treasure_to_secret_reference(
         if not place: _draw_level(state, draws, 0x0033C393, "Isaac low-health fallback")
     _finish_candidate(state, entry, "Isaac", rid, place, descriptors, blocks, before, "0x0033C0F0..0x0033C416", "1/50; low-health 1/5 fallback is false for fresh Isaac")
 
-    conditions.extend((
-        ReferenceConditionTrace("0x0033C416..0x0033C4D1", "alternate-path first-half mandatory end room", False, "skip"),
-        ReferenceConditionTrace("0x0033C554..0x0033C640", "alternate-path second-half collectible-626 end room", False, "skip"),
-        ReferenceConditionTrace("0x0033C645..0x0033C69E", "route-specific end-room state flag", False, "skip"),
-    ))
+    # Alternate-path blocks (0x0033C416..0x0033C69E): see the clean leaf.
+    if profile.stage_type in (4, 5):
+        first_half = profile.level_stage == 2 or (
+            profile.level_stage == 1 and profile.is_xl
+        )
+        second_half = profile.level_stage == 4 or (
+            profile.level_stage == 3 and profile.is_xl
+        )
+        if first_half:
+            seed = _draw_level(state, draws, 0x0033C455, "Alt first-half mandatory end room")
+            before = tuple(state.dead_ends)
+            selection = select_room_reference(
+                entries, weights,
+                RoomConfigQueryReference(
+                    seed, True, profile.room_config_stage, 1,
+                    min_difficulty=0, max_difficulty=0, subtype=34,
+                ),
+            )
+            configs.append(ReferenceConfigTrace("AltEndRoom", (selection,)))
+            _config_draws(draws, "AltEndRoom", (selection,))
+            entry = selection.selected
+            rid = _consume(state, entry, "GetNewEndRoom(AltEndRoom)") if entry is not None else -1
+            placed = rid >= 0
+            if placed:
+                _assign(state, rid, entry); descriptors[rid] = entry
+            blocks.append(InterveningBlockTrace(
+                "AltEndRoom", "0x0033C416..0x0033C4D1", 1, 13, before, rid,
+                placed, tuple(state.dead_ends),
+                entry.key if entry is not None else None,
+                "first-half mandatory end room",
+            ))
+        elif second_half:
+            blocks.append(InterveningBlockTrace(
+                "AltEndRoom", "0x0033C554..0x0033C640", 29, 1,
+                tuple(state.dead_ends), -1, False, tuple(state.dead_ends),
+                None, "second-half collectible-626: canonical no-op",
+            ))
+        else:
+            blocks.append(InterveningBlockTrace(
+                "AltEndRoom", "0x0033C645..0x0033C69E", 0, 0,
+                tuple(state.dead_ends), -1, False, tuple(state.dead_ends),
+                None, "route flag: canonical no-op",
+            ))
+    else:
+        conditions.extend((
+            ReferenceConditionTrace("0x0033C416..0x0033C4D1", "alternate-path first-half mandatory end room", False, "skip"),
+            ReferenceConditionTrace("0x0033C554..0x0033C640", "alternate-path second-half collectible-626 end room", False, "skip"),
+            ReferenceConditionTrace("0x0033C645..0x0033C69E", "route-specific end-room state flag", False, "skip"),
+        ))
+        blocks.append(InterveningBlockTrace(
+            "AltEndRoom", "0x0033C645..0x0033C69E", 0, 0,
+            tuple(state.dead_ends), -1, False, tuple(state.dead_ends),
+            None, "condition_74f030: canonical no-op",
+        ))
 
     secret_seed = post.snapshot
     selections = select_room_with_stage_fallback_reference(entries, weights, RoomConfigQueryReference(secret_seed, True, profile.room_config_stage, 7, subtype=-1), profile.fallback_room_config_stage)

@@ -99,7 +99,7 @@ def test_unsupported_floor_fails_before_generator_call(monkeypatch: pytest.Monke
 def test_preview_support_registry_contains_only_confirmed_complete_floors() -> None:
     assert tuple(SUPPORTED_FLOORS) == (
         "Basement I", "Basement II", "Caves I", "Caves II", "Depths I", "Depths II",
-        "Womb I", "Womb II", "Downpour I",
+        "Womb I", "Womb II", "Downpour I", "Downpour II",
     )
     assert SUPPORTED_FLOORS["Basement I"].replayed_floors == ("Basement I",)
     assert SUPPORTED_FLOORS["Basement II"].replayed_floors == (
@@ -153,6 +153,10 @@ def test_preview_support_registry_contains_only_confirmed_complete_floors() -> N
     )
     assert SUPPORTED_FLOORS["Downpour I"].replayed_floors == ("Downpour I",)
 
+    assert SUPPORTED_FLOORS["Downpour II"].replayed_floors == (
+        "Downpour I",
+        "Downpour II",
+    )
 
 @pytest.mark.parametrize("difficulty", ["NORMAL", "HARD"])
 def test_preview_adapter_replays_and_exposes_clean_accepted_basement2_layout(

@@ -73,14 +73,15 @@ class _PreviewResources:
     depths_bosses: tuple[BossPoolEntry, ...]
     womb_bosses: tuple[BossPoolEntry, ...]
     downpour_bosses: tuple[BossPoolEntry, ...]
+    dross_bosses: tuple[BossPoolEntry, ...]
     special: tuple[RoomDefinition, ...]
     basement: tuple[RoomDefinition, ...]
     caves: tuple[RoomDefinition, ...]
     depths: tuple[RoomDefinition, ...]
     womb: tuple[RoomDefinition, ...]
     downpour: tuple[RoomDefinition, ...]
+    dross: tuple[RoomDefinition, ...]
     blue_womb: tuple[RoomDefinition, ...]
-
 PreviewPipelineResult = Basement1FullResult | Basement2FullResult | Caves1FullResult | Caves2FullResult | Depths1FullResult | Womb1FullResult | Womb2FullResult
 
 
@@ -201,6 +202,7 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
         root / "rooms" / "07.depths.stb",
         root / "rooms" / "10.womb.stb",
         root / "rooms" / "27.downpour.stb",
+        root / "rooms" / "28.dross.stb",
     )
     missing = tuple(path for path in required if not path.is_file())
     if missing:
@@ -213,6 +215,7 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
     depths_bosses = pools.get("depths", ())
     womb_bosses = pools.get("womb", ())
     downpour_bosses = pools.get("downpour", ())
+    dross_bosses = pools.get("dross", ())
     if not bosses:
         raise MissingPreviewResources("the extracted Basement boss pool is empty")
     if not caves_bosses:
@@ -223,12 +226,15 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
         raise MissingPreviewResources("the extracted Womb boss pool is empty")
     if not downpour_bosses:
         raise MissingPreviewResources("the extracted Downpour boss pool is empty")
+    if not dross_bosses:
+        raise MissingPreviewResources("the extracted Dross boss pool is empty")
     return _PreviewResources(
         bosses=tuple(bosses),
         caves_bosses=tuple(caves_bosses),
         depths_bosses=tuple(depths_bosses),
         womb_bosses=tuple(womb_bosses),
         downpour_bosses=tuple(downpour_bosses),
+        dross_bosses=tuple(dross_bosses),
         special=tuple(load_stb(required[1])),
         basement=tuple(load_stb(required[2])),
         caves=tuple(load_stb(required[3])),
@@ -236,6 +242,7 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
         depths=tuple(load_stb(required[5])),
         womb=tuple(load_stb(required[6])),
         downpour=tuple(load_stb(required[7])),
+        dross=tuple(load_stb(required[8])),
     )
 
 
@@ -297,6 +304,23 @@ def _generate_womb1(
         womb_definitions=resources.womb, blue_womb_definitions=resources.blue_womb,
     )
     return womb1.layout
+
+
+def _generate_dross(
+    start_seed: int,
+    difficulty: str,
+    resources: _PreviewResources,
+) -> "Basement1FullResult":
+    from .dross_lifecycle import generate_dross_lifecycle
+
+    return generate_dross_lifecycle(
+        start_seed,
+        difficulty,
+        dross_boss_entries=resources.dross_bosses,
+        special_definitions=resources.special,
+        dross_definitions=resources.dross,
+        blue_womb_definitions=resources.blue_womb,
+    ).layout
 
 
 def _generate_womb2(
@@ -575,6 +599,12 @@ SUPPORTED_FLOORS: dict[str, PreviewFloorSpec] = {
         "downpour1",
         ("Downpour I",),
         _generate_downpour1,
+    ),
+    "Downpour II": PreviewFloorSpec(
+        "Downpour II",
+        "dross",
+        ("Downpour I", "Downpour II"),
+        _generate_dross,
     ),
 }
 

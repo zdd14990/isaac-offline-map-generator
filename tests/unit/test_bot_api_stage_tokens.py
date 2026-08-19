@@ -47,7 +47,7 @@ def test_floor_name_for() -> None:
 def test_generation_fail_closed_for_alt_floors(tmp_path: Path) -> None:
     """Alt floors 2+..6+ still fail closed with the floor name carried back."""
     cases = [
-        (ALT_ROUTE, 2, "Downpour II"),
+        
         (ALT_ROUTE, 3, "Mines I"),
         (ALT_ROUTE, 4, "Mines II"),
         (ALT_ROUTE, 5, "Mausoleum I"),

@@ -468,11 +468,74 @@ def run_treasure_to_secret(
         else: state.dead_ends.append(rid)
     blocks.append(InterveningBlockTrace("Isaac", "0x0033C0F0..0x0033C416", 18, entry.subtype, before, rid, rid >= 0 and place, tuple(state.dead_ends), entry.key, "1/50; low-health 1/5 fallback is false for fresh Isaac"))
 
-    conditions.extend((
-        ConditionTrace("0x0033C416..0x0033C4D1", "alternate-path first-half mandatory end room", False, "skip"),
-        ConditionTrace("0x0033C554..0x0033C640", "alternate-path second-half collectible-626 end room", False, "skip"),
-        ConditionTrace("0x0033C645..0x0033C69E", "route-specific end-room state flag", False, "skip"),
-    ))
+    # Alternate-path blocks (0x0033C416..0x0033C69E): the ALT route places a
+    # mandatory end room on the first-half chapter floors (Dross always,
+    # Downpour I only when XL); the second-half branch is gated on collectible
+    # 626 (never owned on the canonical profile); the ORIGINAL third branch
+    # only sets a flag under a non-canonical condition.
+    if profile.stage_type in (4, 5):
+        first_half = profile.level_stage == 2 or (
+            profile.level_stage == 1 and profile.is_xl
+        )
+        second_half = profile.level_stage == 4 or (
+            profile.level_stage == 3 and profile.is_xl
+        )
+        if first_half:
+            seed = _draw(
+                state.level_rng, ledger, rva=0x0033C455,
+                identity="Level._generationRNG", shift_index=35,
+                reason="Alt first-half mandatory end room",
+                usage="type 1 variant 13 selector seed",
+            )
+            before = tuple(state.dead_ends)
+            selection = select_room(
+                entries, run_state.room_config,
+                RoomConfigQuery(
+                    seed, True, profile.room_config_stage, 1,
+                    min_difficulty=0, max_difficulty=0, subtype=34,
+                ),
+            )
+            configs.append(ConfigTrace("AltEndRoom", (0,), (selection,)))
+            _append_config_draws(ledger, "AltEndRoom", (selection,))
+            entry = selection.entry
+            rid = (
+                _consume_end_room(state, entry, "GetNewEndRoom(AltEndRoom)")
+                if entry is not None
+                else -1
+            )
+            placed = rid >= 0
+            if placed:
+                _assign(state, rid, entry)
+                descriptor_configs[rid] = entry
+            blocks.append(InterveningBlockTrace(
+                "AltEndRoom", "0x0033C416..0x0033C4D1", 1, 13, before, rid,
+                placed, tuple(state.dead_ends),
+                entry.key if entry is not None else None,
+                "first-half mandatory end room",
+            ))
+        elif second_half:
+            blocks.append(InterveningBlockTrace(
+                "AltEndRoom", "0x0033C554..0x0033C640", 29, 1,
+                tuple(state.dead_ends), -1, False, tuple(state.dead_ends),
+                None, "second-half collectible-626: canonical no-op",
+            ))
+        else:
+            blocks.append(InterveningBlockTrace(
+                "AltEndRoom", "0x0033C645..0x0033C69E", 0, 0,
+                tuple(state.dead_ends), -1, False, tuple(state.dead_ends),
+                None, "route flag: canonical no-op",
+            ))
+    else:
+        conditions.extend((
+            ConditionTrace("0x0033C416..0x0033C4D1", "alternate-path first-half mandatory end room", False, "skip"),
+            ConditionTrace("0x0033C554..0x0033C640", "alternate-path second-half collectible-626 end room", False, "skip"),
+            ConditionTrace("0x0033C645..0x0033C69E", "route-specific end-room state flag", False, "skip"),
+        ))
+        blocks.append(InterveningBlockTrace(
+            "AltEndRoom", "0x0033C645..0x0033C69E", 0, 0,
+            tuple(state.dead_ends), -1, False, tuple(state.dead_ends),
+            None, "condition_74f030: canonical no-op",
+        ))
 
     # Secret RoomConfig is chosen first from the saved post-Type8 seed.  Its
     # geometry is then scored with the persistent LevelGenerator RNG object.

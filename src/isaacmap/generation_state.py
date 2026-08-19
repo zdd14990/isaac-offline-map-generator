@@ -141,6 +141,51 @@ class CanonicalDownpour1Profile(CanonicalBasement1Profile):
             )
 
 
+
+@dataclass(frozen=True)
+class CanonicalDrossProfile(CanonicalBasement1Profile):
+    """Stage-2 ALT entry (Dross, StageType 5, rcs 28, slot 3).
+
+    Even Stage 2 never satisfies the Labyrinth predicate, so ``is_xl`` is
+    always false.  The first-half mandatory end room (0x0033C416) fires.
+    """
+
+    level_stage: int = 2
+    stage_type: int = 5
+    room_config_stage: int = 28
+    planetarium_chance: float = 0.01  # gate false on ALT; documentation only
+
+    def validate(self) -> None:
+        if self.difficulty not in ("NORMAL", "HARD"):
+            raise ValueError("difficulty must be NORMAL or HARD")
+        expected = (
+            self.level_stage == 2
+            and self.stage_type == 5
+            and self.room_config_stage == 28
+            and self.fallback_room_config_stage == 0
+            and self.challenge_id == 0
+            and self.game_mode == 0
+            and self.character_id == 0
+            and self.effective_curse_mask in (0, 1, 4, 8, 32, 64)
+            and not self.is_xl
+            and not self.is_ascent
+            and not self.is_daily
+            and not self.collectible_ids
+            and not self.visited_room_types
+            and self.shop_state_flags == (False, False, False, False)
+            and self.shop_generation_count == 0
+            and self.player0_max_hearts == 6
+            and self.player0_coins == 0
+            and self.player0_full_health
+            and self.planetarium_unlocked
+            and self.library_subtype_max == 4
+            and self.special_room_used_bits <= frozenset(range(9, 15))
+        )
+        if not expected:
+            raise ValueError(
+                "state is outside the binary-confirmed canonical Dross entry profile"
+            )
+
 @dataclass(frozen=True)
 class CanonicalBasement2Profile(CanonicalBasement1Profile):
     """Stage-2 entry contract after canonical Basement-I generation replay."""

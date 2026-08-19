@@ -44,7 +44,7 @@ def test_binary_block_order_and_route_blocks_are_retained():
     assert m6 is not None
     assert [block.operation for block in m6.blocks] == [
         "Planetarium", "Sacrifice", "Library", "Curse",
-        "MiniBoss", "Challenge", "Arcade", "Isaac",
+        "MiniBoss", "Challenge", "Arcade", "Isaac", "AltEndRoom",
     ]
     assert [condition.value for condition in m6.conditions] == [False, False, False, False]
     assert all(condition.consequence.startswith("skip") for condition in m6.conditions)
