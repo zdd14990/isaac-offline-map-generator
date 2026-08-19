@@ -194,13 +194,24 @@ def run_treasure_to_secret_reference(
     descriptors = _descriptor_map(post, entries)
 
     seed = _draw_level(state, draws, 0x0033A961, "Planetarium RoomConfig")
-    entry = _select("Planetarium", seed, entries, weights, draws, configs, room_type=24)
-    before = tuple(state.dead_ends); rid = _consume(state, entry, "GetNewEndRoom(Planetarium)")
+    planetarium_gate = (
+        profile.level_stage < 7
+        or (profile.level_stage < 9 and 0x6e in profile.collectible_ids)
+        or profile.level_stage == 10
+    )
+    entry = None
+    rid = -1
     place = False
-    if rid >= 0 and not ({24, 4} & profile.visited_room_types):
-        chance = _draw_level(state, draws, 0x0033AA9B, "Planetarium chance")
-        place = _unit(chance) < _f32(profile.planetarium_chance) and profile.planetarium_unlocked
-    _finish_candidate(state, entry, "Planetarium", rid, place, descriptors, blocks, before, "0x0033A8F7..0x0033AB45", f"visited types 24/4 absent; unlocked; f32(Level.Next()) < {profile.planetarium_chance}")
+    if planetarium_gate:
+        entry = _select("Planetarium", seed, entries, weights, draws, configs, room_type=24)
+        before = tuple(state.dead_ends)
+        rid = _consume(state, entry, "GetNewEndRoom(Planetarium)")
+        if rid >= 0 and not ({24, 4} & profile.visited_room_types):
+            chance = _draw_level(state, draws, 0x0033AA9B, "Planetarium chance")
+            place = _unit(chance) < _f32(profile.planetarium_chance) and profile.planetarium_unlocked
+        _finish_candidate(state, entry, "Planetarium", rid, place, descriptors, blocks, before, "0x0033A8F7..0x0033AB45", f"gate={planetarium_gate}; visited types 24/4 absent; unlocked; f32(Level.Next()) < {profile.planetarium_chance}")
+    else:
+        blocks.append(InterveningBlockTrace("Planetarium", "0x0033A8F7..0x0033AB45", 24, 0, tuple(state.dead_ends), -1, False, tuple(state.dead_ends), None, f"gate={planetarium_gate}; skipped"))
 
     first = _draw_level(state, draws, 0x0033AB94, "Dice/Sacrifice first choice")
     if first % 50 == 0: room_type = 21

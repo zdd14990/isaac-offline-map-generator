@@ -287,27 +287,37 @@ def run_treasure_to_secret(
     blocks: list[InterveningBlockTrace] = []
     descriptor_configs = _selected_entries(post, entries)
 
-    # Planetarium (RoomType 24): config and candidate are obtained before the
-    # chance gate.  A rejected candidate is appended to the vector tail.
+    # Planetarium (RoomType 24).  The binary gates the whole block after the
+    # selector-seed draw (0x0033A8F7..0x0033AB45): enter only when
+    # level_stage < 7, or level_stage < 9 with Planetarium item (collectible
+    # 0x6e), or the stage-10 route cases.  Canonical Womb I/II (stage 7/8,
+    # no collectibles) consume the draw and skip the block.
     seed = _draw(state.level_rng, ledger, rva=0x0033A961, identity="Level._generationRNG", shift_index=35, reason="Planetarium RoomConfig", usage="type 24 selector seed")
-    entry = _select("Planetarium", seed, entries, run_state, ledger, configs, room_type=24)
+    planetarium_gate = (
+        profile.level_stage < 7
+        or (profile.level_stage < 9 and 0x6e in profile.collectible_ids)
+        or profile.level_stage == 10
+    )
+    entry = None
     before = tuple(state.dead_ends)
-    rid = _consume_end_room(state, entry, "GetNewEndRoom(Planetarium)")
-    absent = not ({24, 4} & profile.visited_room_types)
-    chance_state = None
+    rid = -1
     place = False
-    if rid >= 0 and absent:
-        chance_state = _draw(state.level_rng, ledger, rva=0x0033AA9B, identity="Level._generationRNG", shift_index=35, reason="Planetarium chance", usage="binary32 RandomFloat < 0.01")
-        place = (
-            _unit_from_state(chance_state) < _f32(profile.planetarium_chance)
-            and profile.planetarium_unlocked
-        )
-    if rid >= 0:
-        if place:
-            _assign(state, rid, entry); descriptor_configs[rid] = entry
-        else:
-            state.dead_ends.append(rid)
-    blocks.append(InterveningBlockTrace("Planetarium", "0x0033A8F7..0x0033AB45", 24, entry.subtype, before, rid, rid >= 0 and place, tuple(state.dead_ends), entry.key, f"visited types 24/4 absent; unlocked; f32(Level.Next()) < {profile.planetarium_chance}"))
+    if planetarium_gate:
+        entry = _select("Planetarium", seed, entries, run_state, ledger, configs, room_type=24)
+        rid = _consume_end_room(state, entry, "GetNewEndRoom(Planetarium)")
+        absent = not ({24, 4} & profile.visited_room_types)
+        if rid >= 0 and absent:
+            chance_state = _draw(state.level_rng, ledger, rva=0x0033AA9B, identity="Level._generationRNG", shift_index=35, reason="Planetarium chance", usage="binary32 RandomFloat < 0.01")
+            place = (
+                _unit_from_state(chance_state) < _f32(profile.planetarium_chance)
+                and profile.planetarium_unlocked
+            )
+        if rid >= 0:
+            if place:
+                _assign(state, rid, entry); descriptor_configs[rid] = entry
+            else:
+                state.dead_ends.append(rid)
+    blocks.append(InterveningBlockTrace("Planetarium", "0x0033A8F7..0x0033AB45", 24, entry.subtype if entry is not None else 0, before, rid, rid >= 0 and place, tuple(state.dead_ends), entry.key if entry is not None else None, f"gate={planetarium_gate}; visited types 24/4 absent; unlocked; f32(Level.Next()) < {profile.planetarium_chance}"))
 
     # Dice (21) / Sacrifice (13).
     choice = _draw(state.level_rng, ledger, rva=0x0033AB94, identity="Level._generationRNG", shift_index=35, reason="Dice/Sacrifice first choice", usage="state % 50")

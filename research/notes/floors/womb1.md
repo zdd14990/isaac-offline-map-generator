@@ -13,7 +13,7 @@ Status: **parameters partially established; generation NOT implemented.**
 | BossPool index | **10 (CONFIRMED_BINARY)** | pool == ORIGINAL rcs (`boss_pool.py`); rcs = 10 confirmed |
 | Target room count | **20 NORMAL / 22-23 HARD (CONFIRMED_BINARY)** | `generate_dungeon.c`: `min(stage*10/3+5+bit, 20)`; stage 7 -> min(28+bit,20)=20; HARD `+2+bit` |
 | Dead ends | **6 (CONFIRMED_BINARY)** | `generate_dungeon.c`: `(stage != 1) + 5` |
-| XL target | **12 NORMAL / 13 HARD (CONFIRMED_BINARY)** | XL: `max(4, target*3/5)` on 20/22-23 |
+| XL target | **36 NORMAL / 38-39 HARD (CONFIRMED_BINARY)** | XL: `min(base*18//10, 45)` (confirmed Depths-I pattern); base 20 -> 36; HARD +2+bit. **Correction:** the `target*3/5` block in `generate_dungeon` is gated on curse bit 0x80, NOT Labyrinth (bit 2) — it is a different curse, not the XL target |
 | Difficulty window | NORMAL 5..10 / HARD 10..15 (**predicted**) | pattern; RoomConfig selection not yet traced |
 | Planetarium chance | `f32(f32(6*0.2)+0.01)` (**predicted**) | pattern (6 prior treasures) |
 

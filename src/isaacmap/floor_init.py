@@ -630,3 +630,221 @@ def derive_depths2_topology_inputs(
         room_config_min_difficulty=minimum,
         room_config_max_difficulty=maximum,
     )
+
+
+@dataclass(frozen=True)
+class Womb1TopologyInputs:
+    """Binary-derived Stage 7 ORIGINAL inputs after Depths-II replay.
+
+    Odd Stage 7 can satisfy the Labyrinth predicate (XL), so ``is_xl`` is
+    possible.  ``target_room_count`` is capped at 20 before the XL/Lost
+    modifiers, exactly like the confirmed Stage-5 pattern.
+    """
+
+    stage_seed: int
+    level_rng_draws: tuple[int, int, int, int]
+    copied_rng_draws: tuple[int, ...]
+    curse_rate_denominator: int
+    curse_gate_succeeded: bool
+    curse_selector: int | None
+    effective_curse_mask: int
+    is_xl: bool
+    generator_seed: int
+    target_room_count: int
+    required_dead_ends: int
+    allowed_shapes_mask: int
+    room_config_stage: int
+    room_config_min_difficulty: int
+    room_config_max_difficulty: int
+    starting_grid_index: int = 84
+    starting_shape: int = 1
+
+
+def derive_womb1_topology_inputs(
+    start_seed: int, difficulty: Difficulty | str
+) -> Womb1TopologyInputs:
+    """Derive canonical ORIGINAL Womb-I topology inputs from the run seed."""
+
+    try:
+        difficulty_value = Difficulty(difficulty)
+    except ValueError as error:
+        raise ValueError("difficulty must be NORMAL or HARD") from error
+
+    stage_seed = get_initial_stage_seed(start_seed, 7)
+    level_rng = IsaacRNG.game_constructor(stage_seed, LEVEL_RNG_SHIFT_INDEX)
+    first = level_rng.next()
+    second = level_rng.next()
+    copied_rng = IsaacRNG(
+        second, level_rng.shift1, level_rng.shift2, level_rng.shift3
+    )
+    copied_draws: list[int] = []
+    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_gate = copied_rng.next()
+    copied_draws.append(curse_gate)
+    curse_succeeded = curse_gate % curse_rate == 0
+    curse_selector: int | None = None
+    curse_mask = 0
+    if curse_succeeded:
+        curse_selector = copied_rng.next()
+        copied_draws.append(curse_selector)
+        choice = curse_selector % 6
+        if choice == 0:
+            # Odd Stage 7 below Stage 8 accepts Labyrinth.
+            curse_mask = 0x02
+        elif choice == 1:
+            curse_mask = 0x04  # Lost
+        elif choice == 2:
+            curse_mask = 0x01  # Darkness
+        elif choice == 3:
+            curse_mask = 0x08  # Unknown
+        elif choice == 4:
+            curse_mask = 0x20  # Maze
+        elif choice == 5:
+            curse_mask = 0x40  # Blind
+
+    third = level_rng.next()
+    # floor(7 * 10 / 3) + 5 = 28, capped at 20 for both bit values.
+    base_target = min((7 * 10) // 3 + 5 + (third & 1), 20)
+    is_xl = bool(curse_mask & 0x02)
+    if is_xl:
+        target_room_count = min((base_target * 18) // 10, 45)
+    else:
+        target_room_count = base_target
+        if curse_mask & 0x04:
+            target_room_count += 4
+
+    difficulty_draw = copied_rng.next()
+    copied_draws.append(difficulty_draw)
+    if difficulty_value is Difficulty.HARD:
+        target_room_count += 2 + (difficulty_draw & 1)
+
+    fourth = level_rng.next()
+    if is_xl:
+        minimum, maximum = (
+            (5, 15) if difficulty_value is Difficulty.HARD else (1, 10)
+        )
+    else:
+        minimum, maximum = (
+            (5, 10) if difficulty_value is Difficulty.HARD else (1, 5)
+        )
+    return Womb1TopologyInputs(
+        stage_seed=stage_seed,
+        level_rng_draws=(first, second, third, fourth),
+        copied_rng_draws=tuple(copied_draws),
+        curse_rate_denominator=curse_rate,
+        curse_gate_succeeded=curse_succeeded,
+        curse_selector=curse_selector,
+        effective_curse_mask=curse_mask,
+        is_xl=is_xl,
+        generator_seed=fourth,
+        target_room_count=target_room_count,
+        required_dead_ends=7 if is_xl else 6,
+        allowed_shapes_mask=ALL_GENERATED_ROOM_SHAPES_MASK,
+        room_config_stage=10,
+        room_config_min_difficulty=minimum,
+        room_config_max_difficulty=maximum,
+    )
+
+
+@dataclass(frozen=True)
+class Womb2TopologyInputs:
+    """Binary-derived Stage 8 ORIGINAL inputs after Womb-I replay.
+
+    Even Stage 8 never satisfies the Labyrinth predicate, so ``is_xl`` is
+    always false.
+    """
+
+    stage_seed: int
+    level_rng_draws: tuple[int, int, int, int]
+    copied_rng_draws: tuple[int, ...]
+    curse_rate_denominator: int
+    curse_gate_succeeded: bool
+    curse_selector: int | None
+    effective_curse_mask: int
+    is_xl: bool
+    generator_seed: int
+    target_room_count: int
+    required_dead_ends: int
+    allowed_shapes_mask: int
+    room_config_stage: int
+    room_config_min_difficulty: int
+    room_config_max_difficulty: int
+    starting_grid_index: int = 84
+    starting_shape: int = 1
+
+
+def derive_womb2_topology_inputs(
+    start_seed: int, difficulty: Difficulty | str
+) -> Womb2TopologyInputs:
+    """Derive canonical ORIGINAL Womb-II topology inputs from the run seed."""
+
+    try:
+        difficulty_value = Difficulty(difficulty)
+    except ValueError as error:
+        raise ValueError("difficulty must be NORMAL or HARD") from error
+
+    stage_seed = get_initial_stage_seed(start_seed, 8)
+    level_rng = IsaacRNG.game_constructor(stage_seed, LEVEL_RNG_SHIFT_INDEX)
+    first = level_rng.next()
+    second = level_rng.next()
+    copied_rng = IsaacRNG(
+        second, level_rng.shift1, level_rng.shift2, level_rng.shift3
+    )
+    copied_draws: list[int] = []
+    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_gate = copied_rng.next()
+    copied_draws.append(curse_gate)
+    curse_succeeded = curse_gate % curse_rate == 0
+    curse_selector: int | None = None
+    curse_mask = 0
+    if curse_succeeded:
+        curse_selector = copied_rng.next()
+        copied_draws.append(curse_selector)
+        choice = curse_selector % 6
+        # Labyrinth (choice 0) is only valid on odd stages below Stage 8.
+        # Womb II is even, so choice 0 consumes the selector and leaves the
+        # curse empty.
+        if choice == 1:
+            curse_mask = 0x04  # Lost
+        elif choice == 2:
+            curse_mask = 0x01  # Darkness
+        elif choice == 3:
+            curse_mask = 0x08  # Unknown
+        elif choice == 4:
+            curse_mask = 0x20  # Maze
+        elif choice == 5:
+            curse_mask = 0x40  # Blind
+
+    third = level_rng.next()
+    # floor(8 * 10 / 3) + 5 = 31, capped at 20 for both bit values.
+    base_target = min((8 * 10) // 3 + 5 + (third & 1), 20)
+    target_room_count = base_target
+    if curse_mask & 0x04:
+        target_room_count += 4
+
+    difficulty_draw = copied_rng.next()
+    copied_draws.append(difficulty_draw)
+    if difficulty_value is Difficulty.HARD:
+        target_room_count += 2 + (difficulty_draw & 1)
+
+    fourth = level_rng.next()
+    minimum, maximum = (
+        (10, 15) if difficulty_value is Difficulty.HARD else (5, 10)
+    )
+    return Womb2TopologyInputs(
+        stage_seed=stage_seed,
+        level_rng_draws=(first, second, third, fourth),
+        copied_rng_draws=tuple(copied_draws),
+        curse_rate_denominator=curse_rate,
+        curse_gate_succeeded=curse_succeeded,
+        curse_selector=curse_selector,
+        effective_curse_mask=curse_mask,
+        is_xl=False,
+        generator_seed=fourth,
+        target_room_count=target_room_count,
+        required_dead_ends=6,
+        allowed_shapes_mask=ALL_GENERATED_ROOM_SHAPES_MASK,
+        room_config_stage=10,
+        room_config_min_difficulty=minimum,
+        room_config_max_difficulty=maximum,
+    )

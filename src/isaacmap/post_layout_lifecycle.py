@@ -214,7 +214,7 @@ def run_post_layout_lifecycle(
 
     expected_rcs = 1 + (level_stage - 1) // 2 * 3
     if (
-        level_stage not in (1, 2, 3, 4, 5, 6)
+        level_stage not in (1, 2, 3, 4, 5, 6, 7, 8)
         or stage_type != 0
         or room_config_stage != expected_rcs
         or collectible_ids
