@@ -534,3 +534,184 @@ class CanonicalRunGenerationSnapshot:
     special_room_used_bits: tuple[int, ...]
     last_floor_level_rng_state: int
     lifecycle: str
+
+
+@dataclass(frozen=True)
+class CanonicalMines1Profile(CanonicalBasement1Profile):
+    """Stage-3 ALT entry (Mines I, StageType 4, rcs 29, slot 4).
+
+    Odd Stage 3 satisfies the Labyrinth predicate, so ``is_xl`` is possible.
+    """
+
+    level_stage: int = 3
+    stage_type: int = 4
+    room_config_stage: int = 29
+    planetarium_chance: float = 0.01  # gate false on ALT; documentation only
+
+    def validate(self) -> None:
+        if self.difficulty not in ("NORMAL", "HARD"):
+            raise ValueError("difficulty must be NORMAL or HARD")
+        expected = (
+            self.level_stage == 3
+            and self.stage_type == 4
+            and self.room_config_stage == 29
+            and self.fallback_room_config_stage == 0
+            and self.challenge_id == 0
+            and self.game_mode == 0
+            and self.character_id == 0
+            and self.effective_curse_mask in (0, 1, 2, 4, 8, 32, 64)
+            and self.is_xl == bool(self.effective_curse_mask & 0x02)
+            and not self.is_ascent
+            and not self.is_daily
+            and not self.collectible_ids
+            and not self.visited_room_types
+            and self.shop_state_flags == (False, False, False, False)
+            and self.shop_generation_count == 0
+            and self.player0_max_hearts == 6
+            and self.player0_coins == 0
+            and self.player0_full_health
+            and self.planetarium_unlocked
+            and self.library_subtype_max == 4
+            and self.special_room_used_bits <= frozenset(range(9, 15))
+        )
+        if not expected:
+            raise ValueError(
+                "state is outside the binary-confirmed canonical Mines I entry profile"
+            )
+
+
+@dataclass(frozen=True)
+class CanonicalAshpitProfile(CanonicalBasement1Profile):
+    """Stage-4 ALT entry (Ashpit, StageType 5, rcs 30, slot 5).
+
+    Even Stage 4 never satisfies the Labyrinth predicate, so ``is_xl`` is
+    always false.
+    """
+
+    level_stage: int = 4
+    stage_type: int = 5
+    room_config_stage: int = 30
+    planetarium_chance: float = 0.01  # gate false on ALT; documentation only
+
+    def validate(self) -> None:
+        if self.difficulty not in ("NORMAL", "HARD"):
+            raise ValueError("difficulty must be NORMAL or HARD")
+        expected = (
+            self.level_stage == 4
+            and self.stage_type == 5
+            and self.room_config_stage == 30
+            and self.fallback_room_config_stage == 0
+            and self.challenge_id == 0
+            and self.game_mode == 0
+            and self.character_id == 0
+            and self.effective_curse_mask in (0, 1, 4, 8, 32, 64)
+            and not self.is_xl
+            and not self.is_ascent
+            and not self.is_daily
+            and not self.collectible_ids
+            and not self.visited_room_types
+            and self.shop_state_flags == (False, False, False, False)
+            and self.shop_generation_count == 0
+            and self.player0_max_hearts == 6
+            and self.player0_coins == 0
+            and self.player0_full_health
+            and self.planetarium_unlocked
+            and self.library_subtype_max == 4
+            and self.special_room_used_bits <= frozenset(range(9, 15))
+        )
+        if not expected:
+            raise ValueError(
+                "state is outside the binary-confirmed canonical Ashpit entry profile"
+            )
+
+
+@dataclass(frozen=True)
+class CanonicalMausoleum1Profile(CanonicalBasement1Profile):
+    """Stage-5 ALT entry (Mausoleum I, StageType 4, rcs 31, slot 6).
+
+    Odd Stage 5 satisfies the Labyrinth predicate, so ``is_xl`` is possible.
+    Mausoleum I is not in the first/second-half sets, so no -3 / +1 and no
+    mandatory end room apply.
+    """
+
+    level_stage: int = 5
+    stage_type: int = 4
+    room_config_stage: int = 31
+    planetarium_chance: float = 0.01  # gate false on ALT; documentation only
+
+    def validate(self) -> None:
+        if self.difficulty not in ("NORMAL", "HARD"):
+            raise ValueError("difficulty must be NORMAL or HARD")
+        expected = (
+            self.level_stage == 5
+            and self.stage_type == 4
+            and self.room_config_stage == 31
+            and self.fallback_room_config_stage == 0
+            and self.challenge_id == 0
+            and self.game_mode == 0
+            and self.character_id == 0
+            and self.effective_curse_mask in (0, 1, 2, 4, 8, 32, 64)
+            and self.is_xl == bool(self.effective_curse_mask & 0x02)
+            and not self.is_ascent
+            and not self.is_daily
+            and not self.collectible_ids
+            and not self.visited_room_types
+            and self.shop_state_flags == (False, False, False, False)
+            and self.shop_generation_count == 0
+            and self.player0_max_hearts == 6
+            and self.player0_coins == 0
+            and self.player0_full_health
+            and self.planetarium_unlocked
+            and self.library_subtype_max == 4
+            and self.special_room_used_bits <= frozenset(range(9, 15))
+        )
+        if not expected:
+            raise ValueError(
+                "state is outside the binary-confirmed canonical Mausoleum I entry profile"
+            )
+
+
+@dataclass(frozen=True)
+class CanonicalGehennaProfile(CanonicalBasement1Profile):
+    """Stage-6 ALT entry (Gehenna, StageType 5, rcs 32, slot 7).
+
+    Even Stage 6 never satisfies the Labyrinth predicate, so ``is_xl`` is
+    always false.  Gehenna's boss is FIXED (Mom-Mausoleum 89) via the
+    select_boss_id level-6 switch.
+    """
+
+    level_stage: int = 6
+    stage_type: int = 5
+    room_config_stage: int = 32
+    planetarium_chance: float = 0.01  # gate false on ALT; documentation only
+
+    def validate(self) -> None:
+        if self.difficulty not in ("NORMAL", "HARD"):
+            raise ValueError("difficulty must be NORMAL or HARD")
+        expected = (
+            self.level_stage == 6
+            and self.stage_type == 5
+            and self.room_config_stage == 32
+            and self.fallback_room_config_stage == 0
+            and self.challenge_id == 0
+            and self.game_mode == 0
+            and self.character_id == 0
+            and self.effective_curse_mask in (0, 1, 4, 8, 32, 64)
+            and not self.is_xl
+            and not self.is_ascent
+            and not self.is_daily
+            and not self.collectible_ids
+            and not self.visited_room_types
+            and self.shop_state_flags == (False, False, False, False)
+            and self.shop_generation_count == 0
+            and self.player0_max_hearts == 6
+            and self.player0_coins == 0
+            and self.player0_full_health
+            and self.planetarium_unlocked
+            and self.library_subtype_max == 4
+            and self.special_room_used_bits <= frozenset(range(9, 15))
+        )
+        if not expected:
+            raise ValueError(
+                "state is outside the binary-confirmed canonical Gehenna entry profile"
+            )

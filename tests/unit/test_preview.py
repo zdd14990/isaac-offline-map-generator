@@ -100,6 +100,7 @@ def test_preview_support_registry_contains_only_confirmed_complete_floors() -> N
     assert tuple(SUPPORTED_FLOORS) == (
         "Basement I", "Basement II", "Caves I", "Caves II", "Depths I", "Depths II",
         "Womb I", "Womb II", "Downpour I", "Downpour II",
+        "Mines I", "Mines II", "Mausoleum I", "Mausoleum II",
     )
     assert SUPPORTED_FLOORS["Basement I"].replayed_floors == ("Basement I",)
     assert SUPPORTED_FLOORS["Basement II"].replayed_floors == (

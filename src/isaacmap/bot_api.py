@@ -121,11 +121,27 @@ def supported_stage_numbers() -> tuple[int, ...]:
 
 
 def supported_stage_summary() -> str:
-    """Human-readable summary of the supported stage range (for bot replies)."""
-    stages = supported_stage_numbers()
-    first = STAGE_TO_FLOOR[stages[0]]
-    last = STAGE_TO_FLOOR[stages[-1]]
-    return f"stage {stages[0]}-{stages[-1]}（{first} 到 {last}）"
+    """Human-readable summary of the supported stage range (for bot replies).
+
+    MAIN and ALT are separate routes with independent stage numbering, so the
+    summary lists both ranges explicitly instead of merging them.
+    """
+
+    parts: list[str] = []
+    for route, token_suffix in ((MAIN_ROUTE, ""), (ALT_ROUTE, "+")):
+        names = FLOOR_NAMES[route]
+        supported = [
+            stage for stage, name in names.items() if name in SUPPORTED_FLOORS
+        ]
+        if not supported:
+            continue
+        first = names[supported[0]]
+        last = names[supported[-1]]
+        parts.append(
+            f"stage {supported[0]}{token_suffix}-{supported[-1]}{token_suffix}"
+            f"（{first} 到 {last}）"
+        )
+    return "；".join(parts)
 
 
 @dataclass

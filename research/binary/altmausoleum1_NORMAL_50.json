@@ -1,0 +1,27 @@
+{
+  "profile_sha256": "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b",
+  "safety": "Copied PE read as data only; isaac-ng.exe was not executed or loaded.",
+  "external_validation": "NOT_EXTERNALLY_VALIDATED_GAMEPLAY",
+  "evidence_grade": "PARTIAL_BINARY",
+  "validation_corpus": "50 NORMAL + 50 HARD comparisons (intentionally limited)",
+  "difficulty": "NORMAL",
+  "seed_range": [
+    1,
+    50
+  ],
+  "stats": {
+    "comparisons": 50,
+    "attempts": 51,
+    "retrying_seeds": 1,
+    "max_attempts": 2,
+    "rng_transitions": 1800,
+    "room_config_selections": 400,
+    "boss_selections": 50,
+    "xl_floors": 0,
+    "secret_placements": 50,
+    "ultra_placements": 50,
+    "mismatches": 0
+  },
+  "matches": true,
+  "mismatch": null
+}

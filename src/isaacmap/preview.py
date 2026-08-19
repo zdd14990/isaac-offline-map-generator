@@ -74,6 +74,10 @@ class _PreviewResources:
     womb_bosses: tuple[BossPoolEntry, ...]
     downpour_bosses: tuple[BossPoolEntry, ...]
     dross_bosses: tuple[BossPoolEntry, ...]
+    mines_bosses: tuple[BossPoolEntry, ...]
+    ashpit_bosses: tuple[BossPoolEntry, ...]
+    mausoleum_bosses: tuple[BossPoolEntry, ...]
+    gehenna_bosses: tuple[BossPoolEntry, ...]
     special: tuple[RoomDefinition, ...]
     basement: tuple[RoomDefinition, ...]
     caves: tuple[RoomDefinition, ...]
@@ -81,6 +85,10 @@ class _PreviewResources:
     womb: tuple[RoomDefinition, ...]
     downpour: tuple[RoomDefinition, ...]
     dross: tuple[RoomDefinition, ...]
+    mines: tuple[RoomDefinition, ...]
+    ashpit: tuple[RoomDefinition, ...]
+    mausoleum: tuple[RoomDefinition, ...]
+    gehenna: tuple[RoomDefinition, ...]
     blue_womb: tuple[RoomDefinition, ...]
 PreviewPipelineResult = Basement1FullResult | Basement2FullResult | Caves1FullResult | Caves2FullResult | Depths1FullResult | Womb1FullResult | Womb2FullResult
 
@@ -203,6 +211,10 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
         root / "rooms" / "10.womb.stb",
         root / "rooms" / "27.downpour.stb",
         root / "rooms" / "28.dross.stb",
+        root / "rooms" / "29.mines.stb",
+        root / "rooms" / "30.ashpit.stb",
+        root / "rooms" / "31.mausoleum.stb",
+        root / "rooms" / "32.gehenna.stb",
     )
     missing = tuple(path for path in required if not path.is_file())
     if missing:
@@ -216,6 +228,10 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
     womb_bosses = pools.get("womb", ())
     downpour_bosses = pools.get("downpour", ())
     dross_bosses = pools.get("dross", ())
+    mines_bosses = pools.get("mines", ())
+    ashpit_bosses = pools.get("ashpit", ())
+    mausoleum_bosses = pools.get("mausoleum", ())
+    gehenna_bosses = pools.get("gehenna", ())
     if not bosses:
         raise MissingPreviewResources("the extracted Basement boss pool is empty")
     if not caves_bosses:
@@ -228,6 +244,14 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
         raise MissingPreviewResources("the extracted Downpour boss pool is empty")
     if not dross_bosses:
         raise MissingPreviewResources("the extracted Dross boss pool is empty")
+    if not mines_bosses:
+        raise MissingPreviewResources("the extracted Mines boss pool is empty")
+    if not ashpit_bosses:
+        raise MissingPreviewResources("the extracted Ashpit boss pool is empty")
+    if not mausoleum_bosses:
+        raise MissingPreviewResources("the extracted Mausoleum boss pool is empty")
+    if not gehenna_bosses:
+        raise MissingPreviewResources("the extracted Gehenna boss pool is empty")
     return _PreviewResources(
         bosses=tuple(bosses),
         caves_bosses=tuple(caves_bosses),
@@ -235,6 +259,10 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
         womb_bosses=tuple(womb_bosses),
         downpour_bosses=tuple(downpour_bosses),
         dross_bosses=tuple(dross_bosses),
+        mines_bosses=tuple(mines_bosses),
+        ashpit_bosses=tuple(ashpit_bosses),
+        mausoleum_bosses=tuple(mausoleum_bosses),
+        gehenna_bosses=tuple(gehenna_bosses),
         special=tuple(load_stb(required[1])),
         basement=tuple(load_stb(required[2])),
         caves=tuple(load_stb(required[3])),
@@ -243,6 +271,10 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
         womb=tuple(load_stb(required[6])),
         downpour=tuple(load_stb(required[7])),
         dross=tuple(load_stb(required[8])),
+        mines=tuple(load_stb(required[9])),
+        ashpit=tuple(load_stb(required[10])),
+        mausoleum=tuple(load_stb(required[11])),
+        gehenna=tuple(load_stb(required[12])),
     )
 
 
@@ -319,6 +351,74 @@ def _generate_dross(
         dross_boss_entries=resources.dross_bosses,
         special_definitions=resources.special,
         dross_definitions=resources.dross,
+        blue_womb_definitions=resources.blue_womb,
+    ).layout
+
+
+def _generate_mines1(
+    start_seed: int,
+    difficulty: str,
+    resources: _PreviewResources,
+) -> "Basement1FullResult":
+    from .mines1_lifecycle import generate_mines1_lifecycle
+
+    return generate_mines1_lifecycle(
+        start_seed,
+        difficulty,
+        mines1_boss_entries=resources.mines_bosses,
+        special_definitions=resources.special,
+        mines1_definitions=resources.mines,
+        blue_womb_definitions=resources.blue_womb,
+    ).layout
+
+
+def _generate_ashpit(
+    start_seed: int,
+    difficulty: str,
+    resources: _PreviewResources,
+) -> "Basement1FullResult":
+    from .ashpit_lifecycle import generate_ashpit_lifecycle
+
+    return generate_ashpit_lifecycle(
+        start_seed,
+        difficulty,
+        ashpit_boss_entries=resources.ashpit_bosses,
+        special_definitions=resources.special,
+        ashpit_definitions=resources.ashpit,
+        blue_womb_definitions=resources.blue_womb,
+    ).layout
+
+
+def _generate_mausoleum1(
+    start_seed: int,
+    difficulty: str,
+    resources: _PreviewResources,
+) -> "Basement1FullResult":
+    from .mausoleum1_lifecycle import generate_mausoleum1_lifecycle
+
+    return generate_mausoleum1_lifecycle(
+        start_seed,
+        difficulty,
+        mausoleum1_boss_entries=resources.mausoleum_bosses,
+        special_definitions=resources.special,
+        mausoleum1_definitions=resources.mausoleum,
+        blue_womb_definitions=resources.blue_womb,
+    ).layout
+
+
+def _generate_gehenna(
+    start_seed: int,
+    difficulty: str,
+    resources: _PreviewResources,
+) -> "Basement1FullResult":
+    from .gehenna_lifecycle import generate_gehenna_lifecycle
+
+    return generate_gehenna_lifecycle(
+        start_seed,
+        difficulty,
+        gehenna_boss_entries=resources.gehenna_bosses,
+        special_definitions=resources.special,
+        gehenna_definitions=resources.gehenna,
         blue_womb_definitions=resources.blue_womb,
     ).layout
 
@@ -605,6 +705,30 @@ SUPPORTED_FLOORS: dict[str, PreviewFloorSpec] = {
         "dross",
         ("Downpour I", "Downpour II"),
         _generate_dross,
+    ),
+    "Mines I": PreviewFloorSpec(
+        "Mines I",
+        "mines1",
+        ("Mines I",),
+        _generate_mines1,
+    ),
+    "Mines II": PreviewFloorSpec(
+        "Mines II",
+        "ashpit",
+        ("Mines I", "Mines II"),
+        _generate_ashpit,
+    ),
+    "Mausoleum I": PreviewFloorSpec(
+        "Mausoleum I",
+        "mausoleum1",
+        ("Mausoleum I",),
+        _generate_mausoleum1,
+    ),
+    "Mausoleum II": PreviewFloorSpec(
+        "Mausoleum II",
+        "gehenna",
+        ("Mausoleum I", "Mausoleum II"),
+        _generate_gehenna,
     ),
 }
 
