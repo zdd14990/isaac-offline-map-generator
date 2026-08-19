@@ -570,3 +570,122 @@ def derive_womb2_topology_inputs_reference(
         minimum,
         maximum,
     )
+
+
+@dataclass(frozen=True)
+class ReferenceAltTopologyInputs:
+    level_stage: int
+    stage_type: int
+    stage_seed: int
+    seed_slot: int
+    level_draws: tuple[int, int, int, int]
+    copied_draws: tuple[int, ...]
+    curse_rate: int
+    curse_gate: bool
+    curse_selector: int | None
+    curse_mask: int
+    is_xl: bool
+    generator_seed: int
+    target: int
+    dead_ends: int
+    shapes: int
+    room_config_stage: int
+    minimum_difficulty: int
+    maximum_difficulty: int
+
+
+def derive_alt_topology_inputs_reference(
+    level_stage: int,
+    stage_type: int,
+    start_seed: int,
+    difficulty: str,
+) -> ReferenceAltTopologyInputs:
+    if stage_type not in (4, 5):
+        raise ValueError("derive_alt_topology_inputs_reference requires stage_type 4 or 5")
+    if level_stage not in (1, 2, 3, 4, 5, 6):
+        raise ValueError("derive_alt_topology_inputs_reference requires level_stage 1..6")
+    if difficulty not in ("NORMAL", "HARD"):
+        raise ValueError("difficulty must be NORMAL or HARD")
+    seed_slot = min(level_stage + 1, 13)
+    stage_seed = get_initial_stage_seed(start_seed, seed_slot)
+    first = _advance(stage_seed)
+    second = _advance(first)
+    copied = second
+    copied_values: list[int] = []
+    copied = _advance(copied)
+    copied_values.append(copied)
+    rate = 40 if difficulty == "HARD" else 80
+    gate = copied % rate == 0
+    selector = None
+    curse = 0
+    if gate:
+        copied = _advance(copied)
+        copied_values.append(copied)
+        selector = copied
+        choice = copied % 6
+        if choice == 0:
+            if level_stage % 2 == 1 and level_stage < 8:
+                curse = 2
+        elif choice == 1:
+            curse = 4
+        elif choice == 2:
+            curse = 1
+        elif choice == 3:
+            curse = 8
+        elif choice == 4:
+            curse = 0x20
+        elif choice == 5:
+            curse = 0x40
+    third = _advance(second)
+    base = min(level_stage * 10 // 3 + 5 + (third & 1), 20)
+    is_xl = bool(curse & 2)
+    alt = stage_type in (4, 5)
+    first_half = alt and (level_stage == 2 or (level_stage == 1 and is_xl))
+    second_half = alt and (level_stage == 4 or (level_stage == 3 and is_xl))
+    if first_half or second_half:
+        base -= 3
+    if is_xl:
+        target = min(base * 18 // 10, 45)
+    else:
+        target = base
+        if curse & 4:
+            target += 4
+    copied = _advance(copied)
+    copied_values.append(copied)
+    if difficulty == "HARD":
+        target += 2 + (copied & 1)
+    fourth = _advance(third)
+    if is_xl or level_stage >= 9:
+        minimum, maximum = (5, 15) if difficulty == "HARD" else (1, 10)
+    elif level_stage % 2 == 0:
+        minimum, maximum = (10, 15) if difficulty == "HARD" else (5, 10)
+    else:
+        minimum, maximum = (5, 10) if difficulty == "HARD" else (1, 5)
+    dead_ends = (1 if level_stage != 1 else 0) + (6 if is_xl else 5)
+    if first_half or second_half:
+        dead_ends += 1
+    room_config_stage = (
+        ((level_stage - 1) & ~1) + 27
+        if stage_type == 4
+        else ((level_stage - 1) >> 1) * 2 + 28
+    )
+    return ReferenceAltTopologyInputs(
+        level_stage,
+        stage_type,
+        stage_seed,
+        seed_slot,
+        (first, second, third, fourth),
+        tuple(copied_values),
+        rate,
+        gate,
+        selector,
+        curse,
+        is_xl,
+        fourth,
+        target,
+        dead_ends,
+        0x1FFE,
+        room_config_stage,
+        minimum,
+        maximum,
+    )

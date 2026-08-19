@@ -29,10 +29,9 @@ level_stage (the same +1 the slot rule uses).
 |---|---|---|---|---|---|---|---|---|---|
 | Planetarium | 0x0033A8F7 | — | gate uses RAW stage (`<7 || (<9 && 0x6e) || ==10`); no +1 | SKIP | SKIP | SKIP | SKIP | SKIP | SKIP |
 | Dice/Sacrifice, Library, Curse | 0x0033AB45..0x0033B3A8 | — | no stage_type branch | EXEC | EXEC | EXEC | EXEC | EXEC | EXEC |
-| MiniBoss fallback | 0x0033BA27 | 0x73ba3b | `adj == 1` (CONFIRMED) | SKIP | SKIP | SKIP | SKIP | SKIP | SKIP |
-| Challenge | 0x0033BCF5 | 0x73bcff/0x73bd31 | odd-draw: `adj > 2`; even-draw: `cond && adj > 1` (CONFIRMED sites) | OPEN | OPEN | OPEN | OPEN | OPEN | OPEN |
-| Chest/Arcade | 0x0033BD87..0x0033C0B6 | 0x73bfe7 | arcade assign uses adjusted parity `{2,4,6,8}` + room-state clauses | OPEN | OPEN | OPEN | OPEN | OPEN | OPEN |
-| Super-secret loop | 0x73bc80 region | 0x73b497 | `adj` threshold vs 3 | OPEN | OPEN | OPEN | OPEN | OPEN | OPEN |
+| MiniBoss | 0x0033B3A8..0x0033BBAE | 0x73b3ea/0x73b497 | **adjusted-stage threshold**: `adj < 3` floors (Basement I, Downpour) take the direct subtype-vector path; `adj >= 3` floors additionally run the `%10 == 0` + bit-0x20 RNG flow (0x73b4d5..0x73b538). The repo's 20k-validated shape models the ORIGINAL stages; the adj<3/adj>=3 equivalence for ALT is OPEN | EXEC | EXEC | EXEC | EXEC | EXEC | EXEC |
+| Challenge | 0x0033BCF5 | 0x73bcff/0x73bd31 | odd-draw: `adj > 2`; even-draw: `full_health && adj > 1` (CONFIRMED; `condition_9beb30` = full health) | OPEN | OPEN | OPEN | OPEN | OPEN | OPEN |
+| Chest/Arcade | 0x0033BD87..0x0033C0B6 | 0x73bfe7 | assign iff player checks pass AND `adj in {2,4,6,8}`; chest needs `coins <= 1`, arcade needs `hearts >= 5` (canonical: both pass); first clause is a float-bits comparison (effectively no-op) | OPEN | OPEN | OPEN | OPEN | OPEN | OPEN |
 | Isaac | 0x0033C0F0 | — | `stage < 7` RAW gate + 1/50 | EXEC | EXEC | EXEC | EXEC | EXEC | EXEC |
 
 ## Alternate-path blocks (0x0033C416..0x0033C69E) — CONFIRMED
@@ -41,9 +40,8 @@ These were modeled as SKIP for the ORIGINAL route in round 1; they FIRE on
 the ALT route:
 
 | block | RVA | predicate (binary) | effect | D |
-|---|---|---|---|---|
-| first-half mandatory end room | 0x0033C416..0x0033C4D1 | `alt_path_first_half_predicate` = stage_type 4/5 AND (adj-route stage 2 OR (1 AND Labyrinth)) | places a NORMAL room (type 1, variant 13) via GetNewEndRoom + assign; sets the local flag | 1 Level draw + select + geometry draws |
-| second-half collectible-626 room | 0x0033C554..0x0033C640 | `alt_path_second_half_predicate` = stage_type 4/5 AND (stage 4 OR (3 AND Labyrinth)) AND collectible 626 owned | canonical (no collectible): NO-OP, no draw | 0 (canonical) |
+| first-half mandatory end room | 0x0033C416..0x0033C4D1 | `alt_path_first_half_predicate` = stage_type 4/5 AND (stage 2 OR (1 AND Labyrinth)) | places NORMAL room (type 1, variant 13) via GetNewEndRoom + assign; sets the local flag | 1 Level draw + select + geometry |
+| second-half collectible-626 room | 0x0033C554..0x0033C640 | `alt_path_second_half_predicate` = stage_type 4/5 AND (stage 4 OR (3 AND Labyrinth)) AND collectible 626 | canonical (no collectible): NO-OP, no draw | 0 (canonical) |
 | ORIGINAL third flag | 0x0033C645..0x0033C69E | `condition_74f030` = stage_type NOT 4/5 AND (stage 6 OR (5 AND Labyrinth)) + flag condition | sets the local flag only (canonical ORIGINAL: flag condition false) | 0 (canonical) |
 
 So for the canonical profile: **2+ (Dross) ALWAYS places the mandatory end

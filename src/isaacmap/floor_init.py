@@ -848,3 +848,166 @@ def derive_womb2_topology_inputs(
         room_config_min_difficulty=minimum,
         room_config_max_difficulty=maximum,
     )
+
+
+@dataclass(frozen=True)
+class AltTopologyInputs:
+    """Binary-derived alternate-route (stage_type 4/5) topology inputs.
+
+    All formulas come from ``Level::generate_dungeon`` (0x740e10) and the
+    first/second-half predicates (0x74ef70/0x74efd0) — see
+    ``research/notes/alt_floor_init_matrix.md``.  The stage-seed slot is
+    ``level_stage + 1`` (Level::Init, stage_type 4/5).
+    """
+
+    level_stage: int
+    stage_type: int
+    stage_seed: int
+    seed_slot: int
+    level_rng_draws: tuple[int, int, int, int]
+    copied_rng_draws: tuple[int, ...]
+    curse_rate_denominator: int
+    curse_gate_succeeded: bool
+    curse_selector: int | None
+    effective_curse_mask: int
+    is_xl: bool
+    generator_seed: int
+    target_room_count: int
+    required_dead_ends: int
+    allowed_shapes_mask: int
+    room_config_stage: int
+    room_config_min_difficulty: int
+    room_config_max_difficulty: int
+    starting_grid_index: int = 84
+    starting_shape: int = 1
+
+
+def _alt_half_predicate(level_stage: int, stage_type: int, labyrinth: bool) -> tuple[bool, bool]:
+    """Evaluate the first/second-half predicates for the -3 / dead-ends gates.
+
+    first_half: stage_type 4/5 AND (stage 2 OR (stage 1 AND Labyrinth)).
+    second_half: stage_type 4/5 AND (stage 4 OR (stage 3 AND Labyrinth)).
+    """
+
+    alt = stage_type in (4, 5)
+    first = alt and (level_stage == 2 or (level_stage == 1 and labyrinth))
+    second = alt and (level_stage == 4 or (level_stage == 3 and labyrinth))
+    return first, second
+
+
+def derive_alt_topology_inputs(
+    level_stage: int,
+    stage_type: int,
+    start_seed: int,
+    difficulty: Difficulty | str,
+) -> AltTopologyInputs:
+    """Derive alternate-route topology inputs (stage_type 4/5, levels 1..6)."""
+
+    if stage_type not in (4, 5):
+        raise ValueError("derive_alt_topology_inputs requires stage_type 4 or 5")
+    if level_stage not in (1, 2, 3, 4, 5, 6):
+        raise ValueError("derive_alt_topology_inputs requires level_stage 1..6")
+    try:
+        difficulty_value = Difficulty(difficulty)
+    except ValueError as error:
+        raise ValueError("difficulty must be NORMAL or HARD") from error
+
+    seed_slot = min(level_stage + 1, 13)
+    stage_seed = get_initial_stage_seed(start_seed, seed_slot)
+    level_rng = IsaacRNG.game_constructor(stage_seed, LEVEL_RNG_SHIFT_INDEX)
+    first = level_rng.next()
+    second = level_rng.next()
+    copied_rng = IsaacRNG(
+        second, level_rng.shift1, level_rng.shift2, level_rng.shift3
+    )
+    copied_draws: list[int] = []
+    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_gate = copied_rng.next()
+    copied_draws.append(curse_gate)
+    curse_succeeded = curse_gate % curse_rate == 0
+    curse_selector: int | None = None
+    curse_mask = 0
+    if curse_succeeded:
+        curse_selector = copied_rng.next()
+        copied_draws.append(curse_selector)
+        choice = curse_selector % 6
+        if choice == 0:
+            # Labyrinth is valid only on odd stages below Stage 8.
+            if level_stage % 2 == 1 and level_stage < 8:
+                curse_mask = 0x02
+        elif choice == 1:
+            curse_mask = 0x04  # Lost
+        elif choice == 2:
+            curse_mask = 0x01  # Darkness
+        elif choice == 3:
+            curse_mask = 0x08  # Unknown
+        elif choice == 4:
+            curse_mask = 0x20  # Maze
+        elif choice == 5:
+            curse_mask = 0x40  # Blind
+
+    third = level_rng.next()
+    base_target = min((level_stage * 10) // 3 + 5 + (third & 1), 20)
+    is_xl = bool(curse_mask & 0x02)
+    first_half, second_half = _alt_half_predicate(
+        level_stage, stage_type, is_xl
+    )
+    if first_half or second_half:
+        base_target -= 3
+    if is_xl:
+        target_room_count = min((base_target * 18) // 10, 45)
+    else:
+        target_room_count = base_target
+        if curse_mask & 0x04:
+            target_room_count += 4
+
+    difficulty_draw = copied_rng.next()
+    copied_draws.append(difficulty_draw)
+    if difficulty_value is Difficulty.HARD:
+        target_room_count += 2 + (difficulty_draw & 1)
+
+    fourth = level_rng.next()
+    if is_xl or level_stage >= 9:
+        minimum, maximum = (
+            (5, 15) if difficulty_value is Difficulty.HARD else (1, 10)
+        )
+    elif level_stage % 2 == 0:
+        minimum, maximum = (
+            (10, 15) if difficulty_value is Difficulty.HARD else (5, 10)
+        )
+    else:
+        minimum, maximum = (
+            (5, 10) if difficulty_value is Difficulty.HARD else (1, 5)
+        )
+
+    dead_ends = (1 if level_stage != 1 else 0) + 5
+    if is_xl:
+        dead_ends = (1 if level_stage != 1 else 0) + 6
+    if first_half or second_half:
+        dead_ends += 1
+
+    room_config_stage = (
+        ((level_stage - 1) & ~1) + 27
+        if stage_type == 4
+        else ((level_stage - 1) >> 1) * 2 + 28
+    )
+    return AltTopologyInputs(
+        level_stage=level_stage,
+        stage_type=stage_type,
+        stage_seed=stage_seed,
+        seed_slot=seed_slot,
+        level_rng_draws=(first, second, third, fourth),
+        copied_rng_draws=tuple(copied_draws),
+        curse_rate_denominator=curse_rate,
+        curse_gate_succeeded=curse_succeeded,
+        curse_selector=curse_selector,
+        effective_curse_mask=curse_mask,
+        is_xl=is_xl,
+        generator_seed=fourth,
+        target_room_count=target_room_count,
+        required_dead_ends=dead_ends,
+        allowed_shapes_mask=ALL_GENERATED_ROOM_SHAPES_MASK,
+        room_config_stage=room_config_stage,
+        room_config_min_difficulty=minimum,
+        room_config_max_difficulty=maximum,
+    )
