@@ -183,16 +183,22 @@ External gameplay status for all of the above remains independently
 
 ## Partial / not yet complete
 
-Womb I (LevelStage 7) and all later/alternate floors remain unsupported. No
-Stage-7 or later constants or RoomConfig/BossPool profile are copied from
-earlier floors; the next floor remains fail closed until independently
-reconstructed.
+Womb I (LevelStage 7) and Womb II (LevelStage 8) are implemented with
+`PARTIAL_BINARY` evidence (100 ordered clean-vs-reference comparisons each).
+All later floors (Sheol, Cathedral, ...) and every alternate-route floor
+(Downpour/Mines/Mausoleum I/II) remain unsupported and fail closed until
+independently reconstructed. Stage-7/8 constants and RoomConfig/BossPool
+profiles were reconstructed from the binary; nothing was copied from earlier
+floors.
 
-### Stage-7/8 and alternate-route floors: status (2026-08-18, round 2)
+### Womb I/II and alternate-route floors: status (2026-08-18, round 4)
 
-User-facing token surface (main `1..8`, alt `1+..6+`, route-aware cache keys,
-`--supported` registry output) is wired and verified; **generation remains
-FAIL CLOSED for all eight floors** and none is claimed as supported.
+**Womb I/II generation is OPEN on the MAIN route** (bot tokens `7`/`8`;
+`/map B911 99AC 0 7`, `/map B911 99AC 1 8`). Evidence grade `PARTIAL_BINARY`
+per floor: 50 NORMAL + 50 HARD ordered clean-vs-reference comparisons with
+0 mismatches (`research/binary/womb1_100_differential_report.json`,
+`womb2_100_differential_report.json`), plus a targeted Womb I XL fixture
+(seeds 106/244/1381). ALT remains FAIL CLOSED.
 
 New binary findings this round (post-layout lifecycle tail
 `0x0033D1D6..0x0033D925`, disassembled with `scripts/disassemble_range.py`):
@@ -226,23 +232,21 @@ New binary findings this round (post-layout lifecycle tail
   variant); `(7/8, 4/5) -> 33` Corpse (the `-10` domain); Greed-mode special
   mapping documented.
 
-Still open before generation can be implemented (see
+Remaining open work for alternate/later floors (Womb itself is DONE; see
 `research/notes/floors/womb1.md`, `womb2.md`,
 `research/notes/stage_type_4_5_binary_proof.md`):
 
-1. floor-init parameters for stage 7/8 (target count cap, dead ends,
-   difficulty window, XL) and for stage_type 4/5 (must not be extrapolated
-   from ORIGINAL);
+1. alt floor-init parameters for stage_type 4/5 (target-3 confirmed;
+   everything else must not be extrapolated from ORIGINAL);
 2. through-Treasure / Secret / Ultra / late RoomConfig stage gates for
-   level_stage 7/8 and stage_type 4/5;
-3. Womb I XL (stage 7 Labyrinth) — existing XL machinery is gated to 3/5;
-4. route-progression stage_type assignment (I floors = 4, II floors = 5)
+   stage_type 4/5;
+3. route-progression stage_type assignment (I floors = 4, II floors = 5)
    in the level-transition code;
-5. alternate-route RunGenerationState fields and BossPool entries for
-   pools 10 (Womb) and the alt chapters.
+4. alternate-route RunGenerationState fields and BossPool entries for the
+   alt chapters (pools 27..32).
 
 Validation target when implemented: 50 NORMAL + 50 HARD per floor (~100
-comparisons, 800 total), graded at most `PARTIAL_BINARY` /
+comparisons per floor), graded at most `PARTIAL_BINARY` /
 `PREVIEW_SUPPORTED` — never `CONFIRMED_BINARY` on 100 samples.
 
 
@@ -349,7 +353,9 @@ silently approximated.
 
 ## Tests
 
-Current local result: `448 passed`.
+Current local result: `494 passed` (462 baseline + 32 new Womb tests:
+`tests/unit/test_womb_floor_init.py` and
+`tests/differential/test_womb_full_pipeline_differential.py`).
 
 Caves I full-layout/lifecycle differential: 10,000 NORMAL and 10,000 HARD
 start seeds (20,000 comparisons) against an independent mechanical reference,
@@ -378,6 +384,18 @@ with zero mismatch. The corpus covers 20,372 attempts, 363 retrying seeds, a
 maximum of four attempts, 720,000 post-layout RNG transitions, 160,000
 RoomConfig selections and 20,000 boss selections. Depths II is never XL.
 Artifact: `research/binary/depths2_full_differential_report.json`.
+
+Womb I full-layout/lifecycle differential: 50 NORMAL and 50 HARD start seeds
+(100 comparisons) against an independent mechanical reference, with zero
+mismatch, plus a targeted XL fixture (seeds 106/244/1381, NORMAL; curse mask
+2, target 36, dead ends 7, additional boss verified). Evidence grade
+`PARTIAL_BINARY` — 100 samples, not 20k-class.
+Artifact: `research/binary/womb1_100_differential_report.json`.
+
+Womb II full-layout/lifecycle differential: 50 NORMAL and 50 HARD start seeds
+(100 comparisons) against an independent mechanical reference, with zero
+mismatch. Womb II is never XL. Evidence grade `PARTIAL_BINARY`.
+Artifact: `research/binary/womb2_100_differential_report.json`.
 
 Topology mass differential: 20,000 NORMAL/HARD cases and 7,285,534 generator
 RNG transitions, covering all Shapes 1..12, all L shapes, large-room
@@ -494,11 +512,14 @@ Artifacts:
 - `research/notes/basement1_full_layout_proof.md`.
 - `research/notes/post_layout_lifecycle_binary_proof.md`;
 - `research/notes/canonical_run_profile.md`.
+- `research/binary/womb1_100_differential_report.json`;
+- `research/binary/womb2_100_differential_report.json`;
 
 ## Blockers
 
-No binary-proof blocker remains for the canonical Basement I or Basement II
-accepted 13x13 layouts and successful post-layout generation-state tails.
+No binary-proof blocker remains for the canonical ORIGINAL-route accepted
+13x13 layouts (Basement I..Womb II) and their successful post-layout
+generation-state tails.
 
 Whole-function instruction emulation remains
 `HIGH_ISOLATION_COST_NOT_BLOCKING_STATIC_PROOF`; exact leaf emulation is kept
@@ -507,5 +528,7 @@ for suitable helpers only.
 No qualified current-version public complete-floor fixture has been accepted.
 This keeps external validation independent and unvalidated, but does not
 downgrade the complete static-binary proofs. The next reconstruction boundary
-is Caves I: Stage-3 floor initialization, Caves BossPool/resource inputs,
-post-topology predicate changes and the successful lifecycle handoff.
+is the alternate-route chapters (Downpour/Dross/Mines/Ashpit/Mausoleum/
+Gehenna): Stage-1..6 floor initialization for stage_type 4/5, alt BossPool
+entries, post-topology predicate changes and the successful lifecycle
+handoff.
