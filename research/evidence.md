@@ -783,3 +783,16 @@ hash-locked PE) resolves the canonical chapter mapping:
 - (7/8, 4/5) -> 33 (Corpse) cross-checks the -10 descriptor domain.
 
 Full table in `research/notes/get_room_config_stage_stage7_8_alt.md`.
+
+## Womb floor-init confirmation (2026-08-18, round 3 cont.)
+
+`Level__generate_dungeon.c` (decompiled) confirms the floor-init formulas for
+the canonical ORIGINAL route:
+
+- `target = min(stage*10/3 + 5 + (rng&1), 20)`; stage 7/8 -> 20; HARD adds
+  `2 + (rng&1)` (22/23).
+- XL (Labyrinth): `target = max(4, target*3/5)` -> Womb I XL 12 (N) / 13 (H).
+- required dead ends = `(stage != 1) + 5` = 6 for stages 2..8.
+- Alternate floors (stage_type 4/5, alt-half predicate) subtract 3 from the
+  target (`target - 3`) — the alt floor-init differs from ORIGINAL, so it
+  cannot be extrapolated; this is now documented as a confirmed difference.

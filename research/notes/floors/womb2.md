@@ -12,8 +12,8 @@ Status: **parameters partially established; generation NOT implemented.**
 | RoomConfig stage | **10 (CONFIRMED_BINARY)** | `get_room_config_stage(8, 0)` = 1+((8-1)>>1)*3 = 10 (NOT Utero 11); see `get_room_config_stage_stage7_8_alt.md` |
 | BossPool index | **10 (CONFIRMED_BINARY)** | pool == ORIGINAL rcs; rcs = 10 confirmed |
 | XL eligibility | **never (even stage)** | curse logic: Labyrinth only on odd stages |
-| Target room count | `min(floor(80/3)+5+bit, 20) = 20` (**predicted**) | floor_init pattern |
-| Dead ends | 6 (**predicted**) | pattern |
+| Target room count | **20 NORMAL / 22-23 HARD (CONFIRMED_BINARY)** | `min(stage*10/3+5+bit, 20)`; stage 8 -> min(31+bit,20)=20; HARD `+2+bit` |
+| Dead ends | **6 (CONFIRMED_BINARY)** | `(stage != 1) + 5` |
 | Difficulty window | NORMAL 5..10 / HARD 10..15 (**predicted**) | pattern |
 | Planetarium chance | `f32(f32(7*0.2)+0.01)` (**predicted**) | pattern (7 prior treasures) |
 

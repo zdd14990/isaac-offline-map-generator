@@ -11,10 +11,10 @@ Status: **parameters partially established; generation NOT implemented.**
 | Stage-seed slot | 7 | `stage_seed.py` (CONFIRMED_BINARY slot selection) |
 | RoomConfig stage | **10 (CONFIRMED_BINARY)** | `get_room_config_stage(7, 0)` = 1+((7-1)>>1)*3 = 10; see `get_room_config_stage_stage7_8_alt.md` |
 | BossPool index | **10 (CONFIRMED_BINARY)** | pool == ORIGINAL rcs (`boss_pool.py`); rcs = 10 confirmed |
-| XL eligibility | **yes (odd stage, Labyrinth valid)** | curse logic: choice 0 valid on odd stages < 8 |
-| Target room count | `min(floor(70/3)+5+bit, 20) = 20` (**predicted**) | floor_init pattern for stage >= 6 |
-| Dead ends | 6 (**predicted**) | floor_init pattern |
-| Difficulty window | NORMAL 5..10 / HARD 10..15 (**predicted**) | pattern |
+| Target room count | **20 NORMAL / 22-23 HARD (CONFIRMED_BINARY)** | `generate_dungeon.c`: `min(stage*10/3+5+bit, 20)`; stage 7 -> min(28+bit,20)=20; HARD `+2+bit` |
+| Dead ends | **6 (CONFIRMED_BINARY)** | `generate_dungeon.c`: `(stage != 1) + 5` |
+| XL target | **12 NORMAL / 13 HARD (CONFIRMED_BINARY)** | XL: `max(4, target*3/5)` on 20/22-23 |
+| Difficulty window | NORMAL 5..10 / HARD 10..15 (**predicted**) | pattern; RoomConfig selection not yet traced |
 | Planetarium chance | `f32(f32(6*0.2)+0.01)` (**predicted**) | pattern (6 prior treasures) |
 
 ## Post-layout tail (BINARY-CONFIRMED this round)
