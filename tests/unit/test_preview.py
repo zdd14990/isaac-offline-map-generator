@@ -93,12 +93,13 @@ def test_unsupported_floor_fails_before_generator_call(monkeypatch: pytest.Monke
     monkeypatch.setattr("isaacmap.preview.generate_basement1_full", forbidden)
     monkeypatch.setattr("isaacmap.preview.generate_basement2_full", forbidden)
     with pytest.raises(UnsupportedPreviewFloor, match="UNSUPPORTED"):
-        generate_preview("B911 99AC", "HARD", "Womb I")
+        generate_preview("B911 99AC", "HARD", "Sheol")
 
 
 def test_preview_support_registry_contains_only_confirmed_complete_floors() -> None:
     assert tuple(SUPPORTED_FLOORS) == (
-        "Basement I", "Basement II", "Caves I", "Caves II", "Depths I", "Depths II"
+        "Basement I", "Basement II", "Caves I", "Caves II", "Depths I", "Depths II",
+        "Womb I", "Womb II",
     )
     assert SUPPORTED_FLOORS["Basement I"].replayed_floors == ("Basement I",)
     assert SUPPORTED_FLOORS["Basement II"].replayed_floors == (
@@ -130,6 +131,25 @@ def test_preview_support_registry_contains_only_confirmed_complete_floors() -> N
         "Caves II",
         "Depths I",
         "Depths II",
+    )
+    assert SUPPORTED_FLOORS["Womb I"].replayed_floors == (
+        "Basement I",
+        "Basement II",
+        "Caves I",
+        "Caves II",
+        "Depths I",
+        "Depths II",
+        "Womb I",
+    )
+    assert SUPPORTED_FLOORS["Womb II"].replayed_floors == (
+        "Basement I",
+        "Basement II",
+        "Caves I",
+        "Caves II",
+        "Depths I",
+        "Depths II",
+        "Womb I",
+        "Womb II",
     )
 
 

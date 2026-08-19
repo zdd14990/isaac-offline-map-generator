@@ -33,6 +33,10 @@ from .depths1_full_pipeline import Depths1FullResult
 from .depths1_lifecycle import generate_depths1_lifecycle
 from .depths2_full_pipeline import Depths2FullResult
 from .depths2_lifecycle import generate_depths2_lifecycle
+from .womb1_lifecycle import generate_womb1_lifecycle
+from .womb1_full_pipeline import Womb1FullResult
+from .womb2_full_pipeline import Womb2FullResult
+from .womb2_lifecycle import generate_womb2_lifecycle
 from .late_room_config import LateDefaultPassResult
 from .boss_pool import BossPoolEntry, load_boss_pool_xml
 from .resources import RoomDefinition, load_stb
@@ -67,14 +71,15 @@ class _PreviewResources:
     bosses: tuple[BossPoolEntry, ...]
     caves_bosses: tuple[BossPoolEntry, ...]
     depths_bosses: tuple[BossPoolEntry, ...]
+    womb_bosses: tuple[BossPoolEntry, ...]
     special: tuple[RoomDefinition, ...]
     basement: tuple[RoomDefinition, ...]
     caves: tuple[RoomDefinition, ...]
     depths: tuple[RoomDefinition, ...]
+    womb: tuple[RoomDefinition, ...]
     blue_womb: tuple[RoomDefinition, ...]
 
-
-PreviewPipelineResult = Basement1FullResult | Basement2FullResult | Caves1FullResult | Caves2FullResult | Depths1FullResult
+PreviewPipelineResult = Basement1FullResult | Basement2FullResult | Caves1FullResult | Caves2FullResult | Depths1FullResult | Womb1FullResult | Womb2FullResult
 
 
 @dataclass(frozen=True)
@@ -192,6 +197,7 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
         root / "rooms" / "04.caves.stb",
         root / "rooms" / "13.blue womb.stb",
         root / "rooms" / "07.depths.stb",
+        root / "rooms" / "10.womb.stb",
     )
     missing = tuple(path for path in required if not path.is_file())
     if missing:
@@ -202,22 +208,119 @@ def _load_preview_resources(resource_root: str) -> _PreviewResources:
     bosses = pools.get("basement", ())
     caves_bosses = pools.get("caves", ())
     depths_bosses = pools.get("depths", ())
+    womb_bosses = pools.get("womb", ())
     if not bosses:
         raise MissingPreviewResources("the extracted Basement boss pool is empty")
     if not caves_bosses:
         raise MissingPreviewResources("the extracted Caves boss pool is empty")
     if not depths_bosses:
         raise MissingPreviewResources("the extracted Depths boss pool is empty")
+    if not womb_bosses:
+        raise MissingPreviewResources("the extracted Womb boss pool is empty")
     return _PreviewResources(
         bosses=tuple(bosses),
         caves_bosses=tuple(caves_bosses),
         depths_bosses=tuple(depths_bosses),
+        womb_bosses=tuple(womb_bosses),
         special=tuple(load_stb(required[1])),
         basement=tuple(load_stb(required[2])),
         caves=tuple(load_stb(required[3])),
         blue_womb=tuple(load_stb(required[4])),
         depths=tuple(load_stb(required[5])),
+        womb=tuple(load_stb(required[6])),
     )
+
+
+def _generate_womb1(
+    start_seed: int,
+    difficulty: str,
+    resources: _PreviewResources,
+) -> "Womb1FullResult":
+    basement2 = generate_basement2_lifecycle(
+        start_seed, difficulty, boss_entries=resources.bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        blue_womb_definitions=resources.blue_womb,
+    )
+    caves1 = generate_caves1_lifecycle(
+        basement2, basement_boss_entries=resources.bosses,
+        caves_boss_entries=resources.caves_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, blue_womb_definitions=resources.blue_womb,
+    )
+    caves2 = generate_caves2_lifecycle(
+        caves1, basement_boss_entries=resources.bosses,
+        caves_boss_entries=resources.caves_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, blue_womb_definitions=resources.blue_womb,
+    )
+    depths1 = generate_depths1_lifecycle(
+        caves2, depths_boss_entries=resources.depths_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, depths_definitions=resources.depths,
+        blue_womb_definitions=resources.blue_womb,
+    )
+    depths2 = generate_depths2_lifecycle(
+        depths1, depths_boss_entries=resources.depths_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, depths_definitions=resources.depths,
+        blue_womb_definitions=resources.blue_womb,
+    )
+    womb1 = generate_womb1_lifecycle(
+        depths2, womb_boss_entries=resources.womb_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, depths_definitions=resources.depths,
+        womb_definitions=resources.womb, blue_womb_definitions=resources.blue_womb,
+    )
+    return womb1.layout
+
+
+def _generate_womb2(
+    start_seed: int,
+    difficulty: str,
+    resources: _PreviewResources,
+) -> "Womb2FullResult":
+    basement2 = generate_basement2_lifecycle(
+        start_seed, difficulty, boss_entries=resources.bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        blue_womb_definitions=resources.blue_womb,
+    )
+    caves1 = generate_caves1_lifecycle(
+        basement2, basement_boss_entries=resources.bosses,
+        caves_boss_entries=resources.caves_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, blue_womb_definitions=resources.blue_womb,
+    )
+    caves2 = generate_caves2_lifecycle(
+        caves1, basement_boss_entries=resources.bosses,
+        caves_boss_entries=resources.caves_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, blue_womb_definitions=resources.blue_womb,
+    )
+    depths1 = generate_depths1_lifecycle(
+        caves2, depths_boss_entries=resources.depths_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, depths_definitions=resources.depths,
+        blue_womb_definitions=resources.blue_womb,
+    )
+    depths2 = generate_depths2_lifecycle(
+        depths1, depths_boss_entries=resources.depths_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, depths_definitions=resources.depths,
+        blue_womb_definitions=resources.blue_womb,
+    )
+    womb1 = generate_womb1_lifecycle(
+        depths2, womb_boss_entries=resources.womb_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, depths_definitions=resources.depths,
+        womb_definitions=resources.womb, blue_womb_definitions=resources.blue_womb,
+    )
+    womb2 = generate_womb2_lifecycle(
+        womb1, womb_boss_entries=resources.womb_bosses,
+        special_definitions=resources.special, basement_definitions=resources.basement,
+        caves_definitions=resources.caves, depths_definitions=resources.depths,
+        womb_definitions=resources.womb, blue_womb_definitions=resources.blue_womb,
+    )
+    return womb2.layout
 
 
 def _generate_basement1(
@@ -430,6 +533,18 @@ SUPPORTED_FLOORS: dict[str, PreviewFloorSpec] = {
         ("Basement I", "Basement II", "Caves I", "Caves II", "Depths I", "Depths II"),
         _generate_depths2,
     ),
+    "Womb I": PreviewFloorSpec(
+        "Womb I",
+        "womb1",
+        ("Basement I", "Basement II", "Caves I", "Caves II", "Depths I", "Depths II", "Womb I"),
+        _generate_womb1,
+    ),
+    "Womb II": PreviewFloorSpec(
+        "Womb II",
+        "womb2",
+        ("Basement I", "Basement II", "Caves I", "Caves II", "Depths I", "Depths II", "Womb I", "Womb II"),
+        _generate_womb2,
+    ),
 }
 
 
@@ -471,6 +586,11 @@ def generate_preview(
         raise PreviewGenerationFailed(
             f"clean {spec.name} pipeline did not produce an accepted layout"
         )
+    evidence = (
+        "CONFIRMED_BINARY"
+        if "CONFIRMED_BINARY" in result.generation_status
+        else "PARTIAL_BINARY"
+    )
     return PreviewGeneration(
         seed=display_seed,
         start_seed=start_seed,
@@ -478,7 +598,7 @@ def generate_preview(
         floor=spec.name,
         generation_status=result.generation_status,
         partial=False,
-        algorithm_evidence=ALGORITHM_EVIDENCE,
+        algorithm_evidence=evidence,
         gameplay_fixture=GAMEPLAY_FIXTURE,
         replayed_floors=spec.replayed_floors,
         pipeline_result=result,

@@ -317,7 +317,7 @@ def run_treasure_to_secret(
                 _assign(state, rid, entry); descriptor_configs[rid] = entry
             else:
                 state.dead_ends.append(rid)
-    blocks.append(InterveningBlockTrace("Planetarium", "0x0033A8F7..0x0033AB45", 24, entry.subtype if entry is not None else 0, before, rid, rid >= 0 and place, tuple(state.dead_ends), entry.key if entry is not None else None, f"gate={planetarium_gate}; visited types 24/4 absent; unlocked; f32(Level.Next()) < {profile.planetarium_chance}"))
+    blocks.append(InterveningBlockTrace("Planetarium", "0x0033A8F7..0x0033AB45", 24, entry.subtype if entry is not None else 0, before, rid, rid >= 0 and place, tuple(state.dead_ends), entry.key if entry is not None else None, f"gate={planetarium_gate}; skipped" if not planetarium_gate else f"gate={planetarium_gate}; visited types 24/4 absent; unlocked; f32(Level.Next()) < {profile.planetarium_chance}"))
 
     # Dice (21) / Sacrifice (13).
     choice = _draw(state.level_rng, ledger, rva=0x0033AB94, identity="Level._generationRNG", shift_index=35, reason="Dice/Sacrifice first choice", usage="state % 50")

@@ -177,3 +177,67 @@ start of round 2.
 
 Womb I/II generation remains FAIL CLOSED. Commits this round: `652b6c2`
 (P2) and `150980c` (P3 floor-init).
+
+## Round 4 (2026-08-18): Womb I/II IMPLEMENTED (PARTIAL_BINARY)
+
+**Both Womb floors are now generated end-to-end on the MAIN route.**
+
+- Boss path stage-parameterized (`Level__select_boss_id(level_stage,
+  stage_type, pool)`); XL second boss `select_boss_id(level_stage+1,
+  stage_type)` with persistent Level RNG saved+restored; Labyrinth = curse
+  bit 0x02.
+- BossPool 10 CONFIRMED: pool index = XML position+1; entries Scolex(7)/
+  Mama Gurdy(49)/Lokii(31)/Mr. Fred(53)/Blastocyst(16) w=1 + The Matriarch
+  (72) w=0.25; Womb I/II share pool 10 (pool 10 continues from Womb I's
+  selection into Womb II).
+- Type8/Shop/Treasure (`0x00339A87..0x0033A3FF`) + post-Treasure audited:
+  only a `cmp [esi], 0xa` gate exists; no stage-7/8-specific gates — the
+  ordinary blocks run unconditionally on canonical Womb.
+- Planetarium gate False on canonical Womb (no collectible): consumes the
+  unconditional 0x0033A961 draw, skips select/geometry/chance.
+- Post-layout tail: 28 persistent Level RNG draws, identical to Depths II.
+- **Reference bug fixed**: Womb pool 10 was resumed with the Depths pool-7
+  state (`d2.final_boss`); pool RNGs are independent per pool, so pool 10
+  starts from its own game-start seed
+  (`derive_pool_seeds_reference(start_seed)[WOMB_POOL_INDEX]`).
+
+Differentials (100 each, 0 mismatches):
+
+- `research/binary/womb1_100_differential_report.json` — 50 N + 50 H.
+- `research/binary/womb2_100_differential_report.json` — 50 N + 50 H.
+- Targeted Womb I XL fixture (seeds 106/244/1381, NORMAL, curse mask 2,
+  target 36, dead ends 7) recorded in the womb1 report.
+
+Wiring:
+
+- `SUPPORTED_FLOORS` registry: Womb I + Womb II (MAIN 7/8; bot token `7`/`8`).
+- `_load_preview_resources` gains `womb` rooms (`10.womb.stb`) and
+  `womb_bosses`; `pools["womb"]`.
+- `bot_api.BotMapResult.algorithm_evidence` (CONFIRMED_BINARY vs
+  PARTIAL_BINARY, derived from `generation_status`, persisted in the JSON
+  payload for cache hits); fraq bot caption now prints the real evidence
+  grade instead of a hardcoded CONFIRMED_BINARY.
+- Preview UI floor selector derives support status from the registry
+  (Womb I/II now show SUPPORTED; Sheol+ remain UNSUPPORTED).
+
+Tests: generator `494 passed` (462 baseline + 32 new Womb tests:
+`tests/unit/test_womb_floor_init.py`,
+`tests/differential/test_womb_full_pipeline_differential.py`); fraq bot
+`94 passed`, typecheck/build green.
+
+Bot smoke (real CLI, the exact path the bot uses):
+
+```text
+/map B911 99AC 0 7  -> Womb I   NORMAL, PNG 1400x900, PARTIAL_BINARY
+/map B911 99AC 1 8  -> Womb II  HARD,   PNG 1400x900, PARTIAL_BINARY
+```
+
+Alt floors (Downpour/Mines/Mausoleum I/II) remain `UNSUPPORTED — FAIL
+CLOSED` (floor-init target-3 confirmed, everything else still open). Sheol
+and later floors also remain FAIL CLOSED. Commits this round:
+`936652c5` (Womb I clean pipeline [checkpoint B]), plus the Womb II and
+wiring commits [checkpoints C/D].
+
+Evidence-grade discipline: Womb I/II are `PARTIAL_BINARY` on the 100-sample
+corpus — never labeled CONFIRMED_BINARY (that grade is reserved for the
+20k-class floors 1-6).

@@ -44,11 +44,9 @@ def test_floor_name_for() -> None:
     assert floor_name_for(MAIN_ROUTE, 9) is None
 
 
-def test_generation_fail_closed_for_new_floors(tmp_path: Path) -> None:
-    """Womb and alt floors fail closed with the floor name carried back."""
+def test_generation_fail_closed_for_alt_floors(tmp_path: Path) -> None:
+    """Alt floors still fail closed with the floor name carried back."""
     cases = [
-        (MAIN_ROUTE, 7, "Womb I"),
-        (MAIN_ROUTE, 8, "Womb II"),
         (ALT_ROUTE, 1, "Downpour I"),
         (ALT_ROUTE, 2, "Downpour II"),
         (ALT_ROUTE, 3, "Mines I"),
@@ -64,6 +62,20 @@ def test_generation_fail_closed_for_new_floors(tmp_path: Path) -> None:
         assert result.error == "UNSUPPORTED_FLOOR", (route, stage)
         assert result.floor_name == floor, (route, stage)
         assert result.route == route, (route, stage)
+
+
+def test_womb_floors_generate_for_bot(tmp_path: Path) -> None:
+    """Womb I/II are now supported on the MAIN route."""
+    for route, stage, floor in (
+        (MAIN_ROUTE, 7, "Womb I"),
+        (MAIN_ROUTE, 8, "Womb II"),
+    ):
+        result = generate_map_image_for_bot(
+            "B911 99AC", "NORMAL", stage, str(tmp_path), route=route
+        )
+        assert result.ok, (route, stage)
+        assert result.floor_name == floor, (route, stage)
+        assert result.image_path is not None, (route, stage)
 
 
 def test_invalid_route_and_stage_rejected(tmp_path: Path) -> None:

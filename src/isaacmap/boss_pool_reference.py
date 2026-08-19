@@ -24,6 +24,7 @@ POOL_SHIFTS = (2, 21, 9)
 BASEMENT_POOL_INDEX = 1
 CAVES_POOL_INDEX = 4
 DEPTHS_POOL_INDEX = 7
+WOMB_POOL_INDEX = 10
 
 
 def _f32(value: float) -> float:
@@ -180,6 +181,31 @@ class BossPoolRuntimeReference:
             set(),
         )
         result.pool_states[DEPTHS_POOL_INDEX] = pool_state
+        return result
+
+    @classmethod
+    def resume_canonical_womb(
+        cls,
+        game_start_seed: int,
+        womb_entries: tuple[BossPoolEntryReference, ...],
+        *,
+        pool_state: int,
+        removed: tuple[int, ...] | set[int],
+    ) -> "BossPoolRuntimeReference":
+        seeds = derive_pool_seeds_reference(game_start_seed)
+        result = cls(
+            game_start_seed,
+            seeds,
+            list(seeds),
+            {
+                WOMB_POOL_INDEX: shuffle_entries_reference(
+                    womb_entries, seeds[WOMB_POOL_INDEX]
+                )
+            },
+            set(removed),
+            set(),
+        )
+        result.pool_states[WOMB_POOL_INDEX] = pool_state
         return result
 
     def begin_attempt(self) -> None:

@@ -144,6 +144,7 @@ class BotMapResult:
     json_path: str | None = None
     attempts: int | None = None
     cache_hit: bool = False
+    algorithm_evidence: str | None = None
 
 
 def normalize_seed_text(seed_text: str) -> str | None:
@@ -273,11 +274,13 @@ def generate_map_image_for_bot(
     json_path = out_dir / f"{base_name}.json"
 
     # Cache hit: same seed + difficulty + stage + exe/support version already
-    # produced an image.  Generation is deterministic, so reuse it directly.
     if image_path.is_file():
         attempts = None
+        evidence = None
         try:
-            attempts = json.loads(json_path.read_text(encoding="utf-8")).get("attempts")
+            cached = json.loads(json_path.read_text(encoding="utf-8"))
+            attempts = cached.get("attempts")
+            evidence = cached.get("algorithm_evidence")
         except (OSError, ValueError):
             attempts = None
         return BotMapResult(
@@ -291,6 +294,7 @@ def generate_map_image_for_bot(
             json_path=str(json_path) if json_path.is_file() else None,
             attempts=attempts,
             cache_hit=True,
+            algorithm_evidence=evidence,
         )
 
     try:
@@ -334,6 +338,7 @@ def generate_map_image_for_bot(
         payload.setdefault("floor_name", floor_name)
         payload.setdefault("stage_number", stage_number)
         payload.setdefault("route", normalized_route)
+        payload.setdefault("algorithm_evidence", preview.algorithm_evidence)
     except Exception as exc:  # render must never crash the caller
         return BotMapResult(
             ok=False,
@@ -380,6 +385,7 @@ def generate_map_image_for_bot(
         json_path=str(json_path),
         attempts=preview.attempt_count,
         cache_hit=False,
+        algorithm_evidence=preview.algorithm_evidence,
     )
 
 

@@ -272,8 +272,10 @@ def _result(state, completed, abort, boss, boss_room, boss_entry, type8, shop_ro
 def run_post_reference(generator, level_state, boss_state, weights, entries, profile):
     state=_post_state(generator,level_state); draws=[]; configs=[]; conditions=[]
     profile.validate()
-    if profile.level_stage not in (1,2,3,4,5,6) or (profile.is_xl and profile.level_stage not in (3,5)) or 589 in profile.collectible_ids:
-        raise ValueError("through-Treasure reference supports canonical Basement I/II/Caves I/II/Depths I/II")
+    if profile.level_stage not in (1, 2, 3, 4, 5, 6, 7, 8) or (
+        profile.is_xl and profile.level_stage not in (3, 5, 7)
+    ) or 589 in profile.collectible_ids:
+        raise ValueError("through-Treasure reference supports canonical Basement I/II/Caves I/II/Depths I/II/Womb I/II")
     boss=boss_state.select_canonical_stage(profile.room_config_stage)
     boss_entry=_select_boss_config_reference(state,draws,configs,weights,entries,boss,"Boss",0x003394A4)
     if boss_entry is None: return _result(state,False,"Boss RoomConfig",boss,-1,None,[],-1,None,-1,None,0,draws,configs,conditions)
