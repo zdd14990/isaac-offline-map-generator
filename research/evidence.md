@@ -796,3 +796,24 @@ the canonical ORIGINAL route:
 - Alternate floors (stage_type 4/5, alt-half predicate) subtract 3 from the
   target (`target - 3`) — the alt floor-init differs from ORIGINAL, so it
   cannot be extrapolated; this is now documented as a confirmed difference.
+
+## Womb through-Treasure + BossPool 10 (2026-08-18, round 4)
+
+- Boss path is stage-parameterized: `Level__select_boss_id(level_stage,
+  stage_type, pool)` with pool derived from rcs (10 for Womb); XL second boss
+  uses `select_boss_id(level_stage + 1, stage_type)` (pool 10 for stage 7
+  XL since rcs(8,0)=10) with the persistent Level RNG saved and restored
+  (rewound) after the XL boss.
+- Labyrinth/XL gate = curse bit 0x02 (`(~remove & (add|curse|used) & 2) == 0`),
+  matching the repo curse encoding.
+- Pool index == XML pool position + 1 (basement 1, caves 4, depths 7,
+  womb 10). Womb pool: Scolex(7), Mama Gurdy(49), Lokii(31), Mr. Fred(53),
+  Blastocyst(16) w=1, The Matriarch(72) w=0.25; Womb I/II share pool 10 with
+  RNG/removal inheritance via the existing 37-state snapshot.
+- Type8/Shop/Treasure stage-independence is grounded in the round-1
+  CONFIRMED_BINARY STATUS analysis ("NORMAL/HARD has no direct Shop branch",
+  "Canonical Stage 1 executes every named ordinary block") and the clean
+  pipeline's stage-gate shapes (`stage==1/2/3/12` false, `stage>=2/3` true
+  for 7/8, same as Depths 5/6); the 0x00339A87..0x0033A3FF section has not
+  been re-read line-by-line for 7/8, so those rows stay PREVIEW-grade until
+  then.
