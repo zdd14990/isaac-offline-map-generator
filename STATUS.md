@@ -188,30 +188,52 @@ Stage-7 or later constants or RoomConfig/BossPool profile are copied from
 earlier floors; the next floor remains fail closed until independently
 reconstructed.
 
-### Stage-7/8 and alternate-route floors: current blocker (2026-08-18)
+### Stage-7/8 and alternate-route floors: status (2026-08-18, round 2)
 
-The user-facing token surface for Womb I/II (`7`/`8`, main route) and the
-alternate chapters (`1+..6+`: Downpour I/II, Mines I/II, Mausoleum I/II,
-stage type 4/5) is wired end to end in `isaacmap.bot_api` (token parsing,
-route-aware cache keys, `--supported` registry output) and the fraq bot
-(`/map`), but **generation is FAIL CLOSED for all eight floors**. They are
-NOT graded `CONFIRMED_BINARY` and are not claimed as supported.
+User-facing token surface (main `1..8`, alt `1+..6+`, route-aware cache keys,
+`--supported` registry output) is wired and verified; **generation remains
+FAIL CLOSED for all eight floors** and none is claimed as supported.
 
-The concrete blocker is the shared post-layout lifecycle tail
-(`post_layout_lifecycle.run_post_layout_lifecycle`):
+New binary findings this round (post-layout lifecycle tail
+`0x0033D1D6..0x0033D925`, disassembled with `scripts/disassemble_range.py`):
 
-- its guard rejects `level_stage` outside 1..6 and any `stage_type` other
-  than 0, which excludes Womb I/II and every alternate floor;
-- the optional `-9` (room-config-stage 13) and `-10` (stage-type 4/5 plus
-  level-stage 7/8) fixed descriptors are deliberately unimplemented and
-  returned as skipped;
-- the 28-persistent-Level-draw invariant assumes the canonical ORIGINAL
-  tail, which the `-10` branch would change.
+- **`-10` descriptor** (`post_layout_descriptor_minus10.md`): predicate is
+  `stage_type in (4, 5) AND level_stage in (7, 8)` — i.e. the Corpse (Mother
+  route) chapter pair, which is **out of scope**. Every target floor skips
+  it: Womb (stage_type 0) and Downpour/Mines/Mausoleum (level_stage 1..6).
+  It consumes 2 extra Level RNG draws only when entered.
+- **`-9` descriptor** (`post_layout_descriptor_minus9.md`): predicate is
+  `room_config_stage == 13` (Blue Womb). It replaces the `-8` slot with the
+  same 1-draw cost. Never fires for the eight target floors (rcs 10 / 27..32).
+- **28-draw invariant holds for all eight target floors.** The door-chance
+  flag writes in the tail use a local `IsaacRNG::Next` copy seeded from the
+  current Level RNG state (`0x3E9020` disassembly) and do NOT advance the
+  persistent Level RNG; the `-9`/`-10` branches are skipped; therefore the
+  persistent Level RNG sequence is identical to Depths II for every target
+  floor. The tail guard can be relaxed on this binary evidence, but that is
+  deferred until the pipelines that would call it exist.
+- Chapter resources are authoritative in `stages.xml` (Womb 10, Utero 11,
+  Downpour 27, Dross 28, Mines 29, Ashpit 30, Mausoleum 31, Gehenna 32);
+  `boss_pool.py` confirms pool index == ORIGINAL room-config stage.
+  `stage_seed.py` already confirms the alt route seed-slot rule
+  (`level_stage + 1`, capped at Home).
 
-No binary evidence currently exists for these floors (`research/notes/` has
-no Womb/Downpour/Mines/Mausoleum analysis, and no RVA/selection data for the
-`-10` descriptor). Implementing them requires that reverse engineering first;
-pattern-extension without it is refused (the project never approximates).
+Still open before generation can be implemented (see
+`research/notes/floors/womb1.md`, `womb2.md`,
+`research/notes/stage_type_4_5_binary_proof.md`):
+
+1. `get_room_config_stage(7..8, 0)` and `(1..6, 4/5)` binary mapping
+   (Womb II may be rcs 11/Utero, not 10);
+2. floor-init parameters for stage_type 4/5 (must not be extrapolated from
+   ORIGINAL);
+3. through-Treasure / Secret / Ultra / late RoomConfig stage gates for
+   level_stage 7/8 and stage_type 4/5;
+4. Womb I XL (stage 7 Labyrinth) — existing XL machinery is gated to 3/5;
+5. alternate-route RunGenerationState fields and BossPool indices/lists.
+
+Validation target when implemented: 50 NORMAL + 50 HARD per floor (~100
+comparisons, 800 total), graded at most `PARTIAL_BINARY` /
+`PREVIEW_SUPPORTED` — never `CONFIRMED_BINARY` on 100 samples.
 
 
 Noncanonical character, collectible, challenge/game-mode, unlock and continue

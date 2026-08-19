@@ -741,3 +741,32 @@ Differential artifacts:
 
 Womb I (Stage 7), later floors, alternate routes and noncanonical profiles
 remain `UNSUPPORTED — FAIL CLOSED`.
+
+## Post-layout lifecycle tail: Womb/alternate floor blockers (2026-08-18)
+
+Disassembly source: `scripts/disassemble_range.py` on
+`research/input/isaac-ng.exe` (hash-locked), range `0x0073D1D6..0x0073D950`
+(tail `0x0033D1D6..0x0033D925` plus epilogue).
+
+Findings (see `research/notes/post_layout_descriptor_minus9.md` and
+`post_layout_descriptor_minus10.md`):
+
+- The `-10` descriptor branch (`0x0033D874..0x0033D925`) fires only for
+  `stage_type in (4,5) AND level_stage in (7,8)` (Corpse chapter pair). It
+  draws 2 persistent Level RNG values and writes GridIndex -10 via the shared
+  RoomConfig selector. All eight target floors skip it.
+- The `-9` descriptor branch (`0x0033D5E8..0x0033D643`) fires only for
+  `room_config_stage == 13` (Blue Womb) and replaces the `-8` slot with the
+  same single-draw cost. All eight target floors skip it.
+- The door-chance flag writes use a local `IsaacRNG::Next` (raw xorshift at
+  `0x3E9020`) seeded from the current Level RNG state; they never advance the
+  persistent Level RNG (`0x7e90f0` wrapper). The 28-persistent-draw invariant
+  therefore holds for every target floor's tail.
+- `stages.xml` is the authoritative chapter/resource-stage table (Womb 10,
+  Utero 11, Downpour 27, Mines 29, Mausoleum 31, ...); `boss_pool.py`
+  confirms pool index == ORIGINAL room-config stage; `stage_seed.py` confirms
+  the alternate seed-slot rule.
+
+The generation pipelines for the eight floors remain unimplemented and
+`FAIL CLOSED`; the open items are listed in `STATUS.md` (round 2 section) and
+`research/notes/floors/womb1.md` / `womb2.md`.

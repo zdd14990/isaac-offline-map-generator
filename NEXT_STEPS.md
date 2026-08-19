@@ -88,28 +88,47 @@ User-facing token surface is DONE and verified:
   the floor name (e.g. "该层当前未支持（Womb I）..."). Tests: 94 fraq + 14
   generator bot_api tests; fraq typecheck/build green.
 
-Generation for the eight floors (Womb I/II, Downpour I/II, Mines I/II,
-Mausoleum I/II) is **FAIL CLOSED, not implemented**. Blocker:
+## Round 2 (2026-08-18): post-layout lifecycle analysis done, floors still not implemented
 
-1. `post_layout_lifecycle.run_post_layout_lifecycle` guard rejects
-   `level_stage` 7/8 and `stage_type` 4/5; the `-10` fixed descriptor
-   (stage-type 4/5 plus level-stage 7/8) and the `-9` (room-config-stage 13)
-   descriptor are unimplemented; the 28-draw invariant would change.
-2. No binary evidence exists: no RVAs/selection seeds for the `-10` branch,
-   no Womb/Downpour/Mines/Mausoleum floor-init analysis, no notes.
+Checkpoint 1 of the task plan is complete: the `-9`/`-10` descriptor branches
+are reconstructed from the binary and the draw-count question is resolved.
 
-Next concrete steps (each needs static analysis of the frozen binary):
+**Confirmed (binary):**
 
-- Disassemble the shared tail `0x0033D1D6..0x0033D94B` for level-stage 7/8
-  and stage-type 4/5; extract the `-10` descriptor selection (RVAs, room
-  type, subtype, seeds) and its extra RNG consumption.
-- Derive floor-init topology inputs for Womb I/II (slot 7/8; Womb I is odd
-  and XL-capable; `get_room_config_stage(7, ORIGINAL)` = 10, Womb BossPool
-  index 10) and for the alt floors (slot `level_stage + 1`, stage type 4).
-- Implement clean + reference pipelines, ~100 differentials per floor
-  (50 NORMAL + 50 HARD), and grade honestly (PARTIAL_BINARY / PREVIEW
-  at most until the corpus grows) — never `CONFIRMED_BINARY` on 100 samples.
-- Register in `SUPPORTED_FLOORS`/bot_api and update the UI floor selector.
+1. `-10` descriptor = Corpse (Mother route) floors only:
+   predicate `stage_type in (4,5) AND level_stage in (7,8)`; 2 extra Level
+   RNG draws; GridIndex -10 write. Skipped by all 8 target floors.
+2. `-9` descriptor = Blue Womb only: predicate `room_config_stage == 13`;
+   replaces the `-8` slot with the same 1-draw cost. Skipped by all 8
+   target floors.
+3. Door-chance flag writes use a local `IsaacRNG::Next` copy (raw xorshift
+   `0x3E9020`) — no persistent Level RNG consumption.
+4. => 28 persistent Level RNG draws, identical to Depths II, for every
+   target floor. The tail guard can be relaxed on this evidence.
+5. `stages.xml` authoritative resource stages; `boss_pool.py` pool == rcs on
+   ORIGINAL; `stage_seed.py` alt slot rule (`level_stage + 1`).
+
+**Still required before generation can be implemented:**
+
+1. Binary verify `get_room_config_stage(7..8, 0)` and `(1..6, 4/5)`
+   (Womb II may be rcs 11/Utero, not 10; alt floors 27..32).
+2. Floor-init topology inputs for stage_type 4/5 (NOT extrapolated from
+   ORIGINAL) and for stage 7 (XL-capable; Labyrinth valid on odd stages).
+3. Through-Treasure / Secret / Ultra / late RoomConfig stage gates for
+   level_stage 7/8 and stage_type 4/5 (every stage-dependent branch verified
+   against the binary, not pattern-extended).
+4. Womb I XL (existing XL machinery gated to stages 3/5).
+5. Alternate-route RunGenerationState fields and BossPool indices/lists.
+6. Then: profiles + floor_init + clean/reference pipelines + ~100
+   differentials per floor (800 total), grade at most PARTIAL_BINARY /
+   PREVIEW_SUPPORTED, register, update UI selector.
+
+Notes written this round: `research/notes/post_layout_descriptor_minus9.md`,
+`post_layout_descriptor_minus10.md`,
+`research/notes/stage_type_4_5_binary_proof.md`,
+`research/notes/floors/womb1.md`, `research/notes/floors/womb2.md`.
+Evidence appended to `research/evidence.md`; `STATUS.md` round-2 section
+updated.
 
 Verification command:
 
@@ -117,4 +136,5 @@ Verification command:
 .venv\Scripts\python.exe -m pytest -q
 ```
 
-Result: 462 passed (448 + 14 bot_api stage-token tests).
+Result: 462 passed (448 + 14 bot_api stage-token tests), confirmed at the
+start of round 2.
