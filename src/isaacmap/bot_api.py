@@ -34,6 +34,7 @@ from .preview import (
     generate_preview,
 )
 from .seed import InvalidSeedError, decode_seed
+from .generation_profile import RunGenerationProfile, resolve_run_generation_profile
 
 # Version-locked executable profile.  Both values feed the cache key so a
 # changed generator/executable silently invalidates previously cached images.
@@ -156,6 +157,7 @@ class BotMapResult:
     stage_number: int | None = None
     route: str | None = None
     difficulty: str | None = None
+    generation_profile: str | None = None
     seed_text: str | None = None
     image_path: str | None = None
     json_path: str | None = None
@@ -177,9 +179,10 @@ def normalize_seed_text(seed_text: str) -> str | None:
     return f"{compact[:4]} {compact[4:]}"
 
 
-def _version_token() -> str:
-    """Eight-hex token folding EXE hash and support version into file names."""
-    payload = f"{EXE_SHA256}|{SUPPORT_VERSION}"
+def _version_token(profile: RunGenerationProfile | None = None) -> str:
+    """Fold executable, support and generation-profile state into cache keys."""
+    resolved = profile or resolve_run_generation_profile()
+    payload = f"{EXE_SHA256}|{SUPPORT_VERSION}|{resolved.fingerprint}"
     return sha256(payload.encode("utf-8")).hexdigest()[:8]
 
 
@@ -283,7 +286,21 @@ def generate_map_image_for_bot(
             seed_text=normalized_seed,
         )
 
-    version_token = _version_token()
+    try:
+        generation_profile = resolve_run_generation_profile()
+    except ValueError as exc:
+        return BotMapResult(
+            ok=False,
+            error="INVALID_PROFILE",
+            error_message=str(exc),
+            floor_name=floor_name,
+            stage_number=stage_number,
+            route=normalized_route,
+            difficulty=normalized_difficulty,
+            seed_text=normalized_seed,
+        )
+
+    version_token = _version_token(generation_profile)
     compact_seed = normalized_seed.replace(" ", "")
     base_name = f"{compact_seed}_{normalized_route}_{normalized_difficulty}_stage{stage_number}_{version_token}"
     out_dir = Path(output_dir)
@@ -306,6 +323,7 @@ def generate_map_image_for_bot(
             stage_number=stage_number,
             route=normalized_route,
             difficulty=normalized_difficulty,
+            generation_profile=generation_profile.name,
             seed_text=normalized_seed,
             image_path=str(image_path),
             json_path=str(json_path) if json_path.is_file() else None,
@@ -324,6 +342,7 @@ def generate_map_image_for_bot(
             floor_name=floor_name,
             stage_number=stage_number,
             route=normalized_route,
+            generation_profile=generation_profile.name,
             seed_text=normalized_seed,
         )
     except (PreviewGenerationFailed, PreviewError, OSError, ValueError) as exc:
@@ -335,6 +354,7 @@ def generate_map_image_for_bot(
             stage_number=stage_number,
             route=normalized_route,
             difficulty=normalized_difficulty,
+            generation_profile=generation_profile.name,
             seed_text=normalized_seed,
         )
 
@@ -352,6 +372,7 @@ def generate_map_image_for_bot(
         payload = preview_to_dict(preview)
         payload.setdefault("seed_text", normalized_seed)
         payload.setdefault("difficulty", normalized_difficulty)
+        payload.setdefault("generation_profile", generation_profile.name)
         payload.setdefault("floor_name", floor_name)
         payload.setdefault("stage_number", stage_number)
         payload.setdefault("route", normalized_route)
@@ -365,6 +386,7 @@ def generate_map_image_for_bot(
             stage_number=stage_number,
             route=normalized_route,
             difficulty=normalized_difficulty,
+            generation_profile=generation_profile.name,
             seed_text=normalized_seed,
         )
 
@@ -388,6 +410,7 @@ def generate_map_image_for_bot(
             stage_number=stage_number,
             route=normalized_route,
             difficulty=normalized_difficulty,
+            generation_profile=generation_profile.name,
             seed_text=normalized_seed,
         )
 
@@ -397,6 +420,7 @@ def generate_map_image_for_bot(
         stage_number=stage_number,
         route=normalized_route,
         difficulty=normalized_difficulty,
+        generation_profile=generation_profile.name,
         seed_text=normalized_seed,
         image_path=str(image_path),
         json_path=str(json_path),
@@ -427,9 +451,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.supported:
+        generation_profile = resolve_run_generation_profile()
         print(
             json.dumps(
                 {
+                    "generation_profile": generation_profile.name,
+                    "curse_rates": {
+                        "NORMAL": generation_profile.normal_curse_rate,
+                        "HARD": generation_profile.hard_curse_rate,
+                    },
                     "stages": list(supported_stage_numbers()),
                     "summary": supported_stage_summary(),
                     "routes": {

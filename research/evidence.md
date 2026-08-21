@@ -953,9 +953,19 @@ stage seed `362265690`, StageType 4, rcs 27, curse RNG copied state
 `2722452983`, gate draw `163224774`, rate 40, remainder 14, selector not
 consumed, mask 0, `can_apply_labyrinth=true`, effective `is_xl=false`, target
 10, required dead ends 5. Counterfactual next draw `3869886000 % 6 == 0`
-matters only to a progressed rate-6/rate-3 profile, which is not exposed.
+matters only to a progressed rate-6/rate-3 profile.
+
+The four exact denominator pairs are exposed as reproducible generation
+profiles rather than inferred achievement names: `BASE_80_40`, `RATE_30_20`,
+`RATE_10_6`, and `RATE_5_3`. User-reported HARD 1+ controls identify
+`RATE_5_3` for the target Bot environment: `BJPK 79MF` is XL (rate-3-only),
+`BJPK 72ME` is XL (rate-6/rate-3 positive control), and `BJPK 79FB` is non-XL
+(negative control). Clean and mechanical-reference traces agree for every
+profile/seed pair. This is profile selection evidence, not an independently
+operated gameplay oracle, so the external-validation grade remains unchanged.
 
 Validation: ALT 1+..6+ each reran 50 NORMAL + 50 HARD full clean/reference
 comparisons (600 total, zero mismatch); targeted automatic XL pipelines for
-Downpour I, Mines I and Mausoleum I matched; complete suite `633 passed`.
+Downpour I, Mines I and Mausoleum I matched. The same 600 ALT comparisons also
+match under `RATE_5_3`; complete suite `641 passed`.
 External gameplay remains `NOT_EXTERNALLY_VALIDATED_GAMEPLAY`.

@@ -33,6 +33,7 @@ from .depths1_full_pipeline import Depths1FullResult
 from .depths1_lifecycle import generate_depths1_lifecycle
 from .depths2_full_pipeline import Depths2FullResult
 from .depths2_lifecycle import generate_depths2_lifecycle
+from .generation_profile import resolve_run_generation_profile
 from .womb1_lifecycle import generate_womb1_lifecycle
 from .womb1_full_pipeline import Womb1FullResult
 from .womb2_full_pipeline import Womb2FullResult
@@ -110,6 +111,7 @@ class PreviewGeneration:
     seed: str
     start_seed: int
     difficulty: str
+    generation_profile: str
     floor: str
     generation_status: str
     partial: bool
@@ -742,8 +744,9 @@ def generate_preview(
 ) -> PreviewGeneration:
     """Generate a supported accepted-layout research map or fail closed.
 
-    The accepted profile is the ordinary vanilla canonical ORIGINAL route in
-    NORMAL/HARD.  Every floor outside ``SUPPORTED_FLOORS`` remains unsupported.
+    The accepted profile is the configured reproducible vanilla generation
+    profile in NORMAL/HARD. Every floor outside ``SUPPORTED_FLOORS`` remains
+    unsupported.
     """
 
     normalized_floor = str(floor).strip()
@@ -756,6 +759,7 @@ def generate_preview(
     normalized_difficulty = str(difficulty).strip().upper()
     if normalized_difficulty not in SUPPORTED_DIFFICULTIES:
         raise PreviewError("difficulty must be NORMAL or HARD")
+    generation_profile = resolve_run_generation_profile()
 
     if isinstance(seed, str):
         start_seed = decode_seed(seed)
@@ -780,6 +784,7 @@ def generate_preview(
         seed=display_seed,
         start_seed=start_seed,
         difficulty=normalized_difficulty,
+        generation_profile=generation_profile.name,
         floor=spec.name,
         generation_status=result.generation_status,
         partial=False,

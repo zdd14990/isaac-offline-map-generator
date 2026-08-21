@@ -12,9 +12,13 @@ that exports PNG and JSON files.
 - Static game-resource reading only. Isaac and Steam are never launched.
 - Unsupported floors fail closed instead of using approximate generation.
 
-The generator uses a fixed, reproducible generation profile and does not read
-the player's save. Progression can affect curse rates, so a real save may
+The generator uses an explicit, reproducible generation profile and does not
+read the player's save. Progression can affect curse rates, so a real save may
 produce a different curse result.
+
+`BASE_80_40` is the default. Set `ISAAC_MAP_GENERATION_PROFILE` to one of the
+binary-confirmed tiers `BASE_80_40`, `RATE_30_20`, `RATE_10_6` or `RATE_5_3`
+to match a known save profile. The selected profile is included in cache keys.
 
 ## Supported floors
 

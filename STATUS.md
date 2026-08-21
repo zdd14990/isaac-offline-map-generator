@@ -343,7 +343,8 @@ The product-facing UI remains explicitly a Research Preview because external
 gameplay validation is unavailable. No later floor or noncanonical profile is
 silently approximated.
 
-Current local result (2026-08-21 audit): `633 passed`, no failures or skips.
+Current local result (2026-08-21 profile audit): `641 passed`, no failures or
+skips.
 
 Downpour I full-layout/lifecycle differential: 50 NORMAL and 50 HARD start
 seeds (100 comparisons) against an independent mechanical reference, with
@@ -585,7 +586,20 @@ binary-like gate/selector implementation. `DKM8 9MNM` HARD 1+ decodes to
 `364417104`, uses slot 2 / stage seed `362265690`, rate 40, gate draw
 `163224774` (`%40 == 14`), consumes no selector, produces curse mask 0 and is
 not XL. The next draw would be `3869886000` (`%6 == 0`) only if a progressed
-profile selected a denominator such as 6; no progression profile was exposed.
+profile selects a denominator such as 6.
+
+The binary-confirmed denominator pairs are now represented explicitly by
+`RunGenerationProfile`: `BASE_80_40`, `RATE_30_20`, `RATE_10_6`, and
+`RATE_5_3`. The default remains `BASE_80_40`; the process-level
+`ISAAC_MAP_GENERATION_PROFILE` selects another reproducible tier without
+changing `/map` syntax or forcing XL. The profile fingerprint is part of the
+PNG/JSON cache version.
+
+User-reported HARD 1+ observations on the frozen game version identify their
+configured Bot profile as `RATE_5_3`: `BJPK 79MF` XL distinguishes rate 3
+from rate 6, `BJPK 72ME` is the positive control, and `BJPK 79FB` is non-XL.
+These reports select a binary-confirmed branch but do not change the project's
+`NOT_EXTERNALLY_VALIDATED_GAMEPLAY` evidence grade.
 
 Regression evidence:
 
@@ -593,9 +607,11 @@ Regression evidence:
   floor, 600 total, zero mismatch;
 - natural XL full-pipeline fixtures: Downpour I, Mines I and Mausoleum I,
   clean/reference equal; 1+ XL -> 2+ non-XL and 3+ XL -> 4+ non-XL reset;
-- final generator suite: `633 passed`;
+- final generator suite: `641 passed`;
+- `RATE_5_3` ALT 1+..6+ differential: 600 clean/reference comparisons,
+  zero mismatch;
 - fraq bot: `95 passed`, typecheck/build green, real subprocess PNG smoke for
-  Dross and Ashpit NORMAL/HARD plus Gehenna HARD;
+  Dross and Ashpit NORMAL/HARD, Gehenna HARD, and XL `DKM8 9MNM` HARD 1+;
 - no force-XL user/API/CLI/cache feature and no seed special case.
 
 Safety: both executable paths were only hashed/read as static PE data. The

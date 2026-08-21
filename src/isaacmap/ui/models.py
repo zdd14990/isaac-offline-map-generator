@@ -212,6 +212,7 @@ def preview_to_dict(preview: PreviewGeneration) -> dict[str, Any]:
         "seed": preview.seed,
         "start_seed_uint32": preview.start_seed,
         "difficulty": preview.difficulty,
+        "generation_profile": preview.generation_profile,
         "floor": preview.floor,
         "status": preview.generation_status,
         "partial": preview.partial,

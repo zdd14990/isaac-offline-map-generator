@@ -351,9 +351,11 @@ and Sheol/Cathedral/Chest/Dark Room/Void endings stay FAIL CLOSED.
   `Gehenna`) without weakening the fail-closed guard.
 - Reconfirmed the StageType5 rcs 28/30/32 branch by exact-offset static
   decode and reran 600 ALT clean/reference comparisons with zero mismatch.
-- Natural curse/Labyrinth remains automatic under the explicit canonical
-  fresh-save profile. `DKM89MNM` HARD 1+ is correctly non-XL at rate 40.
-- Generator `633 passed`; fraq bot `95 passed`, typecheck/build and real
-  StageType5 PNG smoke green.
+- Natural curse/Labyrinth remains automatic under an explicit generation
+  profile. `DKM89MNM` HARD 1+ is non-XL in `BASE_80_40` and XL in the target
+  Bot's cross-seed-identified `RATE_5_3` profile.
+- Generator `641 passed`; `RATE_5_3` ALT 1+..6+ differential has 600
+  comparisons and zero mismatch; fraq bot `95 passed`, typecheck/build and
+  real StageType5/DKM XL PNG smoke green.
 - B/force-XL stays removed. Do not add Corpse, Sheol or Cathedral in this
   follow-up boundary.

@@ -59,6 +59,21 @@ The natural generation is left unchanged.  `/map` remains
 `/map 种子 0/1 层数`; the earlier `B`/`--force-xl` force mode was removed
 after review.
 
+## Profile identification controls
+
+The denominator tier is now explicit process configuration, not a force-XL
+flag. User-reported HARD 1+ results distinguish the target environment:
+
+| Seed | RATE_10_6 | RATE_5_3 | Reported |
+|---|---|---|---|
+| `BJPK 79MF` | non-XL | XL | XL |
+| `BJPK 72ME` | XL | XL | XL |
+| `BJPK 79FB` | non-XL | non-XL | non-XL |
+
+This identifies `RATE_5_3`. The clean and mechanical-reference RNG paths
+agree on all three traces. The report does not identify the save flag by name
+and does not change the external gameplay-validation grade.
+
 ## Exact-offset anchors (2026-08-21 recheck)
 
 All ranges were decoded from their actual instruction boundary, not from a

@@ -168,6 +168,42 @@ def test_dkm89mnm_hard_downpour1_canonical_curse_trace() -> None:
     assert _clean(clean) == _reference(reference)
 
 
+@pytest.mark.parametrize(
+    ("seed_text", "rate6_is_xl", "rate3_is_xl", "rate3_target"),
+    [
+        ("DKM8 9MNM", True, True, 12),
+        ("BJPK 79MF", False, True, 13),
+        ("BJPK 72ME", True, True, 11),
+        ("BJPK 79FB", False, False, 11),
+    ],
+)
+def test_progression_profile_probe_matrix_matches_clean_and_reference(
+    seed_text: str,
+    rate6_is_xl: bool,
+    rate3_is_xl: bool,
+    rate3_target: int,
+) -> None:
+    start_seed = decode_seed(seed_text)
+    rate6 = derive_alt_topology_inputs(
+        1, 4, start_seed, "HARD", generation_profile="RATE_10_6"
+    )
+    rate6_reference = derive_alt_topology_inputs_reference(
+        1, 4, start_seed, "HARD", generation_profile="RATE_10_6"
+    )
+    rate3 = derive_alt_topology_inputs(
+        1, 4, start_seed, "HARD", generation_profile="RATE_5_3"
+    )
+    rate3_reference = derive_alt_topology_inputs_reference(
+        1, 4, start_seed, "HARD", generation_profile="RATE_5_3"
+    )
+
+    assert rate6.is_xl is rate6_is_xl
+    assert rate3.is_xl is rate3_is_xl
+    assert rate3.target_room_count == rate3_target
+    assert _clean(rate6) == _reference(rate6_reference)
+    assert _clean(rate3) == _reference(rate3_reference)
+
+
 def test_alt_rejects_invalid_inputs() -> None:
     with pytest.raises(ValueError, match="stage_type 4 or 5"):
         derive_alt_topology_inputs(1, 0, 1, "NORMAL")

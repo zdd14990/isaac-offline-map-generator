@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 
+from .generation_profile import RunGenerationProfile, resolve_run_generation_profile
 from .rng import IsaacRNG
 from .stage_seed import get_initial_stage_seed
 
@@ -160,7 +161,10 @@ def derive_basement1_topology_inputs(
 
 
 def derive_basement2_topology_inputs(
-    start_seed: int, difficulty: Difficulty | str
+    start_seed: int,
+    difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> Basement2TopologyInputs:
     """Derive canonical ORIGINAL Basement II topology inputs.
 
@@ -184,7 +188,9 @@ def derive_basement2_topology_inputs(
         second, level_rng.shift1, level_rng.shift2, level_rng.shift3
     )
     copied_draws: list[int] = []
-    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
     curse_gate = copied_rng.next()
     copied_draws.append(curse_gate)
     curse_succeeded = curse_gate % curse_rate == 0
@@ -238,7 +244,10 @@ def derive_basement2_topology_inputs(
 
 
 def derive_caves1_topology_inputs(
-    start_seed: int, difficulty: Difficulty | str
+    start_seed: int,
+    difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> Caves1TopologyInputs:
     """Derive canonical ORIGINAL Caves-I topology inputs from the run seed.
 
@@ -261,7 +270,9 @@ def derive_caves1_topology_inputs(
         second, level_rng.shift1, level_rng.shift2, level_rng.shift3
     )
     copied_draws: list[int] = []
-    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
     curse_gate = copied_rng.next()
     copied_draws.append(curse_gate)
     curse_succeeded = curse_gate % curse_rate == 0
@@ -362,7 +373,10 @@ class Caves2TopologyInputs:
 
 
 def derive_caves2_topology_inputs(
-    start_seed: int, difficulty: Difficulty | str
+    start_seed: int,
+    difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> Caves2TopologyInputs:
     """Derive canonical ORIGINAL Caves-II topology inputs from the run seed."""
 
@@ -379,7 +393,9 @@ def derive_caves2_topology_inputs(
         second, level_rng.shift1, level_rng.shift2, level_rng.shift3
     )
     copied_draws: list[int] = []
-    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
     curse_gate = copied_rng.next()
     copied_draws.append(curse_gate)
     curse_succeeded = curse_gate % curse_rate == 0
@@ -466,7 +482,10 @@ class Depths1TopologyInputs:
 
 
 def derive_depths1_topology_inputs(
-    start_seed: int, difficulty: Difficulty | str
+    start_seed: int,
+    difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> Depths1TopologyInputs:
     """Derive canonical ORIGINAL Depths-I topology inputs from the run seed."""
 
@@ -483,7 +502,9 @@ def derive_depths1_topology_inputs(
         second, level_rng.shift1, level_rng.shift2, level_rng.shift3
     )
     copied_draws: list[int] = []
-    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
     curse_gate = copied_rng.next()
     copied_draws.append(curse_gate)
     curse_succeeded = curse_gate % curse_rate == 0
@@ -580,7 +601,10 @@ class Depths2TopologyInputs:
 
 
 def derive_depths2_topology_inputs(
-    start_seed: int, difficulty: Difficulty | str
+    start_seed: int,
+    difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> Depths2TopologyInputs:
     """Derive canonical ORIGINAL Depths-II topology inputs from the run seed."""
 
@@ -597,7 +621,9 @@ def derive_depths2_topology_inputs(
         second, level_rng.shift1, level_rng.shift2, level_rng.shift3
     )
     copied_draws: list[int] = []
-    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
     curse_gate = copied_rng.next()
     copied_draws.append(curse_gate)
     curse_succeeded = curse_gate % curse_rate == 0
@@ -683,7 +709,10 @@ class Womb1TopologyInputs:
 
 
 def derive_womb1_topology_inputs(
-    start_seed: int, difficulty: Difficulty | str
+    start_seed: int,
+    difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> Womb1TopologyInputs:
     """Derive canonical ORIGINAL Womb-I topology inputs from the run seed."""
 
@@ -700,7 +729,9 @@ def derive_womb1_topology_inputs(
         second, level_rng.shift1, level_rng.shift2, level_rng.shift3
     )
     copied_draws: list[int] = []
-    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
     curse_gate = copied_rng.next()
     copied_draws.append(curse_gate)
     curse_succeeded = curse_gate % curse_rate == 0
@@ -796,7 +827,10 @@ class Womb2TopologyInputs:
 
 
 def derive_womb2_topology_inputs(
-    start_seed: int, difficulty: Difficulty | str
+    start_seed: int,
+    difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> Womb2TopologyInputs:
     """Derive canonical ORIGINAL Womb-II topology inputs from the run seed."""
 
@@ -813,7 +847,9 @@ def derive_womb2_topology_inputs(
         second, level_rng.shift1, level_rng.shift2, level_rng.shift3
     )
     copied_draws: list[int] = []
-    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
     curse_gate = copied_rng.next()
     copied_draws.append(curse_gate)
     curse_succeeded = curse_gate % curse_rate == 0
@@ -922,6 +958,8 @@ def derive_alt_topology_inputs(
     stage_type: int,
     start_seed: int,
     difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> AltTopologyInputs:
     """Derive alternate-route topology inputs (stage_type 4/5, levels 1..6)."""
 
@@ -943,7 +981,9 @@ def derive_alt_topology_inputs(
         second, level_rng.shift1, level_rng.shift2, level_rng.shift3
     )
     copied_draws: list[int] = []
-    curse_rate = 40 if difficulty_value is Difficulty.HARD else 80
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
     curse_gate = copied_rng.next()
     copied_draws.append(curse_gate)
     curse_succeeded = curse_gate % curse_rate == 0

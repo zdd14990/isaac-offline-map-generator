@@ -102,10 +102,18 @@ def test_mausoleum1_mandatory_end_room_block_fires(difficulty: str) -> None:
     )
 
 
-@pytest.mark.parametrize("difficulty,seed", (("NORMAL", 520), ("HARD", 236)))
-def test_mausoleum1_natural_xl_matches_reference(
-    difficulty: str, seed: int
-) -> None:
+@pytest.mark.parametrize("difficulty", ("NORMAL", "HARD"))
+def test_mausoleum1_natural_xl_matches_reference(difficulty: str) -> None:
+    seed = next(
+        (
+            candidate
+            for candidate in range(1, 20_001)
+            if derive_alt_topology_inputs(5, 4, candidate, difficulty).is_xl
+        ),
+        None,
+    )
+    if seed is None:
+        raise AssertionError(f"no XL Mausoleum I seed found in {difficulty}")
     inputs = derive_alt_topology_inputs(5, 4, seed, difficulty)
     assert inputs.is_xl
     clean = generate_mausoleum1_lifecycle(

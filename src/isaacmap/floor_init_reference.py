@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .generation_profile import RunGenerationProfile, resolve_run_generation_profile
 from .stage_seed import get_initial_stage_seed
 
 
@@ -57,7 +58,10 @@ class ReferenceCaves1TopologyInputs:
 
 
 def derive_basement2_topology_inputs_reference(
-    start_seed: int, difficulty: str
+    start_seed: int,
+    difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> ReferenceBasement2TopologyInputs:
     if difficulty not in ("NORMAL", "HARD"):
         raise ValueError("difficulty must be NORMAL or HARD")
@@ -68,7 +72,7 @@ def derive_basement2_topology_inputs_reference(
     copied_values: list[int] = []
     copied = _advance(copied)
     copied_values.append(copied)
-    rate = 40 if difficulty == "HARD" else 80
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
     gate = copied % rate == 0
     selector = None
     curse = 0
@@ -115,7 +119,10 @@ def derive_basement2_topology_inputs_reference(
 
 
 def derive_caves1_topology_inputs_reference(
-    start_seed: int, difficulty: str
+    start_seed: int,
+    difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> ReferenceCaves1TopologyInputs:
     if difficulty not in ("NORMAL", "HARD"):
         raise ValueError("difficulty must be NORMAL or HARD")
@@ -124,7 +131,7 @@ def derive_caves1_topology_inputs_reference(
     second = _advance(first)
     copied = _advance(second)
     copied_values = [copied]
-    rate = 40 if difficulty == "HARD" else 80
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
     gate = copied % rate == 0
     selector = None
     curse = 0
@@ -188,7 +195,10 @@ class ReferenceCaves2TopologyInputs:
 
 
 def derive_caves2_topology_inputs_reference(
-    start_seed: int, difficulty: str
+    start_seed: int,
+    difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> ReferenceCaves2TopologyInputs:
     if difficulty not in ("NORMAL", "HARD"):
         raise ValueError("difficulty must be NORMAL or HARD")
@@ -199,7 +209,7 @@ def derive_caves2_topology_inputs_reference(
     copied_values: list[int] = []
     copied = _advance(copied)
     copied_values.append(copied)
-    rate = 40 if difficulty == "HARD" else 80
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
     gate = copied % rate == 0
     selector = None
     curse = 0
@@ -268,7 +278,10 @@ class ReferenceDepths1TopologyInputs:
 
 
 def derive_depths1_topology_inputs_reference(
-    start_seed: int, difficulty: str
+    start_seed: int,
+    difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> ReferenceDepths1TopologyInputs:
     if difficulty not in ("NORMAL", "HARD"):
         raise ValueError("difficulty must be NORMAL or HARD")
@@ -277,7 +290,7 @@ def derive_depths1_topology_inputs_reference(
     second = _advance(first)
     copied = _advance(second)
     copied_values = [copied]
-    rate = 40 if difficulty == "HARD" else 80
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
     gate = copied % rate == 0
     selector = None
     curse = 0
@@ -341,7 +354,10 @@ class ReferenceDepths2TopologyInputs:
 
 
 def derive_depths2_topology_inputs_reference(
-    start_seed: int, difficulty: str
+    start_seed: int,
+    difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> ReferenceDepths2TopologyInputs:
     if difficulty not in ("NORMAL", "HARD"):
         raise ValueError("difficulty must be NORMAL or HARD")
@@ -352,7 +368,7 @@ def derive_depths2_topology_inputs_reference(
     copied_values: list[int] = []
     copied = _advance(copied)
     copied_values.append(copied)
-    rate = 40 if difficulty == "HARD" else 80
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
     gate = copied % rate == 0
     selector = None
     curse = 0
@@ -420,7 +436,10 @@ class ReferenceWomb1TopologyInputs:
 
 
 def derive_womb1_topology_inputs_reference(
-    start_seed: int, difficulty: str
+    start_seed: int,
+    difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> ReferenceWomb1TopologyInputs:
     if difficulty not in ("NORMAL", "HARD"):
         raise ValueError("difficulty must be NORMAL or HARD")
@@ -431,7 +450,7 @@ def derive_womb1_topology_inputs_reference(
     copied_values: list[int] = []
     copied = _advance(copied)
     copied_values.append(copied)
-    rate = 40 if difficulty == "HARD" else 80
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
     gate = copied % rate == 0
     selector = None
     curse = 0
@@ -510,7 +529,10 @@ class ReferenceWomb2TopologyInputs:
 
 
 def derive_womb2_topology_inputs_reference(
-    start_seed: int, difficulty: str
+    start_seed: int,
+    difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> ReferenceWomb2TopologyInputs:
     if difficulty not in ("NORMAL", "HARD"):
         raise ValueError("difficulty must be NORMAL or HARD")
@@ -521,7 +543,7 @@ def derive_womb2_topology_inputs_reference(
     copied_values: list[int] = []
     copied = _advance(copied)
     copied_values.append(copied)
-    rate = 40 if difficulty == "HARD" else 80
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
     gate = copied % rate == 0
     selector = None
     curse = 0
@@ -599,6 +621,8 @@ def derive_alt_topology_inputs_reference(
     stage_type: int,
     start_seed: int,
     difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> ReferenceAltTopologyInputs:
     if stage_type not in (4, 5):
         raise ValueError("derive_alt_topology_inputs_reference requires stage_type 4 or 5")
@@ -614,7 +638,7 @@ def derive_alt_topology_inputs_reference(
     copied_values: list[int] = []
     copied = _advance(copied)
     copied_values.append(copied)
-    rate = 40 if difficulty == "HARD" else 80
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
     gate = copied % rate == 0
     selector = None
     curse = 0

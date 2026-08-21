@@ -104,8 +104,18 @@ def test_mines1_mandatory_end_room_block_fires(difficulty: str) -> None:
     )
 
 
-@pytest.mark.parametrize("difficulty,seed", (("NORMAL", 787), ("HARD", 229)))
-def test_mines1_natural_xl_matches_reference(difficulty: str, seed: int) -> None:
+@pytest.mark.parametrize("difficulty", ("NORMAL", "HARD"))
+def test_mines1_natural_xl_matches_reference(difficulty: str) -> None:
+    seed = next(
+        (
+            candidate
+            for candidate in range(1, 20_001)
+            if derive_alt_topology_inputs(3, 4, candidate, difficulty).is_xl
+        ),
+        None,
+    )
+    if seed is None:
+        raise AssertionError(f"no XL Mines I seed found in {difficulty}")
     inputs = derive_alt_topology_inputs(3, 4, seed, difficulty)
     assert inputs.is_xl
     clean = generate_mines1_lifecycle(
