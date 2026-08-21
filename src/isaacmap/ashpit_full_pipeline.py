@@ -49,7 +49,7 @@ def generate_ashpit_full(
     ashpit_definitions: tuple[RoomDefinition, ...],
     max_attempts: int = 100,
 ) -> Basement1FullResult:
-    """Generate Ashpit (ALT stage 2, rcs 28) from the run seed."""
+    """Generate Ashpit (ALT stage 4, StageType 5, rcs 30) from the run seed."""
     inputs = derive_alt_topology_inputs(4, 5, start_seed, difficulty)
     profile = CanonicalAshpitProfile(
         difficulty,

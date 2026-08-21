@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from isaacmap.floor_init import derive_alt_topology_inputs
+from isaacmap.floor_init import can_apply_labyrinth, derive_alt_topology_inputs
 from isaacmap.floor_init_reference import derive_alt_topology_inputs_reference
+from isaacmap.seed import decode_seed
 
 
 ALT_FLOORS = (
@@ -111,6 +112,60 @@ def test_alt_xl_targets() -> None:
     assert seen.get(1) in (9, 10), seen
     assert seen.get(3) in (21, 22, 23), seen
     assert seen.get(5) == 36, seen
+
+
+@pytest.mark.parametrize(
+    "level_stage,expected",
+    ((1, True), (2, False), (3, True), (4, False),
+     (5, True), (6, False), (7, True), (8, False)),
+)
+def test_can_apply_labyrinth_binary_floor_matrix(
+    level_stage: int, expected: bool
+) -> None:
+    assert can_apply_labyrinth(level_stage) is expected
+    assert not can_apply_labyrinth(level_stage, game_mode=2)
+    assert not can_apply_labyrinth(level_stage, game_mode=3)
+    assert not can_apply_labyrinth(level_stage, stage_transition_id=0x2C)
+
+
+def test_natural_xl_is_automatic_and_resets_on_even_alt_floors() -> None:
+    downpour1 = derive_alt_topology_inputs(1, 4, 143, "NORMAL")
+    dross = derive_alt_topology_inputs(2, 5, 143, "NORMAL")
+    mines1 = derive_alt_topology_inputs(3, 4, 787, "NORMAL")
+    ashpit = derive_alt_topology_inputs(4, 5, 787, "NORMAL")
+
+    assert downpour1.effective_curse_mask == 0x02
+    assert downpour1.is_xl
+    assert downpour1.target_room_count == 9
+    assert downpour1.required_dead_ends == 7
+    assert not dross.is_xl
+    assert not (dross.effective_curse_mask & 0x02)
+    assert mines1.is_xl
+    assert mines1.effective_curse_mask == 0x02
+    assert not ashpit.is_xl
+    assert not (ashpit.effective_curse_mask & 0x02)
+
+
+def test_dkm89mnm_hard_downpour1_canonical_curse_trace() -> None:
+    start_seed = decode_seed("DKM8 9MNM")
+    clean = derive_alt_topology_inputs(1, 4, start_seed, "HARD")
+    reference = derive_alt_topology_inputs_reference(1, 4, start_seed, "HARD")
+
+    assert start_seed == 364_417_104
+    assert clean.stage_seed == 362_265_690
+    assert clean.seed_slot == 2
+    assert clean.stage_type == 4
+    assert clean.room_config_stage == 27
+    assert clean.curse_rate_denominator == 40
+    assert clean.copied_rng_draws[0] == 163_224_774
+    assert clean.copied_rng_draws[0] % clean.curse_rate_denominator == 14
+    assert not clean.curse_gate_succeeded
+    assert clean.curse_selector is None
+    assert clean.effective_curse_mask == 0
+    assert not clean.is_xl
+    assert clean.target_room_count == 10
+    assert clean.required_dead_ends == 5
+    assert _clean(clean) == _reference(reference)
 
 
 def test_alt_rejects_invalid_inputs() -> None:

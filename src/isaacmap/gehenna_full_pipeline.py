@@ -49,7 +49,7 @@ def generate_gehenna_full(
     gehenna_definitions: tuple[RoomDefinition, ...],
     max_attempts: int = 100,
 ) -> Basement1FullResult:
-    """Generate Gehenna (ALT stage 2, rcs 28) from the run seed."""
+    """Generate Gehenna (ALT stage 6, StageType 5, rcs 32) from the run seed."""
     inputs = derive_alt_topology_inputs(6, 5, start_seed, difficulty)
     profile = CanonicalGehennaProfile(
         difficulty,

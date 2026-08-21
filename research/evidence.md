@@ -888,9 +888,9 @@ the canonical ORIGINAL route:
 
 ## Round 5 (2026-08-18, complete): ALT floors 1+..6+ OPEN
 
-- **All six ALT floors implemented and registered** (Downpour I/II, Mines
-  I/II, Mausoleum I/II). Each floor: 50 NORMAL + 50 HARD ordered
-  clean-vs-reference comparisons, 0 mismatches (artifacts
+- **All six ALT floors implemented and registered** (Downpour I, Dross,
+  Mines I, Ashpit, Mausoleum I, Gehenna). Each floor: 50 NORMAL + 50 HARD
+  ordered clean-vs-reference comparisons, 0 mismatches (artifacts
   `research/binary/alt{downpour1,dross,mines1,ashpit,mausoleum1,gehenna}_
   100_differential_report.json`; the downpour/dross pairs keep their
   round-5 file names `alt1_/alt2_`). Evidence grade per floor:
@@ -912,12 +912,50 @@ the canonical ORIGINAL route:
   {0,1} {1+..6+}` produce real 1400x900 PNGs (`B91199AC_ALT_{NORMAL|HARD}_
   stage{N}_{ver}.png`, PARTIAL_BINARY in the JSON payload); MAIN `stage1`
   vs ALT `stage1` cache filenames stay separated by route.
-- **UI**: ALT floor dropdown entries (Downpour I/II, Mines I/II, Mausoleum
-  I/II) tagged SUPPORTED; `supported_stage_summary()` is now route-aware:
-  "stage 1-8（Baseline I 到 Womb II）；stage 1+-6+（Downpour I 到 Mausoleum
-  II）".
+- **UI**: ALT floor dropdown entries (Downpour I, Dross, Mines I, Ashpit,
+  Mausoleum I, Gehenna) tagged SUPPORTED; `supported_stage_summary()` is
+  route-aware: "stage 1-8（Baseline I 到 Womb II）；stage 1+-6+（Downpour I
+  到 Gehenna）".
 - Generator tests: 617 passed (545 baseline + 72 ALT). MAIN 1..8 unchanged
   this round.
 - Remaining boundary: Corpse (rcs 33, `-10` descriptor domain, level 8
   fixed Mother 88) and the Sheol/Cathedral/Chest/Dark Room/Void endings
   remain FAIL CLOSED.
+
+## 2026-08-21 StageType5 / natural XL debug audit
+
+The user-visible ALT 2+/4+ failures were not generation-algorithm failures.
+On the incoming worktree, the factual bot names were `Dross` and `Ashpit`, but
+the single support registry still used `Downpour II` and `Mines II`. Gehenna
+had the same `Gehenna` versus `Mausoleum II` mismatch, so 6+ also failed. All
+three requests returned `UNSUPPORTED_FLOOR` in
+`bot_api.generate_map_image_for_bot` before `generate_preview` dispatched a
+pipeline. The registry keys/spec labels were synchronized; the fail-closed
+guard remains intact.
+
+Exact-offset static recheck against SHA-256
+`3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b`:
+
+- StageType5 compare: VA `0x0082D0BE`, RVA `0x0042D0BE`, file
+  `0x0042C4BE`, bytes `83 fa 05` (`cmp edx,5`);
+- branch target/formula: VA `0x0082D0C3`, RVA `0x0042D0C3`, file
+  `0x0042C4C3`, bytes `8d 04 4d 1c 00 00 00`
+  (`28 + 2*((stage-1)>>1)` -> 28/30/32);
+- Labyrinth eligibility entry: VA `0x007385C0`, RVA `0x003385C0`, file
+  `0x003379C0`; odd-stage compare at VA `0x007385DF`, stage<8 at
+  `0x007385E4`, game-mode 2/3 rejects at `0x007385EF/0x007385F4`;
+- curse rate starts at VA `0x00744CF3` (`80`), HARD selects `40` at
+  `0x00744DB5`; gate call is VA `0x00744F03`; selector `%6` dispatch is VA
+  `0x00744F6C`; Labyrinth sets bit 2 at VA `0x00744F84`.
+
+`DKM8 9MNM` HARD 1+ clean/reference trace: uint32 `364417104`, slot 2,
+stage seed `362265690`, StageType 4, rcs 27, curse RNG copied state
+`2722452983`, gate draw `163224774`, rate 40, remainder 14, selector not
+consumed, mask 0, `can_apply_labyrinth=true`, effective `is_xl=false`, target
+10, required dead ends 5. Counterfactual next draw `3869886000 % 6 == 0`
+matters only to a progressed rate-6/rate-3 profile, which is not exposed.
+
+Validation: ALT 1+..6+ each reran 50 NORMAL + 50 HARD full clean/reference
+comparisons (600 total, zero mismatch); targeted automatic XL pipelines for
+Downpour I, Mines I and Mausoleum I matched; complete suite `633 passed`.
+External gameplay remains `NOT_EXTERNALLY_VALIDATED_GAMEPLAY`.

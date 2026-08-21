@@ -1,4 +1,4 @@
-"""True clean-vs-reference differential for the Gehenna (Downpour II) layout + tail."""
+"""True clean-vs-reference differential for the Gehenna layout + tail."""
 
 from __future__ import annotations
 

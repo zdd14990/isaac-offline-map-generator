@@ -700,10 +700,10 @@ SUPPORTED_FLOORS: dict[str, PreviewFloorSpec] = {
         ("Downpour I",),
         _generate_downpour1,
     ),
-    "Downpour II": PreviewFloorSpec(
-        "Downpour II",
+    "Dross": PreviewFloorSpec(
+        "Dross",
         "dross",
-        ("Downpour I", "Downpour II"),
+        ("Downpour I", "Dross"),
         _generate_dross,
     ),
     "Mines I": PreviewFloorSpec(
@@ -712,10 +712,10 @@ SUPPORTED_FLOORS: dict[str, PreviewFloorSpec] = {
         ("Mines I",),
         _generate_mines1,
     ),
-    "Mines II": PreviewFloorSpec(
-        "Mines II",
+    "Ashpit": PreviewFloorSpec(
+        "Ashpit",
         "ashpit",
-        ("Mines I", "Mines II"),
+        ("Mines I", "Ashpit"),
         _generate_ashpit,
     ),
     "Mausoleum I": PreviewFloorSpec(
@@ -724,10 +724,10 @@ SUPPORTED_FLOORS: dict[str, PreviewFloorSpec] = {
         ("Mausoleum I",),
         _generate_mausoleum1,
     ),
-    "Mausoleum II": PreviewFloorSpec(
-        "Mausoleum II",
+    "Gehenna": PreviewFloorSpec(
+        "Gehenna",
         "gehenna",
-        ("Mausoleum I", "Mausoleum II"),
+        ("Mausoleum I", "Gehenna"),
         _generate_gehenna,
     ),
 }

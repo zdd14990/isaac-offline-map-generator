@@ -58,29 +58,41 @@ Other game versions are not guaranteed to be compatible.
 
 ## Supported floors
 
-Current support registry (`SUPPORTED_FLOORS`, canonical vanilla ORIGINAL
-route, NORMAL / HARD):
+Current support registry (`SUPPORTED_FLOORS`, canonical vanilla NORMAL /
+HARD):
 
 ```text
-Basement I     (stage 1)
-Basement II    (stage 2)
-Caves I        (stage 3)
-Caves II       (stage 4)
-Depths I       (stage 5)
-Depths II      (stage 6)
+MAIN:
+1  Basement I      CONFIRMED_BINARY
+2  Basement II     CONFIRMED_BINARY
+3  Caves I         CONFIRMED_BINARY
+4  Caves II        CONFIRMED_BINARY
+5  Depths I        CONFIRMED_BINARY
+6  Depths II       CONFIRMED_BINARY
+7  Womb I          PARTIAL_BINARY
+8  Womb II         PARTIAL_BINARY
+
+ALT:
+1+ Downpour I      PARTIAL_BINARY
+2+ Dross           PARTIAL_BINARY
+3+ Mines I         PARTIAL_BINARY
+4+ Ashpit          PARTIAL_BINARY
+5+ Mausoleum I     PARTIAL_BINARY
+6+ Gehenna         PARTIAL_BINARY
 ```
 
-Every other floor (Womb and later, alternate chapters, mods, arbitrary
-gameplay state) is **UNSUPPORTED — FAIL CLOSED**: the generator rejects it
-instead of approximating. The registry in `src/isaacmap/preview.py` is the
-single source of truth.
+MAIN `1`..`6` are `CONFIRMED_BINARY` (20,000-seed differentials, zero
+mismatch). MAIN `7`/`8` and ALT `1+`..`6+` are `PARTIAL_BINARY` (100 ordered
+comparisons per floor, zero mismatch — intentionally capped; that grade is
+reserved below `CONFIRMED_BINARY`). `PARTIAL_BINARY` never implies
+`EXTERNALLY_VALIDATED_GAMEPLAY`.
 
-The headless API (`isaacmap.bot_api`) already understands the full user-facing
-token set — main route `1..8` and alternate route `1+..6+` — with
-route-aware cache keys, but generation for Womb I/II (`7`/`8`) and the
-alternate floors (`1+..6+`) remains fail closed until their post-layout
-lifecycle tail (including the `-10` descriptor and stage 7/8 / stage-type 4/5
-branches) is reconstructed with binary evidence. See `STATUS.md`.
+Everything else — ALT `7+`/`8+` (Corpse, Mother route), Sheol, Cathedral,
+The Chest, Dark Room, Void, mods, arbitrary gameplay state — is
+**UNSUPPORTED — FAIL CLOSED**: the generator rejects it instead of
+approximating. The registry in `src/isaacmap/preview.py` is the single
+source of truth; the headless API (`isaacmap.bot_api`) validates tokens
+route-aware (`MAIN 1..8`, `ALT 1+..6+`) and never opens ALT 7/8.
 
 ## Evidence model
 
@@ -89,11 +101,14 @@ Two independent evidence dimensions are tracked separately:
 - `CONFIRMED_BINARY` — behavior reproduced from the exact frozen executable
   via static analysis and differential comparison against an independent
   mechanical reference (20,000 seeds per floor, zero mismatch).
+- `PARTIAL_BINARY` — implemented from binary-confirmed parameters with a
+  100-comparison per-floor corpus (Womb I/II, all ALT floors).
 - `NOT_EXTERNALLY_VALIDATED_GAMEPLAY` — the reconstruction has not been
   compared against live in-game runs on a real save.
 
-`CONFIRMED_BINARY` does not imply `EXTERNALLY_VALIDATED_GAMEPLAY`. See
-`STATUS.md` for the precise input contract and evidence boundary.
+`CONFIRMED_BINARY` / `PARTIAL_BINARY` do not imply
+`EXTERNALLY_VALIDATED_GAMEPLAY`. See `STATUS.md` for the precise input
+contract and evidence boundary.
 
 ## How it works
 

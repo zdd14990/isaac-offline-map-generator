@@ -1,4 +1,4 @@
-"""True clean-vs-reference differential for the Mausoleum1 (Downpour II) layout + tail."""
+"""True clean-vs-reference differential for the Mausoleum I layout + tail."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ import pytest
 from isaacmap.basement1_full_pipeline_differential import compare_basement1_full
 from isaacmap.boss_pool import MAUSOLEUM_POOL_INDEX, load_boss_pool_xml
 from isaacmap.boss_pool_reference import BossPoolEntryReference
+from isaacmap.floor_init import derive_alt_topology_inputs
 from isaacmap.mausoleum1_full_pipeline_reference import generate_mausoleum1_full_reference
 from isaacmap.mausoleum1_lifecycle import generate_mausoleum1_lifecycle
 from isaacmap.post_layout_lifecycle_differential import compare_post_layout_lifecycle
@@ -98,4 +99,31 @@ def test_mausoleum1_mandatory_end_room_block_fires(difficulty: str) -> None:
     assert not any(
         block.operation == "AltEndRoom" and block.config is not None
         for block in attempt.through_secret.blocks
+    )
+
+
+@pytest.mark.parametrize("difficulty,seed", (("NORMAL", 520), ("HARD", 236)))
+def test_mausoleum1_natural_xl_matches_reference(
+    difficulty: str, seed: int
+) -> None:
+    inputs = derive_alt_topology_inputs(5, 4, seed, difficulty)
+    assert inputs.is_xl
+    clean = generate_mausoleum1_lifecycle(
+        seed,
+        difficulty,
+        mausoleum1_boss_entries=MAUSOLEUM1_BOSSES,
+        special_definitions=SPECIAL,
+        mausoleum1_definitions=MAUSOLEUM1,
+        blue_womb_definitions=BLUE_WOMB,
+    )
+    reference = generate_mausoleum1_full_reference(
+        seed,
+        difficulty,
+        mausoleum1_boss_entries=MAUSOLEUM1_BOSS_REFS,
+        special_definitions=SPECIAL,
+        mausoleum1_definitions=MAUSOLEUM1,
+    )
+    compare_basement1_full(clean.layout, reference)
+    assert clean.layout.attempts[clean.layout.accepted_attempt_index].target_room_count == (
+        inputs.target_room_count
     )

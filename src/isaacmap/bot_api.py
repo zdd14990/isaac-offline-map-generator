@@ -60,11 +60,11 @@ MAIN_FLOOR_NAMES: dict[int, str] = {
 }
 ALT_FLOOR_NAMES: dict[int, str] = {
     1: "Downpour I",
-    2: "Downpour II",
+    2: "Dross",
     3: "Mines I",
-    4: "Mines II",
+    4: "Ashpit",
     5: "Mausoleum I",
-    6: "Mausoleum II",
+    6: "Gehenna",
 }
 FLOOR_NAMES: dict[str, dict[int, str]] = {
     MAIN_ROUTE: MAIN_FLOOR_NAMES,
@@ -101,11 +101,12 @@ def floor_name_for(route: str, stage_number: int) -> str | None:
     """Return the factual floor name for a route/stage, or ``None``."""
     return FLOOR_NAMES.get(route, {}).get(stage_number)
 
-# Canonical stage-number -> floor-name mapping, derived from the insertion
-# order of the single ``SUPPORTED_FLOORS`` registry (== LevelStage order
-# 1..6).  Adding a later floor to the registry automatically extends this.
+# Backward-compatible numeric mapping for the MAIN route.  ALT has its own
+# overlapping 1+..6+ namespace and is reported separately by ``--supported``.
 STAGE_TO_FLOOR: dict[int, str] = {
-    stage: name for stage, name in enumerate(SUPPORTED_FLOORS, start=1)
+    stage: name
+    for stage, name in MAIN_FLOOR_NAMES.items()
+    if name in SUPPORTED_FLOORS
 }
 FLOOR_TO_STAGE: dict[str, int] = {name: stage for stage, name in STAGE_TO_FLOOR.items()}
 
@@ -116,7 +117,7 @@ def stage_number_to_floor_name(stage_number: int) -> str | None:
 
 
 def supported_stage_numbers() -> tuple[int, ...]:
-    """Return the currently supported numeric stages, ascending."""
+    """Return the supported MAIN-route numeric stages, ascending."""
     return tuple(sorted(STAGE_TO_FLOOR))
 
 

@@ -200,11 +200,11 @@ formulas, `get_room_config_stage`, the stage-type 4/5 lifecycle,
 | Floor | Token | Level | StageType | rcs | pool | slot | Evidence |
 |-------|-------|-------|-----------|-----|------|------|----------|
 | Downpour I | `1+` | 1 | 4 | 27 | 27 | 2 | PARTIAL_BINARY |
-| Downpour II (Dross) | `2+` | 2 | 5 | 28 | 28 | 3 | PARTIAL_BINARY |
+| Dross | `2+` | 2 | 5 | 28 | 28 | 3 | PARTIAL_BINARY |
 | Mines I | `3+` | 3 | 4 | 29 | 29 | 4 | PARTIAL_BINARY |
-| Mines II (Ashpit) | `4+` | 4 | 5 | 30 | 30 | 5 | PARTIAL_BINARY |
+| Ashpit | `4+` | 4 | 5 | 30 | 30 | 5 | PARTIAL_BINARY |
 | Mausoleum I | `5+` | 5 | 4 | 31 | 31 | 6 | PARTIAL_BINARY |
-| Mausoleum II (Gehenna) | `6+` | 6 | 5 | 32 | 32 | 7 | PARTIAL_BINARY |
+| Gehenna | `6+` | 6 | 5 | 32 | 32 | 7 | PARTIAL_BINARY |
 
 Per floor: 50 NORMAL + 50 HARD ordered clean-vs-reference comparisons, 0
 mismatches (`research/binary/alt{downpour1,dross,mines1,ashpit,mausoleum1,
@@ -343,10 +343,7 @@ The product-facing UI remains explicitly a Research Preview because external
 gameplay validation is unavailable. No later floor or noncanonical profile is
 silently approximated.
 
-Current local result: `617 passed` (545 round-5 baseline + 72 new
-ALT-floor tests: `tests/differential/test_{downpour1,dross,mines1,ashpit,
-mausoleum1,gehenna}_full_pipeline_differential.py`, 18 per floor, plus the
-expanded `test_alt_floors_1_to_6_generate_for_bot` API test).
+Current local result (2026-08-21 audit): `633 passed`, no failures or skips.
 
 Downpour I full-layout/lifecycle differential: 50 NORMAL and 50 HARD start
 seeds (100 comparisons) against an independent mechanical reference, with
@@ -355,12 +352,11 @@ first-half XL mandatory end room. Evidence grade `PARTIAL_BINARY`.
 Artifact: `research/binary/alt1_100_differential_report.json` (round-5 name
 kept: chapter pair "Downpour I").
 
-Downpour II (Dross) full-layout/lifecycle differential: 50 NORMAL and 50
-HARD start seeds (100 comparisons), zero mismatch. First-half mandatory end
-room placed when a matching dead end exists (topology-dependent). Evidence
-grade `PARTIAL_BINARY`. Artifact:
-`research/binary/alt2_100_differential_report.json` (round-5 name kept:
-chapter pair "Downpour II").
+Dross full-layout/lifecycle differential: 50 NORMAL and 50 HARD start seeds
+(100 comparisons), zero mismatch. First-half mandatory end room placed when
+a matching dead end exists (topology-dependent). Evidence grade
+`PARTIAL_BINARY`. Artifact: `research/binary/alt2_100_differential_report.json`
+(round-5 file name kept).
 
 Mines I full-layout/lifecycle differential: 50 NORMAL and 50 HARD start
 seeds (100 comparisons), zero mismatch, plus targeted XL fixtures (seeds
@@ -369,9 +365,8 @@ keeps the mandatory end room a no-op even on XL. Evidence grade
 `PARTIAL_BINARY`. Artifact:
 `research/binary/altmines1_100_differential_report.json`.
 
-Ashpit (Mines II) full-layout/lifecycle differential: 50 NORMAL and 50 HARD
-start seeds (100 comparisons), zero mismatch. Evidence grade
-`PARTIAL_BINARY`. Artifact:
+Ashpit full-layout/lifecycle differential: 50 NORMAL and 50 HARD start seeds
+(100 comparisons), zero mismatch. Evidence grade `PARTIAL_BINARY`. Artifact:
 `research/binary/altashpit_100_differential_report.json`.
 
 Mausoleum I full-layout/lifecycle differential: 50 NORMAL and 50 HARD start
@@ -380,10 +375,10 @@ seeds (100 comparisons), zero mismatch, plus targeted XL fixtures (seeds
 level outside both half sets. Evidence grade `PARTIAL_BINARY`. Artifact:
 `research/binary/altmausoleum1_100_differential_report.json`.
 
-Gehenna (Mausoleum II) full-layout/lifecycle differential: 50 NORMAL and 50
-HARD start seeds (100 comparisons), zero mismatch, with the fixed
-Mom-Mausoleum (89) boss verified across seeds (pool-32 RNG untouched).
-Evidence grade `PARTIAL_BINARY`. Artifact:
+Gehenna full-layout/lifecycle differential: 50 NORMAL and 50 HARD start
+seeds (100 comparisons), zero mismatch, with the fixed Mom-Mausoleum (89)
+boss verified across seeds (pool-32 RNG untouched). Evidence grade
+`PARTIAL_BINARY`. Artifact:
 `research/binary/altgehenna_100_differential_report.json`.
 
 Caves I full-layout/lifecycle differential: 10,000 NORMAL and 10,000 HARD
@@ -538,7 +533,7 @@ Artifacts:
 - `research/binary/womb1_100_differential_report.json`;
 - `research/binary/womb2_100_differential_report.json`;
 - `research/binary/alt1_100_differential_report.json` (Downpour I);
-- `research/binary/alt2_100_differential_report.json` (Downpour II / Dross);
+- `research/binary/alt2_100_differential_report.json` (Dross);
 - `research/binary/altmines1_100_differential_report.json`;
 - `research/binary/altashpit_100_differential_report.json`;
 - `research/binary/altmausoleum1_100_differential_report.json`;
@@ -566,3 +561,42 @@ downgrade the complete static-binary proofs. The remaining reconstruction
 boundary is the late-game chapters after the alternate route: Corpse (rcs 33)
 uses the `-10` descriptor domain and the level 8 fixed Mother boss; the
 Sheol/Dark Room / Cathedral / Chest / Void endings remain out of scope.
+
+## Debug/audit 2026-08-21: StageType5 registry and natural XL
+
+Baseline on the incoming worktree was `615 passed, 2 failed`. Both failures
+were the same integration defect: `bot_api.ALT_FLOOR_NAMES` had already been
+renamed to the factual StageType5 resource names `Dross`, `Ashpit`, and
+`Gehenna`, while `preview.SUPPORTED_FLOORS` still used `Downpour II`,
+`Mines II`, and `Mausoleum II` as string keys. The fail-closed registry check
+therefore rejected ALT 2+/4+/6+ before floor-init or any generation pipeline.
+
+The fix synchronizes the registry/spec/replay labels; it does not weaken or
+remove the support guard. Direct pre-fix calls behind that guard proved all
+three clean StageType5 pipelines already completed with rcs 28/30/32. Static
+exact-offset decoding reconfirmed the StageType5 rcs branch at VA `0x82D0BE`
+(RVA `0x42D0BE`, file offset `0x42C4BE`) and formula instruction at VA
+`0x82D0C3` (`lea eax,[ecx*2+0x1c]`).
+
+Natural XL was already automatically derived from the stage seed and
+canonical curse roll. The clean path now names the exact binary eligibility
+predicate as `can_apply_labyrinth`; the independent reference keeps its own
+binary-like gate/selector implementation. `DKM8 9MNM` HARD 1+ decodes to
+`364417104`, uses slot 2 / stage seed `362265690`, rate 40, gate draw
+`163224774` (`%40 == 14`), consumes no selector, produces curse mask 0 and is
+not XL. The next draw would be `3869886000` (`%6 == 0`) only if a progressed
+profile selected a denominator such as 6; no progression profile was exposed.
+
+Regression evidence:
+
+- ALT 1+..6+: 50 NORMAL + 50 HARD full clean/reference comparisons per
+  floor, 600 total, zero mismatch;
+- natural XL full-pipeline fixtures: Downpour I, Mines I and Mausoleum I,
+  clean/reference equal; 1+ XL -> 2+ non-XL and 3+ XL -> 4+ non-XL reset;
+- final generator suite: `633 passed`;
+- fraq bot: `95 passed`, typecheck/build green, real subprocess PNG smoke for
+  Dross and Ashpit NORMAL/HARD plus Gehenna HARD;
+- no force-XL user/API/CLI/cache feature and no seed special case.
+
+Safety: both executable paths were only hashed/read as static PE data. The
+game executable was never launched or loaded. `NO_ISAAC_PROCESS`.

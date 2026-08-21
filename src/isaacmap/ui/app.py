@@ -43,11 +43,11 @@ FLOOR_NAMES = (
     "The Chest",
     "Dark Room",
     "Downpour I",
-    "Downpour II",
+    "Dross",
     "Mines I",
-    "Mines II",
+    "Ashpit",
     "Mausoleum I",
-    "Mausoleum II",
+    "Gehenna",
 )
 FLOOR_OPTIONS = tuple(
     (

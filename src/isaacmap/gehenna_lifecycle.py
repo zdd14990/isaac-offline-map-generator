@@ -1,4 +1,4 @@
-"""Canonical Gehenna (2+) accepted layout plus successful lifecycle handoff."""
+"""Canonical Gehenna (6+) accepted layout plus successful lifecycle handoff."""
 
 from __future__ import annotations
 

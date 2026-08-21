@@ -18,6 +18,28 @@ LEVEL_RNG_SHIFT_INDEX = 35  # (5, 9, 7), VA 0x00B1F66C.
 ALL_GENERATED_ROOM_SHAPES_MASK = sum(1 << shape for shape in range(1, 13))
 
 
+def can_apply_labyrinth(
+    level_stage: int,
+    *,
+    game_mode: int = 0,
+    stage_transition_id: int = 0,
+) -> bool:
+    """Return the binary ``Level::can_apply_labyrinth`` predicate.
+
+    RVA ``0x003385C0`` accepts only odd stages below 8 outside game modes
+    2/3 and rejects transition id ``0x2C``.  The canonical profile supplies
+    the defaults, while the explicit inputs keep eligibility separate from
+    the curse selector result.
+    """
+
+    return (
+        stage_transition_id != 0x2C
+        and level_stage % 2 == 1
+        and level_stage < 8
+        and game_mode not in (2, 3)
+    )
+
+
 @dataclass(frozen=True)
 class Basement1TopologyInputs:
     """Inputs handed to ``LevelGenerator`` on the supported research path.
@@ -932,8 +954,7 @@ def derive_alt_topology_inputs(
         copied_draws.append(curse_selector)
         choice = curse_selector % 6
         if choice == 0:
-            # Labyrinth is valid only on odd stages below Stage 8.
-            if level_stage % 2 == 1 and level_stage < 8:
+            if can_apply_labyrinth(level_stage):
                 curse_mask = 0x02
         elif choice == 1:
             curse_mask = 0x04  # Lost

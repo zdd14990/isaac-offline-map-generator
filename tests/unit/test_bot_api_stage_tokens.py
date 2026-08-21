@@ -12,6 +12,8 @@ from isaacmap.bot_api import (
     floor_name_for,
     generate_map_image_for_bot,
     parse_stage_token,
+    stage_number_to_floor_name,
+    supported_stage_numbers,
 )
 
 RESOURCE_ROOT = Path("research/input/extracted_resources/merged/resources")
@@ -39,23 +41,32 @@ def test_floor_name_for() -> None:
     assert floor_name_for(ALT_ROUTE, 1) == "Downpour I"
     assert floor_name_for(ALT_ROUTE, 3) == "Mines I"
     assert floor_name_for(ALT_ROUTE, 5) == "Mausoleum I"
-    assert floor_name_for(ALT_ROUTE, 6) == "Mausoleum II"
+    assert floor_name_for(ALT_ROUTE, 6) == "Gehenna"
     assert floor_name_for(ALT_ROUTE, 7) is None
     assert floor_name_for(MAIN_ROUTE, 9) is None
 
 
-def test_alt_floors_1_to_6_generate_for_bot(tmp_path: Path) -> None:
+def test_legacy_numeric_support_view_is_main_route_only() -> None:
+    assert supported_stage_numbers() == tuple(range(1, 9))
+    assert stage_number_to_floor_name(8) == "Womb II"
+    assert stage_number_to_floor_name(9) is None
+
+
+@pytest.mark.parametrize("difficulty", ("NORMAL", "HARD"))
+def test_alt_floors_1_to_6_generate_for_bot(
+    tmp_path: Path, difficulty: str
+) -> None:
     """All ALT floors 1+..6+ are now supported and generate real images."""
     for route, stage, floor in (
         (ALT_ROUTE, 1, "Downpour I"),
-        (ALT_ROUTE, 2, "Downpour II"),
+        (ALT_ROUTE, 2, "Dross"),
         (ALT_ROUTE, 3, "Mines I"),
-        (ALT_ROUTE, 4, "Mines II"),
+        (ALT_ROUTE, 4, "Ashpit"),
         (ALT_ROUTE, 5, "Mausoleum I"),
-        (ALT_ROUTE, 6, "Mausoleum II"),
+        (ALT_ROUTE, 6, "Gehenna"),
     ):
         result = generate_map_image_for_bot(
-            "B911 99AC", "NORMAL", stage, str(tmp_path), route=route
+            "B911 99AC", difficulty, stage, str(tmp_path), route=route
         )
         assert result.ok, (route, stage)
         assert result.floor_name == floor, (route, stage)

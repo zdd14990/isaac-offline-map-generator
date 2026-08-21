@@ -1,4 +1,4 @@
-"""Canonical Ashpit (2+) accepted layout plus successful lifecycle handoff."""
+"""Canonical Ashpit (4+) accepted layout plus successful lifecycle handoff."""
 
 from __future__ import annotations
 
