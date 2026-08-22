@@ -969,3 +969,38 @@ comparisons (600 total, zero mismatch); targeted automatic XL pipelines for
 Downpour I, Mines I and Mausoleum I matched. The same 600 ALT comparisons also
 match under `RATE_5_3`; complete suite `641 passed`.
 External gameplay remains `NOT_EXTERNALLY_VALIDATED_GAMEPLAY`.
+
+## 2026-08-22 DKM XL topology propagation audit
+
+The accepted-layout I-floor wrappers on both the clean and mechanical-
+reference sides constructed a LevelGenerator without copying the already
+derived `profile.is_xl` state.  Target/dead-end arithmetic was XL, but the
+generator's binary XL candidate-link branch remained disabled.  The shared
+integration omission explains why the previous full-pipeline differential
+could agree while producing a non-XL topology.  Clean and reference wrappers
+now set `generator.is_xl = profile.is_xl`; the cache version was bumped.
+
+`DKM8 9MNM` HARD 1+ under `RATE_5_3` now reaches the full pipeline with stage
+seed `362265690`, generator seed `3869886000`, curse mask `0x02`, XL target
+12, seven required dead ends, and shape mask `0x1FFE`.  The resulting floor
+has the XL room-count semantics (two Boss and two Treasure rooms).
+
+The supplied gameplay capture still has a different topology: exactly four
+multi-cell footprints versus two in the corrected offline topology.  A
+footprint matcher allowing translation and all eight dihedral transforms found
+no match for (a) target 4..30/dead ends 5..12/XL on-off at the current seed,
+(b) 5000 legal stage-slot mutations that retain the Labyrinth roll, or (c) a
+binary-reachable matrix spanning all 14 stage slots, 64 Level-RNG phases,
+targets 7..20, dead ends 5..9, and normal/Giant masks.  `0x802980` is a
+post-generation current-room/entity update; `0x74F0C0` reassigns configs but
+retains geometry; `0x74F360` is not reached by ordinary Downpour I XL.
+
+No screenshot-specific topology change is justified.  The formal fix is the
+binary-supported XL state propagation only; the remaining captured-layout
+mismatch stays open until a new binary-confirmed state input or environmental
+cause is identified.  No seed special case was added.
+
+Final regression: generator `642 passed`; `RATE_5_3` ALT 1+..6+ ran 50 NORMAL
+and 50 HARD clean/reference comparisons per floor (600 total, zero mismatch);
+fraq Bot `95 passed`, typecheck/build green, and real subprocess PNG smoke
+passed for DKM XL plus Dross/Ashpit NORMAL/HARD. `NO_ISAAC_PROCESS`.

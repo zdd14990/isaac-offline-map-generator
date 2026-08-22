@@ -354,8 +354,13 @@ and Sheol/Cathedral/Chest/Dark Room/Void endings stay FAIL CLOSED.
 - Natural curse/Labyrinth remains automatic under an explicit generation
   profile. `DKM89MNM` HARD 1+ is non-XL in `BASE_80_40` and XL in the target
   Bot's cross-seed-identified `RATE_5_3` profile.
-- Generator `641 passed`; `RATE_5_3` ALT 1+..6+ differential has 600
+- Generator `642 passed`; `RATE_5_3` ALT 1+..6+ differential has 600
   comparisons and zero mismatch; fraq bot `95 passed`, typecheck/build and
   real StageType5/DKM XL PNG smoke green.
+- Follow-up fixed the full-pipeline `is_xl` propagation omission. The DKM
+  result is now structurally XL (two Boss and two Treasure rooms), but its
+  four-large-room gameplay capture is still unreachable in the recovered
+  binary state matrix; keep that topology mismatch open and do not approximate
+  it or add a seed special case.
 - B/force-XL stays removed. Do not add Corpse, Sheol or Cathedral in this
   follow-up boundary.

@@ -69,6 +69,7 @@ def generate_mausoleum1_full(
     )
     run_state.room_config.reset(entries)
     generator = LevelGeneratorResearch(inputs.generator_seed)
+    generator.is_xl = profile.is_xl
     level_rng = IsaacRNG.game_constructor(inputs.generator_seed, LEVEL_SHIFT_INDEX)
     generator._m6_level_rng = level_rng
     floor_state = FloorGenerationState(

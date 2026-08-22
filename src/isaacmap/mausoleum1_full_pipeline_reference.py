@@ -64,6 +64,7 @@ def generate_mausoleum1_full_reference(
         start_seed, MAUSOLEUM_POOL_INDEX, mausoleum1_boss_entries
     )
     generator = LevelGeneratorReference(inputs.generator_seed, [])
+    generator.is_xl = profile.is_xl
     level_state = inputs.generator_seed
     target = inputs.target
     used_bits: set[int] = set(profile.special_room_used_bits)

@@ -159,6 +159,7 @@ def generate_womb1_full(
     )
 
     generator = LevelGeneratorResearch(inputs.generator_seed)
+    generator.is_xl = profile.is_xl
     level_rng = IsaacRNG.game_constructor(inputs.generator_seed, LEVEL_SHIFT_INDEX)
     generator._m6_level_rng = level_rng
 

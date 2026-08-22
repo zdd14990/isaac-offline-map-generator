@@ -101,6 +101,7 @@ def generate_caves1_full_reference(
     )
 
     generator = LevelGeneratorReference(inputs.generator_seed, [])
+    generator.is_xl = profile.is_xl
     level_state = inputs.generator_seed
     target = inputs.target
     used_bits = set(b2_tail.used_bits)

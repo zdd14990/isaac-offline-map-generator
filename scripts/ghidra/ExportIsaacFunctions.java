@@ -41,6 +41,7 @@ public class ExportIsaacFunctions extends GhidraScript {
         TARGETS.put("RNG__RandomInt", "007e9020");
         TARGETS.put("RNG__RandomFloat", "007e9080");
         TARGETS.put("RNG__Next", "007e90f0");
+        TARGETS.put("Game__update_current_room_state", "00802980");
         TARGETS.put("Isaac__log", "00a112c0");
         TARGETS.put("LevelGenerator_Room__constructor", "007381b0");
         TARGETS.put("Level__Init", "00744940");
@@ -54,6 +55,10 @@ public class ExportIsaacFunctions extends GhidraScript {
         TARGETS.put("Level__combined_curse_remove_mask", "006f95a0");
         TARGETS.put("Level__alt_path_first_half_predicate", "0074ef70");
         TARGETS.put("Level__alt_path_second_half_predicate", "0074efd0");
+        TARGETS.put("Level__alt_path_first_half_finalize", "0074f0c0");
+        TARGETS.put("Level__alt_path_second_half_finalize", "0074f360");
+        TARGETS.put("Level__set_stage_and_type", "007466d0");
+        TARGETS.put("Level__pre_init_alt_fixup", "007467c0");
         TARGETS.put("Level__query_room_config", "0082ce40");
         TARGETS.put("Level__get_room_config_stage", "0082d030");
         TARGETS.put("RoomConfig__select_room", "0082c7d0");

@@ -12,10 +12,13 @@ from isaacmap.boss_pool_reference import BossPoolEntryReference
 from isaacmap.downpour1_full_pipeline_reference import generate_downpour1_full_reference
 from isaacmap.downpour1_lifecycle import generate_downpour1_lifecycle
 from isaacmap.floor_init import derive_alt_topology_inputs
+from isaacmap.generation_profile import GENERATION_PROFILE_ENV
 from isaacmap.post_layout_lifecycle_differential import compare_post_layout_lifecycle
 from isaacmap.post_layout_lifecycle_reference import run_post_layout_lifecycle_reference
 from isaacmap.resources import load_stb
 from isaacmap.room_config_reference import entries_from_definitions_reference
+from isaacmap.seed import decode_seed
+from isaacmap.topology import generate_topology_research
 
 
 ROOT = Path("research/input/extracted_resources/merged/resources")
@@ -105,3 +108,32 @@ def test_downpour1_xl_seed_matches_reference(difficulty: str) -> None:
         downpour_definitions=DOWNPOUR,
     )
     compare_basement1_full(clean.layout, reference)
+
+
+def test_dkm_rate3_full_pipeline_uses_xl_topology_state(monkeypatch) -> None:
+    """The full pipeline must propagate Labyrinth into LevelGenerator."""
+
+    monkeypatch.setenv(GENERATION_PROFILE_ENV, "RATE_5_3")
+    start_seed = decode_seed("DKM8 9MNM")
+    inputs = derive_alt_topology_inputs(
+        1, 4, start_seed, "HARD", generation_profile="RATE_5_3"
+    )
+    assert inputs.is_xl
+
+    generated = generate_downpour1_lifecycle(
+        start_seed,
+        "HARD",
+        downpour_boss_entries=DOWNPOUR_BOSSES,
+        special_definitions=SPECIAL,
+        downpour_definitions=DOWNPOUR,
+        blue_womb_definitions=BLUE_WOMB,
+    )
+    expected = generate_topology_research(inputs)
+    actual = generated.layout.attempts[0].topology
+
+    assert actual.final_rng_seed == expected.final_rng_seed
+    assert [
+        (room.column, room.line, room.shape) for room in actual.rooms
+    ] == [
+        (room.column, room.line, room.shape) for room in expected.rooms
+    ]

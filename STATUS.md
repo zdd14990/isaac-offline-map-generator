@@ -616,3 +616,29 @@ Regression evidence:
 
 Safety: both executable paths were only hashed/read as static PE data. The
 game executable was never launched or loaded. `NO_ISAAC_PROCESS`.
+
+## Debug follow-up 2026-08-22: DKM XL topology
+
+The automatic curse decision was correct under the Bot's `RATE_5_3` profile,
+but every Labyrinth-capable accepted-layout I-floor wrapper created its
+LevelGenerator with the default `is_xl=false`.  Both clean and reference
+wrappers had the same integration omission, so their earlier equality did not
+expose it.  The wrappers now propagate the derived XL state and the Bot cache
+version changed.
+
+`DKM8 9MNM` HARD 1+ now enters topology with `is_xl=true`, target 12 and seven
+required dead ends and produces XL second Boss/Treasure rooms.  Its corrected
+offline topology still differs from the supplied game capture.  Strict
+occupied-footprint searches across current parameters, 5000 legal stage-seed
+mutations, and the 14-slot/64-phase binary-reachable state matrix found no
+captured-layout match.  Static checks also excluded the post-generation update
+and ALT config-fixup helpers as sources of the four-large-room geometry.
+
+No topology approximation or seed special case was introduced.  The captured
+layout mismatch remains open pending a new binary-confirmed state input or
+environmental cause.
+
+Final validation: generator `642 passed`; `RATE_5_3` ALT 1+..6+ differential
+50 NORMAL + 50 HARD per floor, 600 total and zero mismatch; fraq Bot `95
+passed`, typecheck/build green, real subprocess PNG smoke green for DKM XL and
+Dross/Ashpit NORMAL/HARD. `NO_ISAAC_PROCESS`.

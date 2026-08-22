@@ -90,3 +90,59 @@ shifted linear buffer:
 | Labyrinth eligibility call | `0x744F73` | `0x344F73` | `0x344373` | call target `0x7385C0` |
 | set Labyrinth bit | `0x744F84` | `0x344F84` | `0x344384` | `83 4f 0c 02` |
 | eligibility entry | `0x7385C0` | `0x3385C0` | `0x3379C0` | `8b 15 78 16 c7 00` |
+
+## Full-pipeline XL propagation audit (2026-08-22)
+
+The curse/floor-init trace was correct, but the accepted-layout wrappers had
+an integration defect.  They constructed `LevelGeneratorResearch` or
+`LevelGeneratorReference` and left the object's `is_xl` byte at its default
+false value.  The already-derived XL target and dead-end count were passed,
+but the binary `%10` multi-neighbor branch inside topology generation was not
+enabled.  This affected both sides of the earlier full-pipeline differential,
+so clean/reference equality did not validate this integration point.
+
+The I-floor wrappers now explicitly copy `profile.is_xl` into their clean and
+reference generator objects.  No force input or seed special case was added.
+The public cache support version changed so a pre-fix non-XL PNG cannot mask
+the correction.
+
+For `DKM8 9MNM` HARD Downpour I under `RATE_5_3`, the corrected full-pipeline
+input is:
+
+- stage seed `362265690`, generator seed `3869886000`;
+- gate `163224774 % 3 == 0`, selector `3869886000 % 6 == 0`;
+- curse mask `0x02`, `is_xl=true`, target 12, required dead ends 7;
+- allowed-shape mask `0x1FFE`.
+
+The corrected offline result is an XL floor (two Boss rooms and two Treasure
+rooms), but its topology still does not equal the supplied game capture.  The
+capture has exactly four multi-cell footprints in a different arrangement;
+the corrected topology has two.  Matching uses occupied cells, not renderer
+coordinates or shape labels, and accepts all eight rotations/reflections plus
+translation.
+
+Static negative searches produced no match:
+
+- current generator seed, target 4..30, dead ends 5..12, XL on/off: none;
+- the first 5000 binary `Seeds::advance_stage_slot` mutations that still roll
+  Labyrinth: none;
+- all 14 initial stage slots, the first 64 Level-RNG phases per slot, targets
+  7..20, dead ends 5..9, and normal/Giant shape masks: none.
+
+The LevelGenerator flag mapping was also rechecked at the exact function
+entry: `+0x390` is XL, `+0x391` is chapter 6, and `+0x392` is Void.  Static
+decompilation excludes `0x802980` as a topology rebuild (it updates the
+current room/entities), excludes `0x74F0C0` as a geometry source (it reassigns
+configs while retaining anchors/shapes/connections), and confirms that the
+fixed-geometry helper `0x74F360` belongs to the other ALT pairing flow and is
+not reached by ordinary Downpour I XL.
+
+Therefore the PE-backed correction is limited to propagating `is_xl`.  The
+captured four-large-room topology is not currently reachable from the
+recovered canonical state families, so changing the topology algorithm to
+imitate it would be an unsupported approximation.  The remaining mismatch is
+open pending a new binary-confirmed input or environmental cause.
+
+Regression: generator `642 passed`; `RATE_5_3` ALT 1+..6+ clean/reference
+matrix 600 comparisons, zero mismatch; fraq Bot `95 passed`, typecheck/build
+green, and real DKM/Dross/Ashpit PNG smoke passed.
