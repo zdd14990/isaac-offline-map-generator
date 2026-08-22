@@ -46,13 +46,19 @@ class Basement1TopologyInputs:
     """Inputs handed to ``LevelGenerator`` on the supported research path.
 
     This is not a completed floor.  The scope is a fresh, ordinary, vanilla
-    run on ``STAGE1_1`` + ``STAGETYPE_ORIGINAL``, with no challenge, effective
-    curse, seed effect, ascent/daily state, Voodoo Head owner, blocked cell, or
-    stage-seed mutation before ``Level::Init``.
+    run on ``STAGE1_1`` + ``STAGETYPE_ORIGINAL``, with no challenge, seed
+    effect, ascent/daily state, Voodoo Head owner, blocked cell, or stage-seed
+    mutation before ``Level::Init``.  A naturally rolled curse is retained.
     """
 
     stage_seed: int
     level_rng_draws: tuple[int, int, int, int]
+    copied_rng_draws: tuple[int, ...]
+    curse_rate_denominator: int
+    curse_gate_succeeded: bool
+    curse_selector: int | None
+    effective_curse_mask: int
+    is_xl: bool
     generator_seed: int
     target_room_count: int
     required_dead_ends: int
@@ -118,13 +124,17 @@ class Caves1TopologyInputs:
 
 
 def derive_basement1_topology_inputs(
-    start_seed: int, difficulty: Difficulty | str
+    start_seed: int,
+    difficulty: Difficulty | str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
 ) -> Basement1TopologyInputs:
     """Derive the confirmed pre-``Generate`` values for Basement I.
 
-    The third main-stream draw and the first draw from the copied stack RNG
-    are identical on this no-curse path.  HARD therefore adds ``2 + bit`` to
-    a base count which already contains the same low bit.
+    ``Level::Init`` copies the Level RNG after its second draw, then the copied
+    stream owns the curse gate, optional selector, and the unconditional
+    difficulty draw.  The persistent Level RNG independently supplies the
+    base count bit and the LevelGenerator seed.
     """
 
     try:
@@ -137,25 +147,63 @@ def derive_basement1_topology_inputs(
     first = level_rng.next()
     second = level_rng.next()
 
-    # Level::Init copies the stack RNG at this point. Basement I suppresses
-    # the ordinary curse roll, so its next state equals the third main draw.
+    # Level::Init copies the Level RNG at this point.  The canonical run-start
+    # transition flag is clear, so Basement I executes the ordinary curse gate.
     copied_rng = IsaacRNG(second, level_rng.shift1, level_rng.shift2, level_rng.shift3)
-    third = level_rng.next()
-    hard_bonus_draw = copied_rng.next()
-    if hard_bonus_draw != third:  # pragma: no cover - structural invariant
-        raise AssertionError("the no-curse copied RNG must remain phase-aligned")
+    copied_draws: list[int] = []
+    curse_rate = resolve_run_generation_profile(generation_profile).curse_rate(
+        difficulty_value
+    )
+    curse_gate = copied_rng.next()
+    copied_draws.append(curse_gate)
+    curse_succeeded = curse_gate % curse_rate == 0
+    curse_selector: int | None = None
+    curse_mask = 0
+    if curse_succeeded:
+        curse_selector = copied_rng.next()
+        copied_draws.append(curse_selector)
+        choice = curse_selector % 6
+        if choice == 0 and can_apply_labyrinth(1):
+            curse_mask = 0x02
+        elif choice == 1:
+            curse_mask = 0x04
+        elif choice == 2:
+            curse_mask = 0x01
+        elif choice == 3:
+            curse_mask = 0x08
+        elif choice == 4:
+            curse_mask = 0x20
+        elif choice == 5:
+            curse_mask = 0x40
 
-    target_room_count = 8 + (third & 1)
+    third = level_rng.next()
+    base_target = 8 + (third & 1)
+    is_xl = bool(curse_mask & 0x02)
+    if is_xl:
+        target_room_count = min((base_target * 18) // 10, 45)
+    else:
+        target_room_count = base_target
+        if curse_mask & 0x04:
+            target_room_count += 4
+
+    difficulty_draw = copied_rng.next()
+    copied_draws.append(difficulty_draw)
     if difficulty_value is Difficulty.HARD:
-        target_room_count += 2 + (hard_bonus_draw & 1)
+        target_room_count += 2 + (difficulty_draw & 1)
 
     fourth = level_rng.next()
     return Basement1TopologyInputs(
         stage_seed=stage_seed,
         level_rng_draws=(first, second, third, fourth),
+        copied_rng_draws=tuple(copied_draws),
+        curse_rate_denominator=curse_rate,
+        curse_gate_succeeded=curse_succeeded,
+        curse_selector=curse_selector,
+        effective_curse_mask=curse_mask,
+        is_xl=is_xl,
         generator_seed=fourth,
         target_room_count=target_room_count,
-        required_dead_ends=5,
+        required_dead_ends=6 if is_xl else 5,
         allowed_shapes_mask=ALL_GENERATED_ROOM_SHAPES_MASK,
     )
 

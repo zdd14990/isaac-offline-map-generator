@@ -669,9 +669,13 @@ def generate_basement1_through_treasure(
     basement_definitions: tuple[RoomDefinition, ...],
     max_attempts: int = 100,
 ) -> Basement1ThroughTreasureResult:
-    profile = CanonicalBasement1Profile(difficulty=difficulty)
-    profile.validate()
     inputs = derive_basement1_topology_inputs(start_seed, difficulty)
+    profile = CanonicalBasement1Profile(
+        difficulty=difficulty,
+        effective_curse_mask=inputs.effective_curse_mask,
+        is_xl=inputs.is_xl,
+    )
+    profile.validate()
     entries = entries_from_definitions(special_definitions, stage=0) + entries_from_definitions(basement_definitions, stage=1)
     boss_pools = BossPoolRuntimeState.fresh_basement(start_seed, boss_entries)
     run_state = RunGenerationState(start_seed, boss_pools, RoomConfigMutableState())
@@ -679,6 +683,7 @@ def generate_basement1_through_treasure(
     # outside the outer attempt loop.
     run_state.room_config.reset(entries)
     generator = LevelGeneratorResearch(inputs.generator_seed)
+    generator.is_xl = profile.is_xl
     level_rng = IsaacRNG.game_constructor(inputs.generator_seed, LEVEL_SHIFT_INDEX)
     floor_state = FloorGenerationState(inputs.stage_seed, target_room_count=inputs.target_room_count, level_rng=level_rng, level_generator=generator)
     attempts: list[GenerationAttemptResult] = []

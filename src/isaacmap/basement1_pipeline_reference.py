@@ -9,7 +9,7 @@ from .boss_pool_reference import (
     BossPoolRuntimeReference,
     BossPoolRuntimeSelectionReference,
 )
-from .floor_init import derive_basement1_topology_inputs
+from .floor_init_reference import derive_basement1_topology_inputs_reference
 from .generation_state import (
     CanonicalBasement1Profile,
     CanonicalCaves1Profile,
@@ -355,11 +355,11 @@ def run_post_reference(generator, level_state, boss_state, weights, entries, pro
 
 
 def generate_basement1_through_treasure_reference(start_seed: int,difficulty: str,*,boss_entries: tuple[BossPoolEntryReference,...],special_definitions: tuple[RoomDefinition,...],basement_definitions: tuple[RoomDefinition,...],max_attempts: int=100) -> ReferenceBasement1Result:
-    profile=CanonicalBasement1Profile(difficulty); profile.validate(); inputs=derive_basement1_topology_inputs(start_seed,difficulty)
+    inputs=derive_basement1_topology_inputs_reference(start_seed,difficulty); profile=CanonicalBasement1Profile(difficulty=difficulty,effective_curse_mask=inputs.effective_curse_mask,is_xl=inputs.is_xl); profile.validate()
     entries=entries_from_definitions_reference(special_definitions,stage=0)+entries_from_definitions_reference(basement_definitions,stage=1)
     weights=RoomConfigMutableStateReference(); weights.reset_pool(entries)
     bosses=BossPoolRuntimeReference.fresh_basement(start_seed,boss_entries)
-    generator=LevelGeneratorReference(inputs.generator_seed,[]); level_state=inputs.generator_seed; target=inputs.target_room_count; attempts=[]
+    generator=LevelGeneratorReference(inputs.generator_seed,[]); generator.is_xl=profile.is_xl; level_state=inputs.generator_seed; target=inputs.target_room_count; attempts=[]
     for number in range(1,max_attempts+1):
         attempt_target=target
         bosses.begin_attempt(); start_level=level_state; start_gen=generator.rng.seed; start_boss=bosses.pool_states[1]; before=dict(weights.weights)

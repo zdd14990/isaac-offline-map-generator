@@ -9,6 +9,7 @@ from .basement1_secret_pipeline_reference import (
     generate_basement1_through_secret_reference,
 )
 from .boss_pool_reference import BossPoolEntryReference
+from .floor_init_reference import derive_basement1_topology_inputs_reference
 from .generation_state import CanonicalBasement1Profile, CanonicalCaves1Profile
 from .resources import RoomDefinition
 from .rng import IsaacRNG
@@ -167,10 +168,18 @@ def generate_basement1_through_ultra_reference(
     )
     if not m6.boundary_completed:
         return ReferenceBasement1ThroughUltraResult(False, m6, None)
+    inputs = derive_basement1_topology_inputs_reference(start_seed, difficulty)
+    profile = CanonicalBasement1Profile(
+        difficulty=difficulty,
+        effective_curse_mask=inputs.effective_curse_mask,
+        is_xl=inputs.is_xl,
+    )
     return ReferenceBasement1ThroughUltraResult(
         True,
         m6,
         run_secret_to_ultra_reference(
-            m6, entries=_entries(special_definitions, basement_definitions)
+            m6,
+            entries=_entries(special_definitions, basement_definitions),
+            profile=profile,
         ),
     )

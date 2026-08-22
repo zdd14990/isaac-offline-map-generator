@@ -20,7 +20,7 @@ from .boss_pool_reference import (
     BossPoolEntryReference,
     BossPoolRuntimeReference,
 )
-from .floor_init import derive_basement1_topology_inputs
+from .floor_init_reference import derive_basement1_topology_inputs_reference
 from .generation_state import CanonicalBasement1Profile
 from .late_room_config_reference import (
     ReferenceLateDefaultResult,
@@ -102,14 +102,19 @@ def generate_basement1_full_reference(
     basement_definitions: tuple[RoomDefinition, ...],
     max_attempts: int = 100,
 ) -> ReferenceBasement1FullResult:
-    profile = CanonicalBasement1Profile(difficulty)
+    inputs = derive_basement1_topology_inputs_reference(start_seed, difficulty)
+    profile = CanonicalBasement1Profile(
+        difficulty=difficulty,
+        effective_curse_mask=inputs.effective_curse_mask,
+        is_xl=inputs.is_xl,
+    )
     profile.validate()
-    inputs = derive_basement1_topology_inputs(start_seed, difficulty)
     entries = _entries(special_definitions, basement_definitions)
     weights = RoomConfigMutableStateReference()
     weights.reset_pool(entries)
     bosses = BossPoolRuntimeReference.fresh_basement(start_seed, boss_entries)
     generator = LevelGeneratorReference(inputs.generator_seed, [])
+    generator.is_xl = profile.is_xl
     level_state = inputs.generator_seed
     target = inputs.target_room_count
     used_bits: set[int] = set(profile.special_room_used_bits)
@@ -189,7 +194,7 @@ def generate_basement1_full_reference(
                         tuple(sorted(used_bits)),
                     )
                     m7 = run_secret_to_ultra_reference(
-                        boundary, entries=entries
+                        boundary, entries=entries, profile=profile
                     )
                     generator.rng.seed = m7.final_generator
                     weights.weights = dict(m7.weights)

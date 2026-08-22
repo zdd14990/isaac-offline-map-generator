@@ -39,7 +39,7 @@ from .generation_profile import RunGenerationProfile, resolve_run_generation_pro
 # Version-locked executable profile.  Both values feed the cache key so a
 # changed generator/executable silently invalidates previously cached images.
 EXE_SHA256 = "3bdfc8bae0dc7e334b76009d0ad45dfbb16ee5f00c06ffbc3a0094e34d44616b"
-SUPPORT_VERSION = "xl_topology_state_v2"
+SUPPORT_VERSION = "basement1_curse_rng_v3"
 
 SUPPORTED_DIFFICULTIES = ("NORMAL", "HARD")
 

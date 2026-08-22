@@ -55,22 +55,25 @@ L1 = level_rng.Next()       // early Level::Init
 L2 = level_rng.Next()       // before curse setup
 stack_rng = copy(level_rng) // same state as L2
 
-// Basement I suppresses the ordinary curse roll.
+C_gate = stack_rng.Next()    // RandomInt(curse_rate)
+if C_gate % curse_rate == 0:
+    C_selector = stack_rng.Next() // Next()%6 curse selection
+
 L3 = level_rng.Next()       // base room-count low bit
-C1 = stack_rng.Next()       // equals L3 on this no-curse path
+C_difficulty = stack_rng.Next() // always advances; NORMAL discards the bit
 
 target NORMAL = 8 + (L3 & 1)
-target HARD   = 8 + (L3 & 1) + 2 + (C1 & 1)
-              = 10 or 12
+target HARD   = 8 + (L3 & 1) + 2 + (C_difficulty & 1)
 
 L4 = level_rng.Next()
 LevelGenerator(seed=L4, shifts=(5,9,7))
 ```
 
-Required dead ends are 5 for this path. The starting room is shape 1 at
-column 6, line 6, hence GridIndex 84. The Basement default-room pools contain
-all shapes 1 through 12 in both difficulty windows used here, producing
-allowed-shape mask `0x1FFE`.
+The fresh run-start transition flag is clear, so ordinary Basement I executes
+the curse gate. Required dead ends are 5 normally and 6 when the selector
+retains Labyrinth. The starting room is shape 1 at column 6, line 6, hence
+GridIndex 84. The Basement default-room pools contain all shapes 1 through 12
+in both difficulty windows used here, producing allowed-shape mask `0x1FFE`.
 
 The implemented scope in `src/isaacmap/floor_init.py` intentionally stops at
 these pre-`Generate` values; it does not claim a completed floor.

@@ -253,17 +253,18 @@ Binary functions: `Level::Init`, ordinary dungeon generator,
 
 Address/RVA: `0x00344940`, `0x00340E10`, `0x005ADAF0`
 
-RNG calls: Level RNG uses `(5,9,7)`; on the scoped no-curse path, its third
-draw controls the base room-count bit and its fourth draw seeds
-`LevelGenerator`. A copied stack RNG produces the same third state and supplies
-the HARD bonus bit.
+RNG calls: Level RNG uses `(5,9,7)`; its third draw controls the base room-count
+bit and its fourth draw seeds `LevelGenerator`. A copied stack RNG consumes the
+ordinary curse gate, an optional selector, then an unconditional difficulty
+draw whose low bit supplies the HARD bonus.
 
 Inputs: fresh ordinary `STAGE1_1`, `STAGETYPE_ORIGINAL`, NORMAL/HARD, no
-challenge/daily/ascent state, effective curse, seed effect, Voodoo Head owner,
+challenge/daily/ascent state, seed-effect curse mutation, Voodoo Head owner,
 blocked cell, or prior stage-seed mutation
 
-Outputs: stage seed, four Level RNG draws, generator seed, target count,
-required dead ends, allowed-shape mask, and starting room
+Outputs: stage seed, four Level RNG draws, copied-RNG curse trace, effective
+curse/XL state, generator seed, target count, required dead ends, allowed-shape
+mask, and starting room
 
 Confidence: `CONFIRMED_BINARY` within the stated scope
 
@@ -271,8 +272,9 @@ Evidence:
 
 - Level RNG triple `(5,9,7)` at RVA `0x0071F66C`;
 - starting constants column 6, line 6 at RVA `0x007AAF30`;
-- target NORMAL `8 + bit`, HARD `10 + 2*bit` on Basement I;
-- required dead ends 5;
+- target starts at `8 + LevelBit`; Labyrinth scales by 1.8, Lost adds 4 when
+  non-XL, and HARD adds `2 + copiedDifficultyBit`;
+- required dead ends 5 normally and 6 under Labyrinth;
 - both Basement difficulty windows contain default rooms of every shape 1..12,
   producing mask `0x1FFE`;
 - raw geometry constants match

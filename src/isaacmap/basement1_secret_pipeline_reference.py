@@ -25,7 +25,7 @@ from .basement1_secret_pipeline import (
     SecretDescriptorMutation,
 )
 from .boss_pool_reference import BossPoolEntryReference, BossPoolRuntimeReference
-from .floor_init import derive_basement1_topology_inputs
+from .floor_init_reference import derive_basement1_topology_inputs_reference
 from .generation_state import CanonicalBasement1Profile, CanonicalCaves1Profile
 from .resources import RoomDefinition
 from .room_config_reference import (
@@ -417,13 +417,18 @@ def generate_basement1_through_secret_reference(
     basement_definitions: tuple[RoomDefinition, ...],
     max_attempts: int = 100,
 ) -> ReferenceBasement1ThroughSecretResult:
-    profile = CanonicalBasement1Profile(difficulty)
+    inputs = derive_basement1_topology_inputs_reference(start_seed, difficulty)
+    profile = CanonicalBasement1Profile(
+        difficulty=difficulty,
+        effective_curse_mask=inputs.effective_curse_mask,
+        is_xl=inputs.is_xl,
+    )
     profile.validate()
-    inputs = derive_basement1_topology_inputs(start_seed, difficulty)
     entries = entries_from_definitions_reference(special_definitions, stage=0) + entries_from_definitions_reference(basement_definitions, stage=1)
     weights = RoomConfigMutableStateReference(); weights.reset_pool(entries)
     bosses = BossPoolRuntimeReference.fresh_basement(start_seed, boss_entries)
     generator = LevelGeneratorReference(inputs.generator_seed, [])
+    generator.is_xl = profile.is_xl
     level_state = inputs.generator_seed
     target = inputs.target_room_count
     used_bits: set[int] = set(profile.special_room_used_bits)

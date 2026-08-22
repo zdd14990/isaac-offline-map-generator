@@ -33,8 +33,10 @@ Every clean `(pre,post)` pair must equal the corresponding reference row.
 |---|---|---|---|
 | L1 | `0x00344C1E..0x00344C42` | `Level._generationRNG` | first `Level::Init` progression |
 | L2 | `0x00344CAA..0x00344CCE` | `Level._generationRNG` | second progression; state copied afterward |
+| C-gate | call `0x00344F09` | stack copy made after L2 | ordinary curse `RandomInt(rate)`; always consumed on the canonical run-start path |
+| C-selector | `0x00344F34..0x00344F56` | same stack copy | optional `Next()%6` when the gate succeeds |
 | L3 | `0x00340E8E..0x00340EB8` | `Level._generationRNG` | low bit contributes to base target count |
-| C1 | `0x0034109F..0x003410C0` | stack copy made after L2 | low bit supplies HARD `2+bit`; value discarded on NORMAL |
+| C-difficulty | `0x0034109F..0x003410C0` | same stack copy | unconditional advance; low bit supplies HARD `2+bit` and is discarded on NORMAL |
 | L4 | `0x00341202..0x0034122D` | `Level._generationRNG` | seed passed to `LevelGenerator` constructor |
 
 For start seed 1 the complete entry ledger is:
@@ -44,11 +46,12 @@ For start seed 1 the complete entry ledger is:
 | L1 | `0x00100001` | `0x2152A305` |
 | L2 | `0x2152A305` | `0x91146405` |
 | L3 | `0x91146405` | `0xAD4AA83F` |
-| C1 | `0x91146405` | `0xAD4AA83F` |
+| C-gate | `0x91146405` | `0xAD4AA83F` |
+| C-difficulty | `0xAD4AA83F` | `0xE809B57C` |
 | L4 | `0xAD4AA83F` | `0xE809B57C` |
 
-L3 and C1 match only because the copied stream has no intervening curse draw
-in the frozen scope.
+L3 and C-gate match because both streams start from L2. The failed gate still
+advances the copied stream, so C-difficulty equals L4 rather than L3.
 
 ## Conditional pre-generator draws
 
@@ -56,8 +59,6 @@ These are statically proved but are not taken by the frozen state contract:
 
 | RVA/range | RNG object | Condition | Use |
 |---|---|---|---|
-| call `0x00344F09` → RNG RVA `0x003E9020` | copied Level stack RNG | nonzero curse chance and no suppression | `RandomInt(chanceDenominator)` |
-| `0x00344F34..0x00344F56` | same stack RNG | curse chance result is zero | `Next()%6` curse selection |
 | `0x00340FCC..0x00340FF9` | Level RNG | challenge 21 | `40 + Next()%5` target override |
 | `0x0034103B..0x00341066` | Level RNG | stage 12 | `50 + Next()%5` target override |
 

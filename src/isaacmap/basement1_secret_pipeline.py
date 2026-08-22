@@ -626,9 +626,13 @@ def generate_basement1_through_secret(
     default-room selector can still reject this attempt.
     """
 
-    profile = CanonicalBasement1Profile(difficulty=difficulty)
-    profile.validate()
     inputs = derive_basement1_topology_inputs(start_seed, difficulty)
+    profile = CanonicalBasement1Profile(
+        difficulty=difficulty,
+        effective_curse_mask=inputs.effective_curse_mask,
+        is_xl=inputs.is_xl,
+    )
+    profile.validate()
     entries = (
         entries_from_definitions(special_definitions, stage=0)
         + entries_from_definitions(basement_definitions, stage=1)
@@ -641,6 +645,7 @@ def generate_basement1_through_secret(
     )
     run_state.room_config.reset(entries)
     generator = LevelGeneratorResearch(inputs.generator_seed)
+    generator.is_xl = profile.is_xl
     level_rng = IsaacRNG.game_constructor(inputs.generator_seed, LEVEL_SHIFT_INDEX)
     generator._m6_level_rng = level_rng
     floor_state = FloorGenerationState(

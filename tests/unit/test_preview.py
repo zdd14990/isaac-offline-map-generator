@@ -259,6 +259,26 @@ def test_preview_exposes_ultra_and_all_normal_configs() -> None:
     assert "Config: stage=" in room_tooltip(model.rooms[0])
 
 
+def test_qqtt_fqpg_hard_special_and_secret_rooms_match_game_capture() -> None:
+    preview = generate_preview("QQTT FQPG", "HARD", "Basement I")
+    payload = preview_to_dict(preview)
+    special_grids = {
+        room["room_type"]: room["grid_index"]
+        for room in payload["rooms"]
+        if room["room_type"] in (2, 4, 5, 7, 8, 29)
+    }
+
+    assert payload["attempt_trace"][0]["target_room_count"] == 11
+    assert special_grids == {
+        2: 60,  # Shop
+        4: 86,  # Treasure
+        5: 93,  # Boss
+        7: 85,  # Secret
+        8: 68,  # Super Secret
+        29: 46,  # Ultra Secret
+    }
+
+
 def test_m6_corpus_has_no_natural_secret_none_fixture() -> None:
     report = json.loads(CORPUS_REPORT.read_text(encoding="utf-8"))
     assert report["difficulties"]["NORMAL"]["secret_missing"] == 0

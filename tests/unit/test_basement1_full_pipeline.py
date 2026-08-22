@@ -16,6 +16,7 @@ from isaacmap.basement1_full_pipeline_reference import (
 from isaacmap.boss_pool import load_boss_pool_xml
 from isaacmap.boss_pool_reference import BossPoolEntryReference
 from isaacmap.resources import load_stb
+from isaacmap.seed import decode_seed
 
 
 ROOT = Path("research/input/extracted_resources/merged/resources")
@@ -75,3 +76,24 @@ def test_boss_blacklist_commits_only_after_late_success() -> None:
     assert result.pending_boss_blacklist == ()
     accepted_boss = result.attempts[-1].through_treasure.boss_selection.selected_entry_id
     assert result.permanent_removed_bosses == (accepted_boss,)
+
+
+def test_qqtt_fqpg_hard_full_pipeline_matches_independent_reference() -> None:
+    start_seed = decode_seed("QQTT FQPG")
+    clean = generate_basement1_full(
+        start_seed,
+        "HARD",
+        boss_entries=BOSSES,
+        special_definitions=SPECIAL,
+        basement_definitions=BASEMENT,
+    )
+    reference = generate_basement1_full_reference(
+        start_seed,
+        "HARD",
+        boss_entries=BOSS_REFS,
+        special_definitions=SPECIAL,
+        basement_definitions=BASEMENT,
+    )
+
+    compare_basement1_full(clean, reference)
+    assert clean.completed

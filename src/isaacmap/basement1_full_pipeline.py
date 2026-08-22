@@ -152,9 +152,13 @@ def generate_basement1_full(
     basement_definitions: tuple[RoomDefinition, ...],
     max_attempts: int = 100,
 ) -> Basement1FullResult:
-    profile = CanonicalBasement1Profile(difficulty)
-    profile.validate()
     inputs = derive_basement1_topology_inputs(start_seed, difficulty)
+    profile = CanonicalBasement1Profile(
+        difficulty=difficulty,
+        effective_curse_mask=inputs.effective_curse_mask,
+        is_xl=inputs.is_xl,
+    )
+    profile.validate()
     entries = _entries(special_definitions, basement_definitions)
     run_state = RunGenerationState(
         start_seed,
@@ -164,6 +168,7 @@ def generate_basement1_full(
     )
     run_state.room_config.reset(entries)
     generator = LevelGeneratorResearch(inputs.generator_seed)
+    generator.is_xl = profile.is_xl
     level_rng = IsaacRNG.game_constructor(inputs.generator_seed, LEVEL_SHIFT_INDEX)
     generator._m6_level_rng = level_rng
     floor_state = FloorGenerationState(
@@ -247,6 +252,7 @@ def generate_basement1_full(
                             generator=generator,
                         ),
                         entries=entries,
+                        profile=profile,
                     )
                     run_state.room_config.weights = dict(
                         m7.final_room_config_weights

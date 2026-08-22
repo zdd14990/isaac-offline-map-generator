@@ -79,8 +79,10 @@ class CanonicalBasement1Profile:
             self.level_stage == 1 and self.stage_type == 0
             and self.room_config_stage == 1 and self.fallback_room_config_stage == 0
             and self.challenge_id == 0 and self.game_mode == 0
-            and self.character_id == 0 and self.effective_curse_mask == 0
-            and not self.is_xl and not self.is_ascent and not self.is_daily
+            and self.character_id == 0
+            and self.effective_curse_mask in (0, 1, 2, 4, 8, 32, 64)
+            and self.is_xl == bool(self.effective_curse_mask & 0x02)
+            and not self.is_ascent and not self.is_daily
             and not self.collectible_ids and not self.visited_room_types
             and self.shop_state_flags == (False, False, False, False)
             and self.shop_generation_count == 0

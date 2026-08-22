@@ -22,6 +22,90 @@ def _advance(value: int) -> int:
 
 
 @dataclass(frozen=True)
+class ReferenceBasement1TopologyInputs:
+    stage_seed: int
+    level_draws: tuple[int, int, int, int]
+    copied_draws: tuple[int, ...]
+    curse_rate: int
+    curse_gate: bool
+    curse_selector: int | None
+    curse_mask: int
+    is_xl: bool
+    generator_seed: int
+    target: int
+    dead_ends: int
+    shapes: int
+
+    @property
+    def target_room_count(self) -> int:
+        return self.target
+
+    @property
+    def required_dead_ends(self) -> int:
+        return self.dead_ends
+
+    @property
+    def allowed_shapes_mask(self) -> int:
+        return self.shapes
+
+    @property
+    def effective_curse_mask(self) -> int:
+        return self.curse_mask
+
+
+def derive_basement1_topology_inputs_reference(
+    start_seed: int,
+    difficulty: str,
+    *,
+    generation_profile: RunGenerationProfile | str | None = None,
+) -> ReferenceBasement1TopologyInputs:
+    if difficulty not in ("NORMAL", "HARD"):
+        raise ValueError("difficulty must be NORMAL or HARD")
+    stage_seed = get_initial_stage_seed(start_seed, 1)
+    first = _advance(stage_seed)
+    second = _advance(first)
+    copied = _advance(second)
+    copied_values = [copied]
+    rate = resolve_run_generation_profile(generation_profile).curse_rate(difficulty)
+    gate = copied % rate == 0
+    selector = None
+    curse = 0
+    if gate:
+        copied = _advance(copied)
+        copied_values.append(copied)
+        selector = copied
+        curse = (2, 4, 1, 8, 0x20, 0x40)[copied % 6]
+
+    third = _advance(second)
+    base_target = 8 + (third & 1)
+    is_xl = bool(curse & 2)
+    if is_xl:
+        target = min((base_target * 18) // 10, 45)
+    else:
+        target = base_target + (4 if curse & 4 else 0)
+
+    copied = _advance(copied)
+    copied_values.append(copied)
+    if difficulty == "HARD":
+        target += 2 + (copied & 1)
+    fourth = _advance(third)
+    return ReferenceBasement1TopologyInputs(
+        stage_seed,
+        (first, second, third, fourth),
+        tuple(copied_values),
+        rate,
+        gate,
+        selector,
+        curse,
+        is_xl,
+        fourth,
+        target,
+        6 if is_xl else 5,
+        0x1FFE,
+    )
+
+
+@dataclass(frozen=True)
 class ReferenceBasement2TopologyInputs:
     stage_seed: int
     level_draws: tuple[int, int, int, int]

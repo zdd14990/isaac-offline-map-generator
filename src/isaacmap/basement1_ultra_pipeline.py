@@ -14,6 +14,7 @@ from .basement1_secret_pipeline import (
     generate_basement1_through_secret,
 )
 from .boss_pool import BossPoolEntry
+from .floor_init import derive_basement1_topology_inputs
 from .generation_state import (
     CanonicalBasement1Profile,
     CanonicalBasement2Profile,
@@ -251,8 +252,16 @@ def generate_basement1_through_ultra(
         return Basement1ThroughUltraResult(
             False, start_seed, difficulty, m6.stage_seed, m6, None
         )
+    inputs = derive_basement1_topology_inputs(start_seed, difficulty)
+    profile = CanonicalBasement1Profile(
+        difficulty=difficulty,
+        effective_curse_mask=inputs.effective_curse_mask,
+        is_xl=inputs.is_xl,
+    )
     final = run_secret_to_ultra(
-        m6, entries=_entries(special_definitions, basement_definitions)
+        m6,
+        entries=_entries(special_definitions, basement_definitions),
+        profile=profile,
     )
     return Basement1ThroughUltraResult(
         True, start_seed, difficulty, m6.stage_seed, m6, final

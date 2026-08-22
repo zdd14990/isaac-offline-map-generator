@@ -97,9 +97,10 @@ Topology-relevant bits and exact observed effects are:
 Other curse bits do not alter the recovered topology values on this entry
 path, but remain part of the full Level state for later milestones.
 
-Basement I normally suppresses the ordinary curse roll.  Daily/custom/challenge
-state can change that decision, so `stage==1` alone is not sufficient proof of
-an empty curse stream.
+Canonical run-start Basement I executes the ordinary curse roll because the
+transition flag at `Game+0x2654c` bit `0x10000` is clear. A set transition flag,
+daily/custom/challenge state, or other noncanonical gates can change that
+decision, so `stage==1` alone is not sufficient proof of the RNG sequence.
 
 ### Challenge and daily state
 
@@ -189,4 +190,3 @@ above.  The general offline API needs a `FloorSpec` plus a run-state object (or
 an exact derivation of that object) carrying the current stage seed, curses,
 challenge/daily/ascent flags, relevant inventory queries, room-data profile and
 generator blocked positions.
-
