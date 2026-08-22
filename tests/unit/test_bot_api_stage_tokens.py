@@ -87,6 +87,21 @@ def test_downpour1_generates_for_bot(tmp_path: Path) -> None:
     assert result.image_path is not None
 
 
+def test_natural_xl_returns_explicit_fail_closed_result(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ISAAC_MAP_GENERATION_PROFILE", "RATE_5_3")
+    result = generate_map_image_for_bot(
+        "DKM8 9MNM", "HARD", 1, str(tmp_path), route=ALT_ROUTE
+    )
+    assert not result.ok
+    assert result.error == "UNSUPPORTED_XL"
+    assert result.error_message is not None
+    assert "Labyrinth / XL" in result.error_message
+    assert not tuple(tmp_path.iterdir())
+
+
 def test_womb_floors_generate_for_bot(tmp_path: Path) -> None:
     """Womb I/II are now supported on the MAIN route."""
     for route, stage, floor in (

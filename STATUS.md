@@ -642,3 +642,20 @@ Final validation: generator `642 passed`; `RATE_5_3` ALT 1+..6+ differential
 50 NORMAL + 50 HARD per floor, 600 total and zero mismatch; fraq Bot `95
 passed`, typecheck/build green, real subprocess PNG smoke green for DKM XL and
 Dross/Ashpit NORMAL/HARD. `NO_ISAAC_PROCESS`.
+
+## Product boundary 2026-08-22: XL disabled
+
+The incomplete XL layout implementation has been abandoned. Natural curse
+selection is still evaluated from the configured generation profile, but any
+requested lifecycle containing Labyrinth / XL now fails closed before loading
+resources or running a layout pipeline. This also prevents an XL first floor
+from being replayed as an ordinary second floor.
+
+Non-XL generation remains supported for the floor registry above. The Bot
+uses the explicit `UNSUPPORTED_XL` result and a new cache version, so earlier
+experimental XL PNG files cannot be reused. No force-XL option and no seed
+special case were added.
+
+Final validation: generator `648 passed`; fraq Bot `96 passed`, typecheck and
+build green; real generator and Bot smoke confirmed non-XL PNG output and
+`DKM8 9MNM` HARD 1+ -> `UNSUPPORTED_XL`. `NO_ISAAC_PROCESS`.

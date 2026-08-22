@@ -33,7 +33,14 @@ from .depths1_full_pipeline import Depths1FullResult
 from .depths1_lifecycle import generate_depths1_lifecycle
 from .depths2_full_pipeline import Depths2FullResult
 from .depths2_lifecycle import generate_depths2_lifecycle
-from .generation_profile import resolve_run_generation_profile
+from .floor_init import (
+    derive_alt_topology_inputs,
+    derive_basement1_topology_inputs,
+    derive_caves1_topology_inputs,
+    derive_depths1_topology_inputs,
+    derive_womb1_topology_inputs,
+)
+from .generation_profile import RunGenerationProfile, resolve_run_generation_profile
 from .womb1_lifecycle import generate_womb1_lifecycle
 from .womb1_full_pipeline import Womb1FullResult
 from .womb2_full_pipeline import Womb2FullResult
@@ -65,6 +72,10 @@ class MissingPreviewResources(PreviewError):
 
 class PreviewGenerationFailed(PreviewError):
     """Raised when the recovered pipeline does not finish within its limit."""
+
+
+class UnsupportedLabyrinth(PreviewError):
+    """Raised when a requested lifecycle contains an XL floor."""
 
 
 @dataclass(frozen=True)
@@ -735,6 +746,51 @@ SUPPORTED_FLOORS: dict[str, PreviewFloorSpec] = {
 }
 
 
+def _reject_unsupported_labyrinth(
+    start_seed: int,
+    difficulty: str,
+    spec: PreviewFloorSpec,
+    generation_profile: RunGenerationProfile,
+) -> None:
+    """Fail before layout generation when this lifecycle contains XL."""
+
+    main_derivers = {
+        "Basement I": derive_basement1_topology_inputs,
+        "Caves I": derive_caves1_topology_inputs,
+        "Depths I": derive_depths1_topology_inputs,
+        "Womb I": derive_womb1_topology_inputs,
+    }
+    alt_stages = {
+        "Downpour I": 1,
+        "Mines I": 3,
+        "Mausoleum I": 5,
+    }
+    for floor_name in spec.replayed_floors:
+        derive_main = main_derivers.get(floor_name)
+        if derive_main is not None:
+            inputs = derive_main(
+                start_seed,
+                difficulty,
+                generation_profile=generation_profile,
+            )
+        else:
+            alt_stage = alt_stages.get(floor_name)
+            if alt_stage is None:
+                continue
+            inputs = derive_alt_topology_inputs(
+                alt_stage,
+                4,
+                start_seed,
+                difficulty,
+                generation_profile=generation_profile,
+            )
+        if inputs.is_xl:
+            raise UnsupportedLabyrinth(
+                f"{floor_name}: Labyrinth / XL is detected but unsupported - "
+                "FAIL CLOSED"
+            )
+
+
 def generate_preview(
     seed: str | int,
     difficulty: str,
@@ -767,6 +823,13 @@ def generate_preview(
     else:
         display_seed = encode_seed(seed)
         start_seed = seed
+
+    _reject_unsupported_labyrinth(
+        start_seed,
+        normalized_difficulty,
+        spec,
+        generation_profile,
+    )
 
     root = Path(resource_root) if resource_root is not None else default_resource_root()
     resources = _load_preview_resources(str(root.resolve()))

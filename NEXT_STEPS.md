@@ -9,6 +9,11 @@ Safety: do not execute/load `isaac-ng.exe`, create a game/Steam process, use a
 Lua mod, or use a runtime memory oracle. Static reads of the PE copy under
 `research/input/` only.
 
+Current product boundary (2026-08-22): XL layout generation has been
+abandoned. Natural Labyrinth is still detected, but any affected lifecycle
+fails closed before generation. Older XL notes below are retained only as
+research history and are not active implementation work.
+
 ## Status: FIRST_RELEASE_SCOPE_COMPLETE
 
 The six ORIGINAL-route floors are all `CONFIRMED_BINARY`:

@@ -9,6 +9,7 @@ import pytest
 from isaacmap.preview import (
     GENERATION_STATUS,
     SUPPORTED_FLOORS,
+    UnsupportedLabyrinth,
     UnsupportedPreviewFloor,
     generate_preview,
 )
@@ -38,7 +39,12 @@ def _find_corpus_secret_preview(
 
     start, end = json.loads(CORPUS_REPORT.read_text(encoding="utf-8"))["seed_range"]
     for start_seed in range(start, end + 1):
-        preview = generate_preview(encode_seed(start_seed), difficulty, "Basement I")
+        try:
+            preview = generate_preview(
+                encode_seed(start_seed), difficulty, "Basement I"
+            )
+        except UnsupportedLabyrinth:
+            continue
         expands_bounds = True
         if preview.secret_grid_index is not None and require_bounds_expansion:
             m5_cells = tuple(
@@ -94,6 +100,33 @@ def test_unsupported_floor_fails_before_generator_call(monkeypatch: pytest.Monke
     monkeypatch.setattr("isaacmap.preview.generate_basement2_full", forbidden)
     with pytest.raises(UnsupportedPreviewFloor, match="UNSUPPORTED"):
         generate_preview("B911 99AC", "HARD", "Sheol")
+
+
+def test_natural_xl_fails_closed_before_loading_resources(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ISAAC_MAP_GENERATION_PROFILE", "RATE_5_3")
+
+    def forbidden(_resource_root: str) -> object:
+        raise AssertionError("XL must fail before loading resources")
+
+    monkeypatch.setattr("isaacmap.preview._load_preview_resources", forbidden)
+    with pytest.raises(UnsupportedLabyrinth, match="Downpour I.*FAIL CLOSED"):
+        generate_preview("DKM8 9MNM", "HARD", "Downpour I")
+
+
+def test_xl_in_replayed_floor_fails_closed(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class XlInputs:
+        is_xl = True
+
+    monkeypatch.setattr(
+        "isaacmap.preview.derive_basement1_topology_inputs",
+        lambda *_args, **_kwargs: XlInputs(),
+    )
+    with pytest.raises(UnsupportedLabyrinth, match="Basement I.*FAIL CLOSED"):
+        generate_preview("B911 99AC", "NORMAL", "Caves I")
 
 
 def test_preview_support_registry_contains_only_confirmed_complete_floors() -> None:
